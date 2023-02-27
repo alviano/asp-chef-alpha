@@ -15,6 +15,10 @@ h6 {
   pointer-events: none;
 }
 
+textarea {
+  font-family: monospace;
+}
+
 @media print {
   * {
     font-size: 10pt;
