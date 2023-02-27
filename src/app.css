@@ -1,0 +1,31 @@
+@import url('https://fonts.googleapis.com/css2?family=Paytone+One&family=Rock+Salt&display=swap');
+
+@import 'bulma.css';
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: 'Paytone One', sans-serif;
+}
+
+.popover, .tooltip {
+  pointer-events: none;
+}
+
+@media print {
+  * {
+    font-size: 10pt;
+  }
+
+  pre {
+    border: none !important;
+  }
+
+  .grecaptcha-badge, .offcanvas {
+    visibility: hidden;
+  }
+
+}
