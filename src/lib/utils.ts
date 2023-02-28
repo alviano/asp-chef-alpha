@@ -42,6 +42,21 @@ export class Utils extends BaseUtils {
         return this.parse_atoms(await this.search_model(atoms));
     }
 
+    static add_operation(operation: string, options: object) {
+        const the_recipe = get(recipe);
+        the_recipe.push({
+            operation: consts.OPERATIONS.PROGRAM,
+            options: options,
+        });
+        recipe.set(the_recipe);
+    }
+
+    static edit_operation(index: number, options: object) {
+        const the_recipe = get(recipe);
+        the_recipe[index].options = options;
+        recipe.set(the_recipe);
+    }
+
     static async process_input(input: string) {
         const res = []
         for (const part of input.split('§')) {
@@ -52,7 +67,7 @@ export class Utils extends BaseUtils {
     }
 
     static async apply_operation(input: string[][], operation: string, options: object) {
-        if (operation === 'program') {
+        if (operation === consts.OPERATIONS.PROGRAM) {
             return await this.apply_program_operation(input, options);
         }
         throw Error('Unknown operation: ' + operation);
@@ -64,7 +79,9 @@ export class Utils extends BaseUtils {
             try {
                 const model = await this.search_model(part.map(atom => atom.str + '.').join('\n') + options.rules);
                 res.push(this.parse_atoms(model));
-            } catch (error) { /* empty */ }
+            } catch (error) {
+                res.push([{str: error}])
+            }
         }
         return res;
     }
@@ -74,6 +91,23 @@ export class Utils extends BaseUtils {
         const tmp = the_recipe[index_1];
         the_recipe[index_1] = the_recipe[index_2];
         the_recipe[index_2] = tmp;
+        recipe.set(the_recipe);
+    }
+
+    static remove_operation(index: number) {
+        const the_recipe = get(recipe);
+        recipe.set(the_recipe.filter((value, the_index) => index !== the_index));
+    }
+
+    static toggle_stop_at_operation(index: number) {
+        const the_recipe = get(recipe);
+        the_recipe[index].options.stop = !the_recipe[index].options.stop;
+        recipe.set(the_recipe);
+    }
+
+    static toggle_apply_operation(index: number) {
+        const the_recipe = get(recipe);
+        the_recipe[index].options.apply = !the_recipe[index].options.apply;
         recipe.set(the_recipe);
     }
 }

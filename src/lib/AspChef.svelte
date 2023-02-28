@@ -14,7 +14,12 @@
         try {
             let result = await Utils.process_input(input_value);
             for (const ingredient of $recipe) {
-                result = await Utils.apply_operation(result, ingredient.operation, ingredient.options);
+                if (ingredient.options.apply) {
+                    result = await Utils.apply_operation(result, ingredient.operation, ingredient.options);
+                }
+                if (ingredient.options.stop) {
+                    break;
+                }
             }
             output_value = result;
         } catch (error) {
@@ -22,7 +27,7 @@
         }
     }
 
-    recipe.subscribe(value => {
+    recipe.subscribe(() => {
         const tmp = input_value;
         input_value = null;
         input_value = tmp;
