@@ -5,6 +5,17 @@ import {recipe} from "$lib/stores";
 export class Recipe {
     private static operation_types = new Map();
 
+    static async svelte_components(filter: string) {
+        const res = [];
+        for (const [key, value] of Array.from(this.operation_types).sort()) {
+            if (String(key).match(new RegExp(filter, 'i'))) {
+                const component = (await import(`./operations/${String(key).replace(/ /g, '')}.svelte`)).default;
+                res.push(component);
+            }
+        }
+        return res;
+    }
+
     static register_operation_type(
         operation: string,
         apply: (input: string[][], options: object) => Promise<string[][]>

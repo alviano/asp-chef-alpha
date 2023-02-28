@@ -1,7 +1,8 @@
 <script>
-    import ProgramOperation from "$lib/operations/Program.svelte";
-    import {Card, CardBody, CardHeader, CardTitle} from "sveltestrap";
-    import RemoveErrors from "$lib/operations/RemoveErrors.svelte";
+    import {Card, CardBody, CardHeader, CardTitle, Input, Spinner} from "sveltestrap";
+    import {Recipe} from "$lib/recipe";
+
+    let filter = '';
 </script>
 
 <Card>
@@ -9,8 +10,16 @@
         <CardTitle>Operations</CardTitle>
     </CardHeader>
     <CardBody class="p-1">
-        <ProgramOperation />
-        <RemoveErrors />
+        <Input class="mb-1" type="search" bind:value={filter} placeholder="filter..." />
+        {#await Recipe.svelte_components(filter)}
+            <Spinner />
+        {:then components}
+            {#each components as component}
+                <div class="mb-1">
+                    <svelte:component this={component} />
+                </div>
+            {/each}
+        {/await}
     </CardBody>
 </Card>
 
