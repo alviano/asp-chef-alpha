@@ -4,6 +4,7 @@
     import Program from "$lib/operations/Program.svelte";
     import RemoveErrors from "$lib/operations/RemoveErrors.svelte";
     import Wrap from "$lib/operations/Wrap.svelte";
+    import Merge from "$lib/operations/Merge.svelte";
 </script>
 
 <Card class="p-0">
@@ -19,6 +20,8 @@
                     <RemoveErrors options="{ingredient.options}" {index} />
                 {:else if ingredient.operation === 'Wrap'}
                     <Wrap options="{ingredient.options}" {index} />
+                {:else if ingredient.operation === 'Merge'}
+                    <Merge options="{ingredient.options}" {index} />
                 {:else}
                     Unknown operation: {ingredient.operation}
                 {/if}

@@ -28,6 +28,17 @@ export class Utils extends BaseUtils {
         }
     }
 
+    static async search_models(program: string, number: number, raises: boolean) {
+        const result = await clingo.run(program, number);
+        if (result.Result === 'ERROR') {
+            throw new Error(result.Error);
+        } else if (raises && result.Models.Number !== number) {
+            throw new Error(`Expecting ${number} models, found ${result.Models.Number}`);
+        } else {
+            return result.Call[0].Witnesses.map(witness => witness.Value);
+        }
+    }
+
     static parse_atom(atom: string) {
         return PARSER.parse(atom);
     }

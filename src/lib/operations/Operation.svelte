@@ -2,6 +2,7 @@
     import {Button, Card, CardBody} from "sveltestrap";
     import IngredientHeader from "$lib/operations/IngredientHeader.svelte";
     import {Recipe} from "$lib/recipe";
+    import {Popover} from "dumbo-svelte";
 
     function default_options() {
         return {
@@ -26,5 +27,8 @@
         </CardBody>
     </Card>
 {:else}
-    <Button block outline on:click={() => Recipe.add_operation(operation, {...options})}>{operation}</Button>
+    <Popover block placement="right" title="Add {operation} Operation">
+        <div slot="value"><slot name="description" /></div>
+        <Button block outline on:click={() => Recipe.add_operation(operation, {...options})}>{operation}</Button>
+    </Popover>
 {/if}
