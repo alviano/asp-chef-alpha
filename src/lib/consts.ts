@@ -15,8 +15,4 @@ export const consts = {
     LOCKED: '🔒',
     UNLOCKED: '🔓',
   },
-  OPERATIONS: {
-    PROGRAM: 'Program',
-    REMOVE_ERRORS: 'Remove Errors',
-  }
 };

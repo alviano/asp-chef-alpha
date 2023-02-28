@@ -1,27 +1,20 @@
-<script>
-    import {Button, Card, CardBody} from "sveltestrap";
-    import IngredientHeader from "$lib/IngredientHeader.svelte";
-    import {consts} from "$lib/consts";
-    import {Utils} from "$lib/utils";
+<script context="module">
+    import {Recipe} from "$lib/recipe";
 
-    function default_options() {
-        return {
-            stop: false,
-            apply: true,
-        };
-    }
+    const operation = "Remove Errors";
+    const default_extra_options = {};
 
-    const operation = consts.OPERATIONS.REMOVE_ERRORS;
-    export let options = default_options();
-    export let index = null;
+    Recipe.register_operation_type(operation, async (input) => {
+        console.log(input, input.filter(part => part.length !== 1 || !String(part[0].str).startsWith('Error: ')))
+        return input.filter(part => part.length !== 1 || !String(part[0].str).startsWith('Error: '));
+    });
 </script>
 
-{#if index !== null}
-    <Card>
-        <IngredientHeader {operation} {index} {options} />
-        <CardBody class="p-0">
-        </CardBody>
-    </Card>
-{:else}
-    <Button block outline on:click={() => Utils.add_operation(operation, options)}>{operation}</Button>
-{/if}
+<script>
+    import Operation from "$lib/operations/Operation.svelte";
+
+    export let options;
+    export let index;
+</script>
+
+<Operation {operation} {options} {index} {default_extra_options} />
