@@ -45,8 +45,8 @@ export class Utils extends BaseUtils {
     static add_operation(operation: string, options: object) {
         const the_recipe = get(recipe);
         the_recipe.push({
-            operation: consts.OPERATIONS.PROGRAM,
-            options: options,
+            operation,
+            options,
         });
         recipe.set(the_recipe);
     }
@@ -70,6 +70,9 @@ export class Utils extends BaseUtils {
         if (operation === consts.OPERATIONS.PROGRAM) {
             return await this.apply_program_operation(input, options);
         }
+        if (operation === consts.OPERATIONS.REMOVE_ERRORS) {
+            return await this.apply_remove_errors_operation(input, options);
+        }
         throw Error('Unknown operation: ' + operation);
     }
 
@@ -84,6 +87,10 @@ export class Utils extends BaseUtils {
             }
         }
         return res;
+    }
+
+    private static async apply_remove_errors_operation(input: string[][], options: object) {
+        return input.filter(part => part.length !== 1 || !String(part[0].str).startsWith('Error: '));
     }
 
     static swap_operations(index_1: number, index_2: number) {

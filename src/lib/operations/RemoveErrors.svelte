@@ -1,5 +1,5 @@
 <script>
-    import {Button, Card, CardBody, Input} from "sveltestrap";
+    import {Button, Card, CardBody} from "sveltestrap";
     import IngredientHeader from "$lib/IngredientHeader.svelte";
     import {consts} from "$lib/consts";
     import {Utils} from "$lib/utils";
@@ -8,24 +8,18 @@
         return {
             stop: false,
             apply: true,
-            rules: '',
         };
     }
 
-    const operation = consts.OPERATIONS.PROGRAM;
+    const operation = consts.OPERATIONS.REMOVE_ERRORS;
     export let options = default_options();
     export let index = null;
-
-    function edit() {
-        Utils.edit_operation(index, options);
-    }
 </script>
 
 {#if index !== null}
     <Card>
         <IngredientHeader {operation} {index} {options} />
         <CardBody class="p-0">
-            <Input type="textarea" rows=5 bind:value="{options.rules}" on:keydown={edit} on:change={edit} />
         </CardBody>
     </Card>
 {:else}

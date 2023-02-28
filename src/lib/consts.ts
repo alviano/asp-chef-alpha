@@ -17,5 +17,6 @@ export const consts = {
   },
   OPERATIONS: {
     PROGRAM: 'Program',
+    REMOVE_ERRORS: 'Remove Errors',
   }
 };
