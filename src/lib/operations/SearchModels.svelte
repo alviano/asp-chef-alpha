@@ -7,13 +7,17 @@
         rules: '',
         number: 1,
         raises: true,
+        input_as_constraints: false,
     };
 
     Recipe.register_operation_type(operation, async (input, options) => {
+        const mapper = options.input_as_constraints ?
+            atom => `:- not ${atom.str}.` :
+            atom => atom.str + '.';
         const res = [];
         for (const part of input) {
             try {
-                const program = part.map(atom => atom.str + '.').join('\n') + options.rules;
+                const program = part.map(mapper).join('\n') + options.rules;
                 const models = await Utils.search_models(program, options.number, options.raises);
                 models.forEach(model => {
                     res.push(Utils.parse_atoms(model));
@@ -44,7 +48,7 @@
             The <strong>{operation}</strong> operation replaces each model in input with a sequence of models.
         </p>
         <p>
-            Each model in input is used as the input of a program given in the recipe.
+            Each model in input is used as the input of a program given in the recipe, either as facts (the defaults) or as constraints.
             <em>Weak constraints should not be included in the program; use the <strong>Optimize</strong> operation.</em>
         </p>
         <p>
@@ -65,5 +69,6 @@
                on:input={edit}
         />
         <Button outline="{!options.raises}" on:click={() => { options.raises = !options.raises; edit(); }}>Raise error</Button>
+        <Button outline="{!options.input_as_constraints}" on:click={() => { options.input_as_constraints = !options.input_as_constraints; edit(); }}>Use constraints</Button>
     </InputGroup>
 </Operation>

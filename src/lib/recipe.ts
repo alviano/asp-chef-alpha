@@ -108,6 +108,10 @@ export class Recipe {
         recipe.set(the_recipe);
     }
 
+    static remove_all_operations() {
+        recipe.set([]);
+    }
+
     static remove_operation(index: number) {
         recipe.set(this.recipe.filter((value, the_index) => index !== the_index));
     }

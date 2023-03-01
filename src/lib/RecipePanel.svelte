@@ -1,6 +1,6 @@
 <script>
     import {recipe} from "$lib/stores";
-    import {Card, CardBody, CardHeader, CardTitle} from "sveltestrap";
+    import {Button, Card, CardBody, CardHeader, Icon} from "sveltestrap";
     import SearchModels from "$lib/operations/SearchModels.svelte";
     import RemoveErrors from "$lib/operations/RemoveErrors.svelte";
     import Wrap from "$lib/operations/Wrap.svelte";
@@ -10,11 +10,18 @@
     import InputIntersection from "$lib/operations/InputIntersection.svelte";
     import InputUnion from "$lib/operations/InputUnion.svelte";
     import Table from "$lib/operations/Table.svelte";
+    import {Popover} from "dumbo-svelte";
+    import {Recipe} from "$lib/recipe";
 </script>
 
 <Card class="p-0">
-    <CardHeader>
-        <CardTitle>Recipe</CardTitle>
+    <CardHeader class="h3">
+        Recipe
+        <span class="float-end">
+            <Popover title="Remove operation" value="Remove all ingredients from the recipe.">
+                <Button size="sm" color="danger" on:click={() => Recipe.remove_all_operations()}><Icon name="trash" /></Button>
+            </Popover>
+        </span>
     </CardHeader>
     <CardBody class="p-0">
         {#each $recipe as ingredient, index}
