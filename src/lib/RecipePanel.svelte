@@ -14,6 +14,13 @@
     import {Recipe} from "$lib/recipe";
     import Unwrap from "$lib/operations/Unwrap.svelte";
     import Split from "$lib/operations/Split.svelte";
+    import {Utils} from "$lib/utils";
+
+    async function copy_to_clipboard() {
+        const url = Recipe.as_url();
+        await navigator.clipboard.writeText(url);
+        Utils.snackbar("URL copied in the clipboard!");
+    }
 </script>
 
 <Card class="p-0">
@@ -22,6 +29,9 @@
         <span class="float-end">
             <Popover title="Remove operation" value="Remove all ingredients from the recipe.">
                 <Button size="sm" color="danger" on:click={() => Recipe.remove_all_operations()}><Icon name="trash" /></Button>
+            </Popover>
+            <Popover title="Remove operation" value="Remove all ingredients from the recipe.">
+                <Button size="sm" on:click={() => copy_to_clipboard()}><Icon name="clipboard-plus" /></Button>
             </Popover>
         </span>
     </CardHeader>

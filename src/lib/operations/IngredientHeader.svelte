@@ -17,6 +17,9 @@
             <Popover title="Remove operation" value="Remove ingredient #{index + 1} from the recipe.">
                 <Button size="sm" color="danger" on:click={() => Recipe.remove_operation(index)}><Icon name="trash" /></Button>
             </Popover>
+            <Popover title="Duplicate operation" value="Add a copy of ingredient #{index + 1} below it.">
+                <Button size="sm" on:click={() => Recipe.duplicate_operation(index)}><Icon name="box-arrow-down" /></Button>
+            </Popover>
             <Popover title="Control execution of the recipe">
                 <div slot="value">
                     <p>Enabled ingredients <Badge><Icon name="eye" /></Badge> are applied.</p>

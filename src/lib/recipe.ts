@@ -108,12 +108,24 @@ export class Recipe {
         recipe.set(the_recipe);
     }
 
+    static as_url() {
+        const res = new URL(location.toString());
+        res.hash = this.last_serialization;
+        return res.toString();
+    }
+
     static remove_all_operations() {
         recipe.set([]);
     }
 
     static remove_operation(index: number) {
         recipe.set(this.recipe.filter((value, the_index) => index !== the_index));
+    }
+
+    static duplicate_operation(index: number) {
+        const the_recipe = this.recipe;
+        the_recipe.splice(index, 0, JSON.parse(JSON.stringify(the_recipe[index])));
+        recipe.set(the_recipe);
     }
 
     static toggle_stop_at_operation(index: number) {
