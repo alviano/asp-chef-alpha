@@ -8,19 +8,21 @@
     };
 
     Recipe.register_operation_type(operation, async (input, options) => {
+        const res = [];
         for (let index = 0; index < input.length; index++) {
             const part = input[index];
             try {
                 const models = await Utils.search_models(part.map(atom => `${atom.str}.`).join('\n') + `
-{__active_model__(1..NumberOfModels)} = 1 :- NumberOfModels = #count{Index : ${options.predicate}(Index, _)}.
+{${options.predicate}'(Index) : ${options.predicate}(Index)} = 1.
 #show.
-#show Atom : __active_model__(Index), ${options.predicate}(Index, Atom).
-                `, 0);
-                return models.map(model => Utils.parse_atoms(model));
+#show Atom : ${options.predicate}'(Index), ${options.predicate}(Index, Atom).
+                `, 0, false);
+                res.push(...models.map(model => Utils.parse_atoms(model)));
             } catch (error) {
-                return [[{str: error}]]
+                res.push([{str: error}]);
             }
         }
+        return res;
     });
 </script>
 
@@ -49,7 +51,6 @@
         </p>
         <p>
             The order of models is not necessarily preserved.
-            Empty models are also possibly discarded.
         </p>
     </div>
     <Input type="search"

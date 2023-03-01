@@ -12,7 +12,7 @@
         for (let index = 0; index < input.length; index++) {
             const part = input[index];
             try {
-                const model = await Utils.search_model(part.map(atom => `${options.predicate}(${index + 1}, ${atom.str}).`).join('\n'));
+                const model = await Utils.search_model(`${options.predicate}(${index + 1}).` + part.map(atom => `${options.predicate}(${index + 1}, ${atom.str}).`).join('\n'));
                 res.push(Utils.parse_atoms(model));
             } catch (error) {
                 res.push([{str: error}])
@@ -39,7 +39,7 @@
         <p>The <strong>{operation}</strong> operation combines all models in a single model.</p>
         <p>
             Each model in input is encoded by a sequence of facts of the form <br />
-            <code class="ms-3">__model__(INDEX, ATOM).</code><br />
+            <code class="ms-3">__model__(INDEX). __model__(INDEX, ATOM).</code><br />
             where <code>INDEX</code> is an identifier for the model (starting from 1) and
             <code>ATOM</code> is an atom in the model.
         </p>

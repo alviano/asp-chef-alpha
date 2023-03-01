@@ -22,15 +22,15 @@
             </Popover>
             <Popover title="Control execution of the recipe">
                 <div slot="value">
-                    <p>Enabled ingredients <Badge><Icon name="eye" /></Badge> are applied.</p>
+                    <p>Enabled ingredients <Badge color="success"><Icon name="eye" /></Badge> are applied.</p>
                     <p>Disabled ingredients <Badge><Icon name="eye-slash" /></Badge> are skipped.</p>
                     <p>The recipe is terminated after applying an ingredient with the <strong>pause button</strong> <Badge><Icon name="pause-fill" /></Badge> active.</p>
                 </div>
                 <ButtonGroup>
-                    <Button size="sm" on:click={() => Recipe.toggle_apply_operation(index)}>
+                    <Button size="sm" color={options.apply ? "success" : "secondary"} outline={!options.apply} on:click={() => Recipe.toggle_apply_operation(index)}>
                         <Icon name={options.apply ? "eye" : "eye-slash"} />
                     </Button>
-                    <Button size="sm" active={options.stop} outline={!options.stop} on:click={() => Recipe.toggle_stop_at_operation(index)}><Icon name="pause-fill" /></Button>
+                    <Button size="sm" color={options.stop ? "danger" : "secondary"} outline={!options.stop} on:click={() => Recipe.toggle_stop_at_operation(index)}><Icon name="pause-fill" /></Button>
                 </ButtonGroup>
             </Popover>
             <Popover title="Move operation" value="Move ingredient #{index + 1} up or down in the recipe.">
