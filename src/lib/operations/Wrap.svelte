@@ -4,7 +4,7 @@
 
     const operation = "Wrap";
     const default_extra_options = {
-        predicate: 'atom',
+        predicate: '__atom__',
     };
 
     Recipe.register_operation_type(operation, async (input, options) => {

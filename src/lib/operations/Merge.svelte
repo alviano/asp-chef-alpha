@@ -4,7 +4,7 @@
 
     const operation = "Merge";
     const default_extra_options = {
-        predicate: 'model',
+        predicate: '__model__',
     };
 
     Recipe.register_operation_type(operation, async (input, options) => {

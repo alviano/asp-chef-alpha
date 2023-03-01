@@ -5,6 +5,11 @@ import {consts} from "$lib/consts";
 
 export class Recipe {
     private static operation_types = new Map();
+    private static last_serialization = null;
+
+    private static get recipe() {
+        return get(recipe);
+    }
 
     static async svelte_components(filter: string) {
         const res = [];
@@ -24,11 +29,32 @@ export class Recipe {
         this.operation_types.set(operation, apply);
     }
 
+    static serialize(input: string) {
+        const json = {
+            input: input,
+            recipe: this.recipe,
+        };
+        this.last_serialization = Utils.compress(json) + '!';
+        return this.last_serialization;
+    }
+
+    static deserialize(serialized_data: string) {
+        if (serialized_data === this.last_serialization) {
+            return null;
+        }
+        if (!serialized_data.endsWith('!')) {
+            throw Error('Cannot deserialize. Incomplete string. Must terminate with a bang!');
+        }
+        this.last_serialization = serialized_data;
+        const json = JSON.parse(Utils.uncompress(serialized_data.slice(0, -1)));
+        recipe.set(json.recipe);
+        return json.input;
+    }
+
     static async process(input: string): Promise<object[][]> {
-        const the_recipe = get(recipe);
         try {
             let result = await this.process_input(input);
-            for (const ingredient of the_recipe) {
+            for (const ingredient of this.recipe) {
                 if (ingredient.options.apply) {
                     result = await Recipe.apply_operation_type(ingredient.operation, result, ingredient.options);
                 }
@@ -51,7 +77,7 @@ export class Recipe {
 
 
     static async add_operation(operation: string, options: object) {
-        const the_recipe = get(recipe);
+        const the_recipe = this.recipe;
         the_recipe.push({
             operation,
             options,
@@ -60,7 +86,7 @@ export class Recipe {
     }
 
     static edit_operation(index: number, options: object) {
-        const the_recipe = get(recipe);
+        const the_recipe = this.recipe;
         the_recipe[index].options = options;
         recipe.set(the_recipe);
     }
@@ -75,7 +101,7 @@ export class Recipe {
     }
 
     static swap_operations(index_1: number, index_2: number) {
-        const the_recipe = get(recipe);
+        const the_recipe = this.recipe;
         const tmp = the_recipe[index_1];
         the_recipe[index_1] = the_recipe[index_2];
         the_recipe[index_2] = tmp;
@@ -83,18 +109,17 @@ export class Recipe {
     }
 
     static remove_operation(index: number) {
-        const the_recipe = get(recipe);
-        recipe.set(the_recipe.filter((value, the_index) => index !== the_index));
+        recipe.set(this.recipe.filter((value, the_index) => index !== the_index));
     }
 
     static toggle_stop_at_operation(index: number) {
-        const the_recipe = get(recipe);
+        const the_recipe = this.recipe;
         the_recipe[index].options.stop = !the_recipe[index].options.stop;
         recipe.set(the_recipe);
     }
 
     static toggle_apply_operation(index: number) {
-        const the_recipe = get(recipe);
+        const the_recipe = this.recipe;
         the_recipe[index].options.apply = !the_recipe[index].options.apply;
         recipe.set(the_recipe);
     }
