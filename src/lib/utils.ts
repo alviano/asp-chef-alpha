@@ -1,6 +1,7 @@
 import {default as peg} from 'pegjs';
 import {consts} from '$lib/consts';
 import {DOMPurifyConfig, Utils as BaseUtils} from "dumbo-svelte";
+import _ from 'lodash';
 // import {run} from 'clingo-wasm'
 
 const dom_purify_config = new DOMPurifyConfig(consts);
@@ -37,6 +38,27 @@ export class Utils extends BaseUtils {
             throw new Error(`Expecting ${number} models, found ${result.Models.Number}`);
         } else {
             return result.Call[0].Witnesses.map(witness => witness.Value);
+        }
+    }
+
+    static async search_optimal_models(program: string, number: number, raises: boolean) {
+        const result = await clingo.run(program, number, [
+            '--opt-mode=optN',
+        ]);
+        if (result.Result === 'ERROR') {
+            throw new Error(result.Error);
+        } else if (raises && result.Models.Optimal !== number) {
+            throw new Error(`Expecting ${number} optimal models, found ${result.Models.Optimal}`);
+        } else {
+            const res = result.Call[0].Witnesses
+                .filter(model => _.isEqual(model.Costs, result.Models.Costs))
+                .map(witness => witness.Value);
+            if (number !== 0) {
+                while (res.length > number) {
+                    res.shift()
+                }
+            }
+            return res;
         }
     }
 

@@ -1,6 +1,6 @@
 <script>
     import {recipe} from "$lib/stores";
-    import {Button, Card, CardBody, CardHeader, Icon} from "sveltestrap";
+    import {Button, Card, CardBody, CardHeader, CardTitle, Icon} from "sveltestrap";
     import SearchModels from "$lib/operations/SearchModels.svelte";
     import RemoveErrors from "$lib/operations/RemoveErrors.svelte";
     import Wrap from "$lib/operations/Wrap.svelte";
@@ -15,6 +15,7 @@
     import Unwrap from "$lib/operations/Unwrap.svelte";
     import Split from "$lib/operations/Split.svelte";
     import {Utils} from "$lib/utils";
+    import Optimize from "$lib/operations/Optimize.svelte";
 
     async function copy_to_clipboard() {
         const url = Recipe.as_url();
@@ -24,16 +25,18 @@
 </script>
 
 <Card class="p-0">
-    <CardHeader class="h3">
-        Recipe
-        <span class="float-end">
-            <Popover title="Remove operation" value="Remove all ingredients from the recipe.">
-                <Button size="sm" color="danger" on:click={() => Recipe.remove_all_operations()}><Icon name="trash" /></Button>
-            </Popover>
-            <Popover title="Remove operation" value="Remove all ingredients from the recipe.">
-                <Button size="sm" on:click={() => copy_to_clipboard()}><Icon name="clipboard-plus" /></Button>
-            </Popover>
-        </span>
+    <CardHeader>
+        <CardTitle class="h4">
+            Recipe
+            <span class="float-end">
+                <Popover title="Remove operation" value="Remove all ingredients from the recipe.">
+                    <Button size="sm" color="danger" on:click={() => Recipe.remove_all_operations()}><Icon name="trash" /></Button>
+                </Popover>
+                <Popover title="Remove operation" value="Remove all ingredients from the recipe.">
+                    <Button size="sm" on:click={() => copy_to_clipboard()}><Icon name="clipboard-plus" /></Button>
+                </Popover>
+            </span>
+        </CardTitle>
     </CardHeader>
     <CardBody class="p-0">
         {#each $recipe as ingredient, index}
@@ -60,6 +63,8 @@
                     <Unwrap options="{ingredient.options}" {index}/>
                 {:else if ingredient.operation === 'Split'}
                     <Split options="{ingredient.options}" {index}/>
+                {:else if ingredient.operation === 'Optimize'}
+                    <Optimize options="{ingredient.options}" {index}/>
                 {:else}
                     Unknown operation: {ingredient.operation}
                 {/if}

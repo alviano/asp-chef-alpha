@@ -2,7 +2,7 @@
     import {Recipe} from "$lib/recipe";
     import {Utils} from "$lib/utils";
 
-    const operation = "Search Models";
+    const operation = "Optimize";
     const default_extra_options = {
         rules: '',
         number: 1,
@@ -18,7 +18,7 @@
         for (const part of input) {
             try {
                 const program = part.map(mapper).join('\n') + options.rules;
-                const models = await Utils.search_models(program, options.number, options.raises);
+                const models = await Utils.search_optimal_models(program, options.number, options.raises);
                 models.forEach(model => {
                     res.push(Utils.parse_atoms(model));
                 });
@@ -49,7 +49,7 @@
         </p>
         <p>
             Each model in input is used as the input of a program given in the recipe, either as facts (the defaults) or as constraints.
-            <em>Weak constraints should not be included in the program; use the <strong>Optimize</strong> operation.</em>
+            An optimization function is expected to be specified by means of weak constraints.
         </p>
         <p>
             In addition to the rules of the program, the number of models can be specified (0 for unbounded).
