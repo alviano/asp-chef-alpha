@@ -40,11 +40,11 @@
         </p>
         <p>
             Each model in input is mapped to a model comprising facts of the form <br />
-            <code class="ms-3">atom(ATOM).</code><br />
+            <code class="ms-3">__atom__(ATOM).</code><br />
             where <code>ATOM</code> is an atom in the model.
         </p>
         <p>
-            The name of the unary predicate <code>atom</code> can be specified in the recipe.
+            The name of the unary predicate <code>__atom__</code> can be specified in the recipe.
         </p>
     </div>
     <Input type="search"

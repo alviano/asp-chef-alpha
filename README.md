@@ -4,6 +4,10 @@
         // $ mkdir -p static/dist; ln -s ../../node_modules/clingo-wasm/dist/clingo.wasm static/dist/
 
 
+## Adding new operations
+
+Create a component in $lib/operations and link it in the component RecipePanel.
+
 
 # create-svelte
 

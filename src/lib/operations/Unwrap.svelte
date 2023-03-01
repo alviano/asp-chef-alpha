@@ -2,23 +2,22 @@
     import {Recipe} from "$lib/recipe";
     import {Utils} from "$lib/utils";
 
-    const operation = "Merge";
+    const operation = "Unwrap";
     const default_extra_options = {
-        predicate: '__model__',
+        predicate: '__atom__',
     };
 
     Recipe.register_operation_type(operation, async (input, options) => {
         const res = [];
-        for (let index = 0; index < input.length; index++) {
-            const part = input[index];
+        for (const part of input) {
             try {
-                const model = await Utils.search_model(part.map(atom => `${options.predicate}(${index + 1}, ${atom.str}).`).join('\n'));
+                const model = await Utils.search_model(part.map(atom => `${atom.str}.`).join('\n') + `\n#show.\n#show Atom : ${options.predicate}(Atom).`);
                 res.push(Utils.parse_atoms(model));
             } catch (error) {
                 res.push([{str: error}])
             }
         }
-        return [res.flatMap(model => model)];
+        return res;
     });
 </script>
 
@@ -36,15 +35,17 @@
 
 <Operation {operation} {options} {index} {default_extra_options}>
     <div slot="description">
-        <p>The <strong>{operation}</strong> operation combines all models in a single model.</p>
         <p>
-            Each model in input is encoded by a sequence of facts of the form <br />
-            <code class="ms-3">__model__(INDEX, ATOM).</code><br />
-            where <code>INDEX</code> is an identifier for the model (starting from 1) and
-            <code>ATOM</code> is an atom in the model.
+            The <strong>{operation}</strong> operation reverse the Wrap operation.
         </p>
         <p>
-            The name of the binary predicate <code>__model__</code> can be specified in the recipe.
+            Each atom in input of the form <br />
+            <code class="ms-3">__atom__(ATOM).</code><br />
+            is replaced by <br />
+            <code class="ms-3">ATOM.</code><br />
+        </p>
+        <p>
+            The name of the unary predicate <code>__atom__</code> can be specified in the recipe.
         </p>
     </div>
     <Input type="search"

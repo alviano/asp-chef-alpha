@@ -12,6 +12,8 @@
     import Table from "$lib/operations/Table.svelte";
     import {Popover} from "dumbo-svelte";
     import {Recipe} from "$lib/recipe";
+    import Unwrap from "$lib/operations/Unwrap.svelte";
+    import Split from "$lib/operations/Split.svelte";
 </script>
 
 <Card class="p-0">
@@ -44,6 +46,10 @@
                     <InputUnion options="{ingredient.options}" {index}/>
                 {:else if ingredient.operation === 'Table'}
                     <Table options="{ingredient.options}" {index}/>
+                {:else if ingredient.operation === 'Unwrap'}
+                    <Unwrap options="{ingredient.options}" {index}/>
+                {:else if ingredient.operation === 'Split'}
+                    <Split options="{ingredient.options}" {index}/>
                 {:else}
                     Unknown operation: {ingredient.operation}
                 {/if}
