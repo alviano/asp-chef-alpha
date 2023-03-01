@@ -2,17 +2,18 @@
     import {Recipe} from "$lib/recipe";
     import {Utils} from "$lib/utils";
 
-    const operation = "Wrap";
+    const operation = "Union";
     const default_extra_options = {
-        predicate: 'atom',
+        rules: '',
     };
 
     Recipe.register_operation_type(operation, async (input, options) => {
         const res = [];
         for (const part of input) {
             try {
-                const model = await Utils.search_model(part.map(atom => `${options.predicate}(${atom.str}).`).join('\n'));
-                res.push(Utils.parse_atoms(model));
+                const program = part.map(atom => atom.str + '.').join('\n') + options.rules;
+                const consequences = await Utils.brave_consequences(program);
+                res.push(Utils.parse_atoms(consequences));
             } catch (error) {
                 res.push([{str: error}])
             }
@@ -36,20 +37,17 @@
 <Operation {operation} {options} {index} {default_extra_options}>
     <div slot="description">
         <p>
-            The <strong>{operation}</strong> operation considers the elements in input as terms of a unary predicate.
+            The <strong>{operation}</strong> operation replaces each model in input with a sequence of <em>brave consequences</em>.
         </p>
         <p>
-            Each model in input is mapped to a model comprising facts of the form <br />
-            <code class="ms-3">atom(ATOM).</code><br />
-            where <code>ATOM</code> is an atom in the model.
-        </p>
-        <p>
-            The name of the unary predicate <code>atom</code> can be specified in the recipe.
+            Each model in input is used as the input of a program given in the recipe, and its brave consequences are computed.
+            <em>Weak constraints should not be included in the program; use the <strong>Optimize</strong> operation.</em>
         </p>
     </div>
-    <Input type="search"
-           bind:value="{options.predicate}"
-           placeholder="predicate"
+    <Input type="textarea"
+           rows=5
+           bind:value="{options.rules}"
+           placeholder="One or more ASP rules..."
            on:input={edit}
     />
 </Operation>

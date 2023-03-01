@@ -2,7 +2,7 @@
     import {Recipe} from "$lib/recipe";
     import {Utils} from "$lib/utils";
 
-    const operation = "Program";
+    const operation = "Search Models";
     const default_extra_options = {
         rules: '',
         number: 1,
@@ -41,10 +41,11 @@
 <Operation {operation} {options} {index} {default_extra_options}>
     <div slot="description">
         <p>
-            The <strong>program</strong> operation replaces each model in input with a sequence of models.
+            The <strong>{operation}</strong> operation replaces each model in input with a sequence of models.
         </p>
         <p>
             Each model in input is used as the input of a program given in the recipe.
+            <em>Weak constraints should not be included in the program; use the <strong>Optimize</strong> operation.</em>
         </p>
         <p>
             In addition to the rules of the program, the number of models can be specified (0 for unbounded).

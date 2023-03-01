@@ -11,7 +11,7 @@
 <Navbar color="dark d-print-none" dark expand="md">
   <NavbarBrand href='/'>
     <span class="logo">
-      Asp Chef
+      ASP Chef
     </span>
   </NavbarBrand>
   <NavbarToggler on:click={() => (isOpen = !isOpen)} />

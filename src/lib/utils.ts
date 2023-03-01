@@ -1,6 +1,7 @@
 import {default as peg} from 'pegjs';
 import {consts} from '$lib/consts';
 import {DOMPurifyConfig, Utils as BaseUtils} from "dumbo-svelte";
+// import {run} from 'clingo-wasm'
 
 const dom_purify_config = new DOMPurifyConfig(consts);
 
@@ -36,6 +37,32 @@ export class Utils extends BaseUtils {
             throw new Error(`Expecting ${number} models, found ${result.Models.Number}`);
         } else {
             return result.Call[0].Witnesses.map(witness => witness.Value);
+        }
+    }
+
+    static async cautious_consequences(program: string) {
+        const result = await clingo.run(program, 0, [
+            '--enum-mode=cautious'
+        ]);
+        if (result.Result === 'ERROR') {
+            throw new Error(result.Error);
+        } else if (result.Result === 'UNSATISFIABLE') {
+            throw new Error('NO MODEL');
+        } else {
+            return result.Call[0].Witnesses[result.Call[0].Witnesses.length - 1].Value;
+        }
+    }
+
+    static async brave_consequences(program: string) {
+        const result = await clingo.run(program, 0, [
+            '--enum-mode=brave'
+        ]);
+        if (result.Result === 'ERROR') {
+            throw new Error(result.Error);
+        } else if (result.Result === 'UNSATISFIABLE') {
+            throw new Error('NO MODEL');
+        } else {
+            return result.Call[0].Witnesses[result.Call[0].Witnesses.length - 1].Value;
         }
     }
 
@@ -75,7 +102,7 @@ term
 / the_number:number { return { number : the_number, str : '' + the_number }; }
 
 string_id
-= head:[a-z] tail:[A-Za-z0-9_]* { return head + tail.join(""); }
+= prefix:[_]* head:[a-z] tail:[A-Za-z0-9_]* { return prefix.join("") + head + tail.join(""); }
 
 quoted_string
 = '"' str:('\\\\"' / [^"])* '"' { return '"' + str.join("") + '"'; }

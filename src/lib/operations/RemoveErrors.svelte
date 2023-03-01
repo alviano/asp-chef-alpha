@@ -31,7 +31,7 @@
 <Operation {operation} {options} {index} {default_extra_options}>
     <div slot="description">
         <p>
-            The <strong>remove errors</strong> operation discards input parts being errors.
+            The <strong>{operation}</strong> operation discards input parts being errors.
         </p>
         <p>
             The errors to be discarded can be specified by means of a regular expression.

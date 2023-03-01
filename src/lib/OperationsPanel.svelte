@@ -16,7 +16,7 @@
         {:then components}
             {#each components as component}
                 <div class="mb-1">
-                    <svelte:component this={component} />
+                    <svelte:component this={component} options="{undefined}" index="{undefined}" />
                 </div>
             {/each}
         {/await}

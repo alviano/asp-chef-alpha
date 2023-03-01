@@ -36,7 +36,7 @@
 
 <Operation {operation} {options} {index} {default_extra_options}>
     <div slot="description">
-        <p>The <strong>merge</strong> operation combines all models in a single model.</p>
+        <p>The <strong>{operation}</strong> operation combines all models in a single model.</p>
         <p>
             Each model in input is encoded by a sequence of facts of the form <br />
             <code class="ms-3">model(INDEX, ATOM).</code><br />
