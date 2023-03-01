@@ -7,7 +7,12 @@
 
 <Card class="p-0">
     <CardHeader>
-        <CardTitle>Input</CardTitle>
+        <CardTitle>
+            Input
+            <span class="float-end">
+                <code class="h6">models: {value.split(consts.SYMBOLS.MODELS_SEPARATOR).length}</code>
+            </span>
+        </CardTitle>
     </CardHeader>
     <CardBody class="p-0">
         <Input type="textarea"

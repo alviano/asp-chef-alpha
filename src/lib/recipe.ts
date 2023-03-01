@@ -31,7 +31,7 @@ export class Recipe {
 
     static serialize(input: string) {
         const json = {
-            input: input,
+            input: input.split(consts.SYMBOLS.MODELS_SEPARATOR),
             recipe: this.recipe,
         };
         this.last_serialization = Utils.compress(json) + '!';
@@ -48,7 +48,7 @@ export class Recipe {
         this.last_serialization = serialized_data;
         const json = JSON.parse(Utils.uncompress(serialized_data.slice(0, -1)));
         recipe.set(json.recipe);
-        return json.input;
+        return json.input.join(consts.SYMBOLS.MODELS_SEPARATOR);
     }
 
     static async process(input: string): Promise<object[][]> {

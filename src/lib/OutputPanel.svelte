@@ -8,7 +8,12 @@
 
 <Card class="p-0">
     <CardHeader>
-        <CardTitle>Output</CardTitle>
+        <CardTitle>
+            Output
+            <span class="float-end">
+                <code class="h6">models: {value.length}</code>
+            </span>
+        </CardTitle>
     </CardHeader>
     <CardBody class="p-0">
         <Input type="textarea" rows=10 readonly name="output" value="{text_value}" />
