@@ -14,5 +14,6 @@ export const consts = {
     THUMB_UP: '👍',
     LOCKED: '🔒',
     UNLOCKED: '🔓',
+    MODELS_SEPARATOR: '§',
   },
 };

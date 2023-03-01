@@ -105,7 +105,7 @@ string_id
 = prefix:[_]* head:[a-z] tail:[A-Za-z0-9_]* { return prefix.join("") + head + tail.join(""); }
 
 quoted_string
-= '"' str:('\\\\"' / [^"])* '"' { return '"' + str.join("") + '"'; }
+= '"' str:('\\\\"' / [^"${consts.SYMBOLS.MODELS_SEPARATOR}])* '"' { return '"' + str.join("") + '"'; }
 
 number
 = str:[0-9]+ { return parseInt(str.join("")); }

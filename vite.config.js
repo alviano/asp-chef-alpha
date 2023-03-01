@@ -6,11 +6,11 @@ const config = {
 		sveltekit(),
 	],
 	test: {
-		include: ['src/**/*.{test,spec}.{js,ts}']
+		include: ['src/**/*.{test,spec}.{js,ts}'],
+		environment: 'jsdom',
+		globals: true,
+		setupFiles: ["@testing-library/jest-dom/extend-expect"]
 	},
-	output: {
-		publicPath: ''
-	}
 };
 
 export default config;

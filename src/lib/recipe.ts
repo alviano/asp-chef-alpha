@@ -1,6 +1,7 @@
 import {get} from "svelte/store";
 import {Utils} from "$lib/utils";
 import {recipe} from "$lib/stores";
+import {consts} from "$lib/consts";
 
 export class Recipe {
     private static operation_types = new Map();
@@ -66,7 +67,7 @@ export class Recipe {
 
     static async process_input(input: string) {
         const res = [];
-        for (const part of input.split('§')) {
+        for (const part of input.split(consts.SYMBOLS.MODELS_SEPARATOR)) {
             const atoms = await Utils.parse_answer_set(part);
             res.push(atoms);
         }

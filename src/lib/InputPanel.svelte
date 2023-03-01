@@ -1,5 +1,6 @@
 <script>
     import {Card, CardBody, CardHeader, CardTitle, Input} from "sveltestrap";
+    import {consts} from "$lib/consts";
 
     export let value;
 </script>
@@ -9,6 +10,12 @@
         <CardTitle>Input</CardTitle>
     </CardHeader>
     <CardBody class="p-0">
-        <Input type="textarea" rows=10 name="input" bind:value={value} />
+        <Input type="textarea"
+               placeholder={`One or more models separated by ${consts.SYMBOLS.MODELS_SEPARATOR}`}
+               rows=10
+               name="input"
+               bind:value={value}
+               data-testid="InputPanel-textarea"
+        />
     </CardBody>
 </Card>
