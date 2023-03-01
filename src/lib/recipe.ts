@@ -13,7 +13,7 @@ export class Recipe {
 
     static async svelte_components(filter: string) {
         const res = [];
-        for (const [key, value] of Array.from(this.operation_types).sort()) {
+        for (const [key] of Array.from(this.operation_types).sort()) {
             if (String(key).match(new RegExp(filter, 'i'))) {
                 const component = (await import(`./operations/${String(key).replace(/ /g, '')}.svelte`)).default;
                 res.push(component);
@@ -24,7 +24,7 @@ export class Recipe {
 
     static register_operation_type(
         operation: string,
-        apply: (input: string[][], options: object) => Promise<string[][]>
+        apply: (input: string[][], options: object, index: number) => Promise<string[][]>
     ) {
         this.operation_types.set(operation, apply);
     }
@@ -54,9 +54,9 @@ export class Recipe {
     static async process(input: string): Promise<object[][]> {
         try {
             let result = await this.process_input(input);
-            for (const ingredient of this.recipe) {
+            for (const [index, ingredient] of this.recipe.entries()) {
                 if (ingredient.options.apply) {
-                    result = await Recipe.apply_operation_type(ingredient.operation, result, ingredient.options);
+                    result = await Recipe.apply_operation_type(index, ingredient.operation, result, ingredient.options);
                 }
                 if (ingredient.options.stop) {
                     break;
@@ -68,11 +68,11 @@ export class Recipe {
         }
     }
 
-    static async apply_operation_type(operation: string, input: string[][], options: object) {
+    static async apply_operation_type(index: number, operation: string, input: string[][], options: object) {
         if (!this.operation_types.has(operation)) {
             throw Error('Unknown operation: ' + operation);
         }
-        return await this.operation_types.get(operation)(input, options);
+        return await this.operation_types.get(operation)(input, options, index);
     }
 
 

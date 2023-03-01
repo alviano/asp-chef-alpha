@@ -9,6 +9,7 @@
     import Union from "$lib/operations/Union.svelte";
     import InputIntersection from "$lib/operations/InputIntersection.svelte";
     import InputUnion from "$lib/operations/InputUnion.svelte";
+    import Table from "$lib/operations/Table.svelte";
 </script>
 
 <Card class="p-0">
@@ -34,6 +35,8 @@
                     <InputIntersection options="{ingredient.options}" {index} />
                 {:else if ingredient.operation === 'Input Union'}
                     <InputUnion options="{ingredient.options}" {index}/>
+                {:else if ingredient.operation === 'Table'}
+                    <Table options="{ingredient.options}" {index}/>
                 {:else}
                     Unknown operation: {ingredient.operation}
                 {/if}

@@ -6,7 +6,7 @@
     import OutputPanel from "$lib/OutputPanel.svelte";
     import {recipe} from "$lib/stores";
     import RecipePanel from "$lib/RecipePanel.svelte";
-    import {onMount} from "svelte";
+    import {onDestroy, onMount} from "svelte";
 
     let input_value = location.hash.length > 1 ? Recipe.deserialize(location.hash.slice(1)) : '';
     let output_value = [];
@@ -19,7 +19,7 @@
         location.hash = Recipe.serialize(input);
     }
 
-    recipe.subscribe(() => {
+    const unsubscribe = recipe.subscribe(() => {
         update_hash(input_value);
         process(input_value);
     });
@@ -27,15 +27,18 @@
     $: process(input_value);
     $: update_hash(input_value);
 
-    $: console.log(location.hash)
     onMount(() => {
         window.addEventListener('hashchange', () => {
             const input = Recipe.deserialize(location.hash.slice(1));
             if (input !== null) {
                 input_value = input;
             }
-        })
-    })
+        });
+    });
+
+    onDestroy(() => {
+        unsubscribe();
+    });
 </script>
 
 <Row>
