@@ -57,11 +57,13 @@
             The <strong>{operation}</strong> operation selects some predicates from the models in input.
         </p>
     </div>
-    {#each input_predicates as predicate}
-        <Input type="switch"
-               label="{predicate}"
-               checked="{options.predicates.includes(predicate)}"
-               on:change={() => toggle_predicate(predicate)}
-               />
-    {/each}
+    <div class="m-3">
+        {#each input_predicates as predicate}
+            <Input type="switch"
+                   label="{predicate}"
+                   checked="{options.predicates.includes(predicate)}"
+                   on:change={() => toggle_predicate(predicate)}
+                   />
+        {/each}
+    </div>
 </Operation>

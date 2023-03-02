@@ -4,6 +4,7 @@
 
     const operation = "Search Models";
     const default_extra_options = {
+        rows: 5,
         rules: '',
         number: 1,
         raises: true,
@@ -56,8 +57,16 @@
             An error can be raised if the specified number of models is not produced (if 0, the program is expected to be incoherent).
         </p>
     </div>
+    <InputGroup>
+        <InputGroupText>Rows</InputGroupText>
+        <Input type="number"
+               bind:value={options.rows}
+               min="1"
+               on:input={edit}
+        />
+    </InputGroup>
     <Input type="textarea"
-           rows=5
+           rows={options.rows}
            bind:value="{options.rules}"
            placeholder="One or more ASP rules..."
            on:input={edit}

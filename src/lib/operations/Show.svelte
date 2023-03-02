@@ -4,6 +4,7 @@
 
     const operation = "Show";
     const default_extra_options = {
+        rows: 5,
         rules: '',
     };
 
@@ -24,7 +25,7 @@
 </script>
 
 <script>
-    import {Input} from "sveltestrap";
+    import {Input, InputGroup, InputGroupText} from "sveltestrap";
     import Operation from "$lib/operations/Operation.svelte";
 
     export let options;
@@ -47,8 +48,16 @@
             A program can be specified in general, but the target should be the set of <code>#show</code> directives.
         </p>
     </div>
+    <InputGroup>
+        <InputGroupText>Rows</InputGroupText>
+        <Input type="number"
+               bind:value={options.rows}
+               min="1"
+               on:input={edit}
+        />
+    </InputGroup>
     <Input type="textarea"
-           rows=5
+           rows={options.rows}
            bind:value="{options.rules}"
            placeholder="One or more #show directives..."
            on:input={edit}

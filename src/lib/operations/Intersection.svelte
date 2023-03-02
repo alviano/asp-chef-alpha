@@ -4,6 +4,7 @@
 
     const operation = "Intersection";
     const default_extra_options = {
+        rows: 5,
         rules: '',
     };
 
@@ -23,7 +24,7 @@
 </script>
 
 <script>
-    import {Input} from "sveltestrap";
+    import {Input, InputGroup, InputGroupText} from "sveltestrap";
     import Operation from "$lib/operations/Operation.svelte";
 
     export let options;
@@ -44,8 +45,16 @@
             <em>Weak constraints should not be included in the program; use the <strong>Optimize</strong> operation.</em>
         </p>
     </div>
+    <InputGroup>
+        <InputGroupText>Rows</InputGroupText>
+        <Input type="number"
+               bind:value={options.rows}
+               min="1"
+               on:input={edit}
+        />
+    </InputGroup>
     <Input type="textarea"
-           rows=5
+           rows={options.rows}
            bind:value="{options.rules}"
            placeholder="One or more ASP rules..."
            on:input={edit}
