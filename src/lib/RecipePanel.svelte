@@ -16,6 +16,9 @@
     import Split from "$lib/operations/Split.svelte";
     import {Utils} from "$lib/utils";
     import Optimize from "$lib/operations/Optimize.svelte";
+    import Show from "$lib/operations/Show.svelte";
+    import Output from "$lib/operations/Output.svelte";
+    import Nop from "$lib/operations/Nop.svelte";
 
     async function copy_to_clipboard() {
         const url = Recipe.as_url();
@@ -56,15 +59,21 @@
                 {:else if ingredient.operation === 'Input Intersection'}
                     <InputIntersection options="{ingredient.options}" {index} />
                 {:else if ingredient.operation === 'Input Union'}
-                    <InputUnion options="{ingredient.options}" {index}/>
+                    <InputUnion options="{ingredient.options}" {index} />
                 {:else if ingredient.operation === 'Table'}
-                    <Table options="{ingredient.options}" {index}/>
+                    <Table options="{ingredient.options}" {index} />
                 {:else if ingredient.operation === 'Unwrap'}
-                    <Unwrap options="{ingredient.options}" {index}/>
+                    <Unwrap options="{ingredient.options}" {index} />
                 {:else if ingredient.operation === 'Split'}
-                    <Split options="{ingredient.options}" {index}/>
+                    <Split options="{ingredient.options}" {index} />
                 {:else if ingredient.operation === 'Optimize'}
-                    <Optimize options="{ingredient.options}" {index}/>
+                    <Optimize options="{ingredient.options}" {index} />
+                {:else if ingredient.operation === 'Show'}
+                    <Show options="{ingredient.options}" {index} />
+                {:else if ingredient.operation === 'Output'}
+                    <Output options="{ingredient.options}" {index} on:change_input />
+                {:else if ingredient.operation === 'Nop'}
+                    <Nop options="{ingredient.options}" {index} />
                 {:else}
                     Unknown operation: {ingredient.operation}
                 {/if}

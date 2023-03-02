@@ -44,7 +44,7 @@
         <Operations />
     </Col>
     <Col>
-        <RecipePanel />
+        <RecipePanel on:change_input={(event) => input_value = event.detail} />
     </Col>
     <Col>
         <Row>

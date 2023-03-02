@@ -16,7 +16,7 @@
 <script>
     import {Table} from "sveltestrap";
     import Operation from "$lib/operations/Operation.svelte";
-    import {onMount} from "svelte";
+    import {onDestroy, onMount} from "svelte";
 
     export let options;
     export let index;
@@ -35,8 +35,12 @@
     onMount(() => {
         listeners.set(index, (input) => {
             models = input;
-        })
-    })
+        });
+    });
+
+    onDestroy(() => {
+        listeners.set(index, null);
+    });
 </script>
 
 <Operation {operation} {options} {index} {default_extra_options}>
