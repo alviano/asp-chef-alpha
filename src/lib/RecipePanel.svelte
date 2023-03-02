@@ -32,7 +32,7 @@
                 <Popover title="Remove operation" value="Remove all ingredients from the recipe.">
                     <Button size="sm" color="danger" on:click={() => Recipe.remove_all_operations()}><Icon name="trash" /></Button>
                 </Popover>
-                <Popover title="Remove operation" value="Remove all ingredients from the recipe.">
+                <Popover title="Copy recipe" value="Copy the recipe URL in the clipboard.">
                     <Button size="sm" on:click={() => copy_to_clipboard()}><Icon name="clipboard-plus" /></Button>
                 </Popover>
             </span>

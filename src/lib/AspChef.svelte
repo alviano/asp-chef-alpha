@@ -8,31 +8,29 @@
     import RecipePanel from "$lib/RecipePanel.svelte";
     import {onDestroy, onMount} from "svelte";
 
-    let input_value = location.hash.length > 1 ? Recipe.deserialize(location.hash.slice(1)) : '';
+    let input_value = '';
     let output_value = [];
 
     async function process(input_value) {
         output_value = await Recipe.process(input_value)
+        if (unsubscribe !== null) {
+            location.hash = Recipe.serialize(input_value);
+        }
     }
-
-    function update_hash(input) {
-        location.hash = Recipe.serialize(input);
-    }
-
-    const unsubscribe = recipe.subscribe(() => {
-        update_hash(input_value);
-        process(input_value);
-    });
 
     $: process(input_value);
-    $: update_hash(input_value);
+
+    let unsubscribe = null;
 
     onMount(() => {
-        window.addEventListener('hashchange', () => {
+        if (location.hash.length > 1) {
             const input = Recipe.deserialize(location.hash.slice(1));
             if (input !== null) {
                 input_value = input;
             }
+        }
+        unsubscribe = recipe.subscribe(() => {
+            process(input_value);
         });
     });
 
