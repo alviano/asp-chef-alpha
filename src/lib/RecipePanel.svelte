@@ -21,6 +21,7 @@
     import Nop from "$lib/operations/Nop.svelte";
     import Filter from "$lib/operations/Filter.svelte";
     import Select from "$lib/operations/Select.svelte";
+    import Undo from "$lib/operations/Undo.svelte";
 
     async function copy_to_clipboard() {
         const url = Recipe.as_url();
@@ -80,6 +81,8 @@
                     <Filter options="{ingredient.options}" {index} />
                 {:else if ingredient.operation === 'Select'}
                     <Select options="{ingredient.options}" {index} />
+                {:else if ingredient.operation === 'Undo'}
+                    <Undo options="{ingredient.options}" {index} />
                 {:else}
                     Unknown operation: {ingredient.operation}
                 {/if}

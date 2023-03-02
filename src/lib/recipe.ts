@@ -6,6 +6,7 @@ import {consts} from "$lib/consts";
 export class Recipe {
     private static operation_types = new Map();
     private static last_serialization = null;
+    private static input_at_index = [];
 
     private static get recipe() {
         return get(recipe);
@@ -51,10 +52,16 @@ export class Recipe {
         return json.input.join(consts.SYMBOLS.MODELS_SEPARATOR);
     }
 
+    static get_input_at_index(index: number) {
+        return this.input_at_index[index];
+    }
+
     static async process(input: string): Promise<object[][]> {
+        this.input_at_index.length = 0;
         try {
             let result = await this.process_input(input);
             for (const [index, ingredient] of this.recipe.entries()) {
+                this.input_at_index.push(result);
                 if (ingredient.options.apply) {
                     result = await Recipe.apply_operation_type(index, ingredient.operation, result, ingredient.options);
                 }
