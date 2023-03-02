@@ -1,13 +1,22 @@
 <script>
-    import {Button, Card, CardBody, CardHeader, CardTitle, Icon, Input} from "sveltestrap";
+    import {Button, Card, CardBody, CardHeader, CardTitle, Icon, Input, InputGroup, InputGroupText} from "sveltestrap";
     import {Popover} from "dumbo-svelte";
     import {createEventDispatcher} from "svelte";
+    import {output_rows} from "$lib/stores";
 
     const dispatch = createEventDispatcher();
 
     export let value = [];
-
     $: text_value = value.map(atoms => atoms.map(atom => atom.str + '.').join('\n')).join('\n§\n');
+
+    function update_output_rows(rows) {
+        if (rows !== $output_rows) {
+            $output_rows = rows;
+        }
+    }
+
+    let rows = $output_rows;
+    $: update_output_rows(rows);
 </script>
 
 <Card class="p-0">
@@ -23,6 +32,13 @@
         </CardTitle>
     </CardHeader>
     <CardBody class="p-0">
-        <Input type="textarea" rows=10 readonly name="output" value="{text_value}" />
+        <InputGroup>
+            <InputGroupText>Rows</InputGroupText>
+            <Input type="number"
+                   bind:value={rows}
+                   min="1"
+            />
+        </InputGroup>
+        <Input type="textarea" {rows} readonly name="output" value="{text_value}" />
     </CardBody>
 </Card>

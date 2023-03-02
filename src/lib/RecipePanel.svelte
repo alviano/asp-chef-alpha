@@ -19,6 +19,7 @@
     import Show from "$lib/operations/Show.svelte";
     import Output from "$lib/operations/Output.svelte";
     import Nop from "$lib/operations/Nop.svelte";
+    import Filter from "$lib/operations/Filter.svelte";
 
     async function copy_to_clipboard() {
         const url = Recipe.as_url();
@@ -74,6 +75,8 @@
                     <Output options="{ingredient.options}" {index} on:change_input />
                 {:else if ingredient.operation === 'Nop'}
                     <Nop options="{ingredient.options}" {index} />
+                {:else if ingredient.operation === 'Filter'}
+                    <Filter options="{ingredient.options}" {index} />
                 {:else}
                     Unknown operation: {ingredient.operation}
                 {/if}
