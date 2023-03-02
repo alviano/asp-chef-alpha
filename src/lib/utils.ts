@@ -88,6 +88,10 @@ export class Utils extends BaseUtils {
         }
     }
 
+    static predicates(models: string[][]) {
+        return models.flatMap(model => model.map(atom => atom.predicate || 'CONSTANTS')).sort();
+    }
+
     static parse_atom(atom: string) {
         return PARSER.parse(atom);
     }

@@ -11,14 +11,25 @@
     let input_value = '';
     let output_value = [];
 
+    let process_timeout = null;
+
     async function process(input_value) {
-        output_value = await Recipe.process(input_value)
+        output_value = await Recipe.process(input_value);
         if (unsubscribe !== null) {
             location.hash = Recipe.serialize(input_value);
         }
     }
 
-    $: process(input_value);
+    function delayed_process(input_value) {
+        if (process_timeout !== null) {
+            clearTimeout(process_timeout);
+        }
+        process_timeout = setTimeout(async () => {
+            await process(input_value)
+        }, 100);
+    }
+
+    $: delayed_process(input_value);
 
     let unsubscribe = null;
 
@@ -30,7 +41,7 @@
             }
         }
         unsubscribe = recipe.subscribe(() => {
-            process(input_value);
+            delayed_process(input_value);
         });
     });
 
@@ -44,7 +55,9 @@
         <Operations />
     </Col>
     <Col>
-        <RecipePanel on:change_input={(event) => input_value = event.detail} />
+        <RecipePanel
+                on:change_input={(event) => input_value = event.detail}
+        />
     </Col>
     <Col>
         <Row>
