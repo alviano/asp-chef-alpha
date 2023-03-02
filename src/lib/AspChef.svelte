@@ -53,7 +53,7 @@
             <InputPanel bind:value={input_value} />
         </Row>
         <Row>
-            <OutputPanel value={output_value} />
+            <OutputPanel value={output_value} on:change_input={(event) => input_value = event.detail} />
         </Row>
     </Col>
 </Row>

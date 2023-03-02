@@ -1,6 +1,7 @@
 <script>
-    import {Card, CardBody, CardHeader, CardTitle, Input} from "sveltestrap";
+    import {Button, Card, CardBody, CardHeader, CardTitle, Icon, Input} from "sveltestrap";
     import {consts} from "$lib/consts";
+    import {Popover} from "dumbo-svelte";
 
     export let value;
 </script>
@@ -10,7 +11,10 @@
         <CardTitle>
             Input
             <span class="float-end">
-                <code class="h6">models: {value.split(consts.SYMBOLS.MODELS_SEPARATOR).length}</code>
+                <code class="h6 me-3">models: {value.split(consts.SYMBOLS.MODELS_SEPARATOR).length}</code>
+                <Popover title="Remove operation" value="Remove input content.">
+                    <Button size="sm" color="danger" on:click={() => value = ''}><Icon name="trash" /></Button>
+                </Popover>
             </span>
         </CardTitle>
     </CardHeader>

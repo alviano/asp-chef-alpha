@@ -47,7 +47,7 @@ export class Utils extends BaseUtils {
         ]);
         if (result.Result === 'ERROR') {
             throw new Error(result.Error);
-        } else if (raises && result.Models.Optimal !== number) {
+        } else if (raises && (result.Models.Optimal !== undefined ? result.Models.Optimal !== number : result.Models.Number !== number)) {
             throw new Error(`Expecting ${number} optimal models, found ${result.Models.Optimal}`);
         } else {
             const res = result.Call[0].Witnesses
