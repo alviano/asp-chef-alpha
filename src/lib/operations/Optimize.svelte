@@ -9,6 +9,7 @@
         number: 1,
         raises: true,
         input_as_constraints: false,
+        decode_predicate: '__base64__',
     };
 
     Recipe.register_operation_type(operation, async (input, options) => {
@@ -18,7 +19,12 @@
         const res = [];
         for (const part of input) {
             try {
-                const program = part.map(mapper).join('\n') + options.rules;
+                const program = part.map(atom => {
+                    if (atom.predicate === options.decode_predicate) {
+                        return atob(atom.terms[0].str.slice(1, -1));
+                    }
+                    return mapper(atom);
+                }).join('\n') + options.rules;
                 const models = await Utils.search_optimal_models(program, options.number, options.raises);
                 models.forEach(model => {
                     res.push(Utils.parse_atoms(model));
@@ -53,6 +59,9 @@
             An optimization function is expected to be specified by means of weak constraints.
         </p>
         <p>
+            A unary predicate is decoded as part of the program (default <code>__base64__/1</code>).
+        </p>
+        <p>
             In addition to the rules of the program, the number of models can be specified (0 for unbounded).
             An error can be raised if the specified number of models is not produced (if 0, the program is expected to be incoherent).
         </p>
@@ -62,6 +71,12 @@
         <Input type="number"
                bind:value={options.rows}
                min="1"
+               style="max-width: 5em;"
+               on:input={edit}
+        />
+        <InputGroupText>Decode</InputGroupText>
+        <Input type="search"
+               bind:value={options.decode_predicate}
                on:input={edit}
         />
     </InputGroup>

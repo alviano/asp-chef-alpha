@@ -44,7 +44,7 @@
                readonly
                name="output"
                value="{text_value}"
-               placeholder="NO MODELS"
+               placeholder="EMPTY OUTPUT"
                data-testid="OutputPanel-textarea"
         />
     </CardBody>

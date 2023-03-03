@@ -6,13 +6,20 @@
     const default_extra_options = {
         rows: 5,
         rules: '',
+        decode_predicate: '__base64__',
     };
 
     Recipe.register_operation_type(operation, async (input, options) => {
+        const mapper = atom => atom.str + '.';
         const res = [];
         for (const part of input) {
             try {
-                const program = part.map(atom => atom.str + '.').join('\n') + options.rules;
+                const program = part.map(atom => {
+                    if (atom.predicate === options.decode_predicate) {
+                        return atob(atom.terms[0].str.slice(1, -1));
+                    }
+                    return mapper(atom);
+                }).join('\n') + options.rules;
                 const consequences = await Utils.cautious_consequences(program);
                 res.push(Utils.parse_atoms(consequences));
             } catch (error) {
@@ -41,6 +48,9 @@
             The <strong>{operation}</strong> operation replaces each model in input with a sequence of <em>cautious consequences</em>.
         </p>
         <p>
+            A unary predicate is decoded as part of the program (default <code>__base64__/1</code>).
+        </p>
+        <p>
             Each model in input is used as the input of a program given in the recipe, and its cautious consequences are computed.
             <em>Weak constraints should not be included in the program; use the <strong>Optimize</strong> operation.</em>
         </p>
@@ -50,6 +60,12 @@
         <Input type="number"
                bind:value={options.rows}
                min="1"
+               style="max-width: 5em;"
+               on:input={edit}
+        />
+        <InputGroupText>Decode</InputGroupText>
+        <Input type="search"
+               bind:value={options.decode_predicate}
                on:input={edit}
         />
     </InputGroup>
