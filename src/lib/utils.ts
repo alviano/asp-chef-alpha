@@ -19,8 +19,14 @@ export class Utils extends BaseUtils {
         return BaseUtils.dom_purify(content, dom_purify_config);
     }
 
+    static get clingo() {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        return window.clingo;
+    }
+
     static async search_model(program: string) {
-        const result = await clingo.run(program);
+        const result = await this.clingo.run(program);
         if (result.Result === 'ERROR') {
             throw new Error(result.Error);
         } else if (result.Models.Number === 0) {
@@ -31,7 +37,7 @@ export class Utils extends BaseUtils {
     }
 
     static async search_models(program: string, number: number, raises: boolean) {
-        const result = await clingo.run(program, number);
+        const result = await this.clingo.run(program, number);
         if (result.Result === 'ERROR') {
             throw new Error(result.Error);
         } else if (raises && result.Models.Number !== number) {
@@ -42,7 +48,7 @@ export class Utils extends BaseUtils {
     }
 
     static async search_optimal_models(program: string, number: number, raises: boolean) {
-        const result = await clingo.run(program, number, [
+        const result = await this.clingo.run(program, number, [
             '--opt-mode=optN',
         ]);
         if (result.Result === 'ERROR') {
@@ -63,7 +69,7 @@ export class Utils extends BaseUtils {
     }
 
     static async cautious_consequences(program: string) {
-        const result = await clingo.run(program, 0, [
+        const result = await this.clingo.run(program, 0, [
             '--enum-mode=cautious'
         ]);
         if (result.Result === 'ERROR') {
@@ -76,7 +82,7 @@ export class Utils extends BaseUtils {
     }
 
     static async brave_consequences(program: string) {
-        const result = await clingo.run(program, 0, [
+        const result = await this.clingo.run(program, 0, [
             '--enum-mode=brave'
         ]);
         if (result.Result === 'ERROR') {
@@ -104,10 +110,6 @@ export class Utils extends BaseUtils {
         return this.parse_atoms(await this.search_model(atoms));
     }
 }
-
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-const clingo = window.clingo;
 
 const GRAMMAR = `
 $

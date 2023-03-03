@@ -70,6 +70,7 @@
            bind:value="{options.rules}"
            placeholder="One or more ASP rules..."
            on:input={edit}
+           data-testid="SearchModels-rules"
     />
     <InputGroup>
         <InputGroupText># of models</InputGroupText>

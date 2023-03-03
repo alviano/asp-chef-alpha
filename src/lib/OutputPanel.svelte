@@ -39,6 +39,13 @@
                    min="1"
             />
         </InputGroup>
-        <Input type="textarea" {rows} readonly name="output" value="{text_value}" />
+        <Input type="textarea"
+               {rows}
+               readonly
+               name="output"
+               value="{text_value}"
+               placeholder="NO MODELS"
+               data-testid="OutputPanel-textarea"
+        />
     </CardBody>
 </Card>

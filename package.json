@@ -1,12 +1,13 @@
 {
 	"name": "asp-chef",
-	"version": "0.0.22",
+	"version": "0.0.23",
 	"private": true,
 	"scripts": {
 		"dev": "vite dev --port 5188",
 		"build": "vite build",
 		"preview": "vite preview",
 		"test": "playwright test",
+		"test:headed": "playwright test --headed",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"test:unit": "vitest",
