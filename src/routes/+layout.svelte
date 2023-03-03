@@ -1,11 +1,8 @@
 <script>
   import '../app.css';
   import { Button, Container, Offcanvas, Row } from "sveltestrap";
-  import Nav from '$lib/Nav.svelte';
   import { privacy_policy } from '$lib/stores';
 </script>
-
-<Nav />
 
 <Container fluid>
   <slot />

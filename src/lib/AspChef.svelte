@@ -51,20 +51,16 @@
 </script>
 
 <Row>
-    <Col class="ps-0" style="max-width: 20em;">
+    <Col class="p-0 vh-100" style="max-width: 20em; overflow-x: hidden; overflow-y: scroll;">
         <Operations />
     </Col>
-    <Col>
+    <Col class="p-0 vh-100" style="overflow-x: hidden; overflow-y: scroll;">
         <RecipePanel
                 on:change_input={(event) => input_value = event.detail}
         />
     </Col>
-    <Col>
-        <Row>
-            <InputPanel bind:value={input_value} />
-        </Row>
-        <Row>
-            <OutputPanel value={output_value} on:change_input={(event) => input_value = event.detail} />
-        </Row>
+    <Col class="p-0 vh-100" style="overflow-x: hidden; overflow-y: auto;">
+        <InputPanel bind:value={input_value} />
+        <OutputPanel value={output_value} on:change_input={(event) => input_value = event.detail} />
     </Col>
 </Row>

@@ -1,9 +1,12 @@
 <script>
     import {Card, CardBody, CardHeader, CardTitle, Input, Spinner} from "sveltestrap";
     import {Recipe} from "$lib/recipe";
+    import Nav from '$lib/Nav.svelte';
 
     let filter = '';
 </script>
+
+<Nav />
 
 <Card>
     <CardHeader>
