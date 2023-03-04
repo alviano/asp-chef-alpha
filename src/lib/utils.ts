@@ -95,7 +95,13 @@ export class Utils extends BaseUtils {
     }
 
     static predicates(models: string[][]) {
-        return models.flatMap(model => model.map(atom => atom.predicate || 'CONSTANTS')).sort();
+        const res = new Set();
+        models.forEach(model => {
+            model.forEach(atom => {
+                res.add(atom.predicate || 'CONSTANTS');
+            });
+        });
+        return Array.from(res).sort();
     }
 
     static parse_atom(atom: string) {
