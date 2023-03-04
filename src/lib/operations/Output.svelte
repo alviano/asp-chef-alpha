@@ -8,8 +8,8 @@
 
     const listeners = new Map();
 
-    Recipe.register_operation_type(operation, async (input, options, index) => {
-        listeners.get(index)(input);
+    Recipe.register_operation_type(operation, async (input, options, index, id) => {
+        listeners.get(id)(input);
         return input;
     });
 </script>
@@ -34,13 +34,13 @@
     }
 
     onMount(() => {
-        listeners.set(index, (input) => {
+        listeners.set(id, (input) => {
             models = input;
         });
     });
 
     onDestroy(() => {
-        listeners.set(index, null);
+        listeners.set(id, null);
     });
 </script>
 
