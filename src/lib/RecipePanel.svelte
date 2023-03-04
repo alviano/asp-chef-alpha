@@ -22,11 +22,12 @@
     import Output from "$lib/operations/Output.svelte";
     import Nop from "$lib/operations/Nop.svelte";
     import Filter from "$lib/operations/Filter.svelte";
-    import Select from "$lib/operations/Select.svelte";
+    import SelectPredicates from "$lib/operations/SelectPredicates.svelte";
     import Undo from "$lib/operations/Undo.svelte";
     import Encode from "$lib/operations/Encode.svelte";
     import {onDestroy, onMount} from "svelte";
     import {show_ingredient_details} from "$lib/stores";
+    import SelectModel from "$lib/operations/SelectModel.svelte";
 
     async function copy_to_clipboard() {
         const url = Recipe.as_url();
@@ -117,8 +118,10 @@
                         <Nop id={item.id} options={item.options} index={index} />
                     {:else if item.operation === 'Filter'}
                         <Filter id={item.id} options={item.options} index={index} />
-                    {:else if item.operation === 'Select'}
-                        <Select id={item.id} options={item.options} index={index} />
+                    {:else if item.operation === 'Select Predicates'}
+                        <SelectPredicates id={item.id} options={item.options} index={index} />
+                    {:else if item.operation === 'Select Model'}
+                        <SelectModel id={item.id} options={item.options} index={index} />
                     {:else if item.operation === 'Undo'}
                         <Undo id={item.id} options={item.options} index={index} />
                     {:else if item.operation === 'Encode'}

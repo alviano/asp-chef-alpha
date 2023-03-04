@@ -2,7 +2,7 @@
     import {Recipe} from "$lib/recipe";
     import {Utils} from "$lib/utils";
 
-    const operation = "Select";
+    const operation = "Select Predicates";
     const default_extra_options = {
         predicates: [],
     };
@@ -34,7 +34,7 @@
     function toggle_predicate(predicate) {
         const index_of_predicate = options.predicates.indexOf(predicate);
         if (index_of_predicate !== -1) {
-            options.predicates.splice(index, 1);
+            options.predicates.splice(index_of_predicate, 1);
         } else {
             options.predicates.push(predicate);
         }
