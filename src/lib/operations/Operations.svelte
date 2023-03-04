@@ -1,7 +1,7 @@
 <script context="module">
     import {Recipe} from "$lib/recipe";
 
-    const operation = "Nop";
+    const operation = "Operations";
     const default_extra_options = {
     };
 
@@ -12,6 +12,7 @@
 
 <script>
     import Operation from "$lib/operations/Operation.svelte";
+    import OperationsDetail from "$lib/operations/OperationsDetail.svelte";
 
     export let id;
     export let options;
@@ -22,10 +23,9 @@
 <Operation {id} {operation} {options} {index} {default_extra_options} {add_to_recipe}>
     <div slot="description">
         <p>
-            The <strong>{operation}</strong> operation does nothing!
-        </p>
-        <p>
-            It can be used to set breakpoints in the recipe.
+            The <strong>{operation}</strong> operation does nothing... but can be used to add other ingredients above it!
         </p>
     </div>
+    <OperationsDetail {index} style="height: 50vh; overflow-y: scroll" />
+
 </Operation>

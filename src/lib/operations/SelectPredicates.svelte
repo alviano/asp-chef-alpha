@@ -24,6 +24,7 @@
     export let id;
     export let options;
     export let index;
+    export let add_to_recipe;
 
     let input_predicates = [];
 
@@ -52,7 +53,7 @@
     });
 </script>
 
-<Operation {id} {operation} {options} {index} {default_extra_options}>
+<Operation {id} {operation} {options} {index} {default_extra_options} {add_to_recipe}>
     <div slot="description">
         <p>
             The <strong>{operation}</strong> operation selects some predicates from the models in input.

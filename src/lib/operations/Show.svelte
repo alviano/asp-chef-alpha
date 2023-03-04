@@ -31,13 +31,14 @@
     export let id;
     export let options;
     export let index;
+    export let add_to_recipe;
 
     function edit() {
         Recipe.edit_operation(index, options);
     }
 </script>
 
-<Operation {id} {operation} {options} {index} {default_extra_options}>
+<Operation {id} {operation} {options} {index} {default_extra_options} {add_to_recipe}>
     <div slot="description">
         <p>
             The <strong>{operation}</strong> operation replaces each model according to the specified <code>#show</code> directives.

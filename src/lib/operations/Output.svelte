@@ -25,6 +25,7 @@
     export let id;
     export let options;
     export let index;
+    export let add_to_recipe;
 
     let models = [];
     $: text_value = models.map(atoms => atoms.map(atom => atom.str + '.').join('\n')).join('\n§\n');
@@ -44,7 +45,7 @@
     });
 </script>
 
-<Operation {id} {operation} {options} {index} {default_extra_options}>
+<Operation {id} {operation} {options} {index} {default_extra_options} {add_to_recipe}>
     <div slot="description">
         <p>
             The <strong>{operation}</strong> operation shows the output of the previous operation.

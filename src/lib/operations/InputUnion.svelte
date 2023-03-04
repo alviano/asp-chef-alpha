@@ -24,9 +24,10 @@
     export let id;
     export let options;
     export let index;
+    export let add_to_recipe;
 </script>
 
-<Operation {id} {operation} {options} {index} {default_extra_options}>
+<Operation {id} {operation} {options} {index} {default_extra_options} {add_to_recipe}>
     <div slot="description">
         <p>
             The <strong>{operation}</strong> operation computes the union of the models in input.

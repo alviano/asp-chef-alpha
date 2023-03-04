@@ -19,6 +19,11 @@
     export let operation;
     export let options = default_options();
     export let index;
+    export let add_to_recipe;
+
+    if (add_to_recipe) {
+        Recipe.add_operation(operation, {...options}, index);
+    }
 </script>
 
 {#if id !== undefined}
