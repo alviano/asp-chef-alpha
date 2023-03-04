@@ -20,6 +20,7 @@
     import Operation from "$lib/operations/Operation.svelte";
     import {Input} from "sveltestrap";
 
+    export let id;
     export let options;
     export let index;
 
@@ -28,7 +29,7 @@
     }
 </script>
 
-<Operation {operation} {options} {index} {default_extra_options}>
+<Operation {id} {operation} {options} {index} {default_extra_options}>
     <div slot="description">
         <p>
             The <strong>{operation}</strong> operation discards input parts being errors.

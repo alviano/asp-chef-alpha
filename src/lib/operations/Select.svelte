@@ -9,8 +9,8 @@
 
     const listeners = new Map();
 
-    Recipe.register_operation_type(operation, async (input, options, index) => {
-        listeners.get(index)(input);
+    Recipe.register_operation_type(operation, async (input, options, index, id) => {
+        listeners.get(id)(input);
         const included_predicates = new Set(options.predicates);
         return input.map(model => model.filter(atom => included_predicates.has(atom.predicate || 'CONSTANTS')));
     });
@@ -21,6 +21,7 @@
     import Operation from "$lib/operations/Operation.svelte";
     import {onDestroy, onMount} from "svelte";
 
+    export let id;
     export let options;
     export let index;
 
@@ -41,17 +42,17 @@
     }
 
     onMount(() => {
-        listeners.set(index, (input) => {
+        listeners.set(id, (input) => {
             input_predicates = Utils.predicates(input);
         });
     });
 
     onDestroy(() => {
-        listeners.set(index, null);
+        listeners.delete(id);
     });
 </script>
 
-<Operation {operation} {options} {index} {default_extra_options}>
+<Operation {id} {operation} {options} {index} {default_extra_options}>
     <div slot="description">
         <p>
             The <strong>{operation}</strong> operation selects some predicates from the models in input.

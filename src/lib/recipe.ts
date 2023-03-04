@@ -2,6 +2,7 @@ import {get} from "svelte/store";
 import {Utils} from "$lib/utils";
 import {recipe} from "$lib/stores";
 import {consts} from "$lib/consts";
+import {v4 as uuidv4} from 'uuid';
 
 export class Recipe {
     private static operation_types = new Map();
@@ -25,7 +26,7 @@ export class Recipe {
 
     static register_operation_type(
         operation: string,
-        apply: (input: string[][], options: object, index: number) => Promise<string[][]>
+        apply: (input: string[][], options: object, index: number, id: string) => Promise<string[][]>
     ) {
         this.operation_types.set(operation, apply);
     }
@@ -63,7 +64,7 @@ export class Recipe {
             for (const [index, ingredient] of this.recipe.entries()) {
                 this.input_at_index.push(result);
                 if (ingredient.options.apply) {
-                    result = await Recipe.apply_operation_type(index, ingredient.operation, result, ingredient.options);
+                    result = await Recipe.apply_operation_type(index, ingredient, result);
                 }
                 if (ingredient.options.stop) {
                     break;
@@ -75,17 +76,18 @@ export class Recipe {
         }
     }
 
-    static async apply_operation_type(index: number, operation: string, input: string[][], options: object) {
-        if (!this.operation_types.has(operation)) {
-            throw Error('Unknown operation: ' + operation);
+    static async apply_operation_type(index: number, ingredient: object, input: string[][]) {
+        if (!this.operation_types.has(ingredient.operation)) {
+            throw Error('Unknown operation: ' + ingredient.operation);
         }
-        return await this.operation_types.get(operation)(input, options, index);
+        return await this.operation_types.get(ingredient.operation)(input, ingredient.options, index, ingredient.id);
     }
 
 
     static async add_operation(operation: string, options: object) {
         const the_recipe = this.recipe;
         the_recipe.push({
+            id: uuidv4(),
             operation,
             options,
         });

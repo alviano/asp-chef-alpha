@@ -12,15 +12,13 @@
     <CardHeader>
         <CardTitle>Operations</CardTitle>
     </CardHeader>
-    <CardBody class="p-1">
-        <Input class="mb-1" type="search" bind:value={filter} placeholder="filter..." />
+    <CardBody class="p-0">
+        <Input type="search" bind:value={filter} placeholder="filter..." />
         {#await Recipe.svelte_components(filter)}
             <Spinner />
         {:then components}
             {#each components as component}
-                <div class="mb-1">
-                    <svelte:component this={component} options="{undefined}" index="{undefined}" />
-                </div>
+                <svelte:component this={component} id="{undefined}" options="{undefined}" index="{undefined}" />
             {/each}
         {/await}
     </CardBody>

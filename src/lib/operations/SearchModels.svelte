@@ -41,6 +41,7 @@
     import {Button, Input, InputGroup, InputGroupText} from "sveltestrap";
     import Operation from "$lib/operations/Operation.svelte";
 
+    export let id;
     export let options;
     export let index;
 
@@ -49,7 +50,7 @@
     }
 </script>
 
-<Operation {operation} {options} {index} {default_extra_options}>
+<Operation {id} {operation} {options} {index} {default_extra_options}>
     <div slot="description">
         <p>
             The <strong>{operation}</strong> operation replaces each model in input with a sequence of models.

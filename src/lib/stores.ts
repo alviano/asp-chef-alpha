@@ -5,6 +5,7 @@ export const privacy_policy = writable(browser ? localStorage.getItem('privacy-p
 export const recipe = writable([]);
 export const input_rows = writable(browser ? Number.parseInt(localStorage.getItem('input-rows')) || 10 : 10);
 export const output_rows = writable(browser ? Number.parseInt(localStorage.getItem('output-rows')) || 10 : 10);
+export const show_ingredient_details = writable(true);
 
 privacy_policy.subscribe(value => {
   if (value) {

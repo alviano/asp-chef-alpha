@@ -54,7 +54,7 @@
     <Col class="p-0 vh-100" style="max-width: 20em; overflow-x: hidden; overflow-y: scroll;">
         <Operations />
     </Col>
-    <Col class="p-0 vh-100" style="overflow-x: hidden; overflow-y: scroll;">
+    <Col class="p-0 vh-100" style="background-color: lightgray; overflow-x: hidden; overflow-y: scroll;">
         <RecipePanel
                 on:change_input={(event) => input_value = event.detail}
         />

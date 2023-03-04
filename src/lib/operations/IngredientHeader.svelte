@@ -4,6 +4,7 @@
     import {Popover} from "dumbo-svelte";
     import {Recipe} from "$lib/recipe";
 
+    export let id;
     export let operation;
     export let index;
     export let options;
@@ -11,8 +12,14 @@
 
 <CardHeader>
     <CardTitle class="h6">
-        #{index + 1}.
-        {operation}
+        <Popover title="Ingredient #{index + 1}">
+            <div slot="value">
+                <p>Drag and drop to move the ingredient in the recipe.</p>
+                <p>UUID: {id}</p>
+            </div>
+            #{index + 1}.
+            {operation}
+        </Popover>
         <span class="float-end">
             <Popover title="Remove operation" value="Remove ingredient #{index + 1} from the recipe.">
                 <Button size="sm" color="danger" on:click={() => Recipe.remove_operation(index)}><Icon name="trash" /></Button>

@@ -7,8 +7,8 @@
 
     const listeners = new Map();
 
-    Recipe.register_operation_type(operation, async (input, options, index) => {
-        listeners.get(index)(input);
+    Recipe.register_operation_type(operation, async (input, options, index, id) => {
+        listeners.get(id)(input);
         return input;
     });
 </script>
@@ -18,6 +18,7 @@
     import Operation from "$lib/operations/Operation.svelte";
     import {onDestroy, onMount} from "svelte";
 
+    export let id;
     export let options;
     export let index;
 
@@ -33,17 +34,17 @@
     }
 
     onMount(() => {
-        listeners.set(index, (input) => {
+        listeners.set(id, (input) => {
             models = input;
         });
     });
 
     onDestroy(() => {
-        listeners.set(index, null);
+        listeners.delete(id);
     });
 </script>
 
-<Operation {operation} {options} {index} {default_extra_options}>
+<Operation {id} {operation} {options} {index} {default_extra_options}>
     <div slot="description">
         <p>
             The <strong>{operation}</strong> operation shows input models in tables.

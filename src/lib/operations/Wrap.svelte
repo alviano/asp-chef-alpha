@@ -25,6 +25,7 @@
     import {Input} from "sveltestrap";
     import Operation from "$lib/operations/Operation.svelte";
 
+    export let id;
     export let options;
     export let index;
 
@@ -33,7 +34,7 @@
     }
 </script>
 
-<Operation {operation} {options} {index} {default_extra_options}>
+<Operation {id} {operation} {options} {index} {default_extra_options}>
     <div slot="description">
         <p>
             The <strong>{operation}</strong> operation considers the elements in input as terms of a unary predicate.
