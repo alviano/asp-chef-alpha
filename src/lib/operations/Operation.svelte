@@ -18,10 +18,10 @@
     export let id;
     export let operation;
     export let options = default_options();
-    export let index = null;
+    export let index;
 </script>
 
-{#if index !== null}
+{#if id !== undefined}
     <Card style="border-top: 3px solid black;">
         <IngredientHeader {id} {operation} {index} {options} />
         {#if $show_ingredient_details}
@@ -34,7 +34,7 @@
     <Popover block placement="right" title="Add {operation} Operation">
         <div slot="value"><slot name="description" /></div>
         <Button block outline style="border-radius: 0; text-align: left; text-transform: revert;"
-                on:click={() => Recipe.add_operation(operation, {...options})}>
+                on:click={() => Recipe.add_operation(operation, {...options}, index)}>
             {operation}
         </Button>
     </Popover>

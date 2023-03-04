@@ -28,6 +28,7 @@
     import {onDestroy, onMount} from "svelte";
     import {show_ingredient_details} from "$lib/stores";
     import SelectModel from "$lib/operations/SelectModel.svelte";
+    import OperationsPanel from "$lib/operations/OperationsPanel.svelte";
 
     async function copy_to_clipboard() {
         const url = Recipe.as_url();
@@ -116,6 +117,8 @@
                         <Output id={item.id} options={item.options} index={index} on:change_input />
                     {:else if item.operation === 'Nop'}
                         <Nop id={item.id} options={item.options} index={index} />
+                    {:else if item.operation === 'Operations Panel'}
+                        <OperationsPanel id={item.id} options={item.options} index={index} />
                     {:else if item.operation === 'Filter'}
                         <Filter id={item.id} options={item.options} index={index} />
                     {:else if item.operation === 'Select Predicates'}

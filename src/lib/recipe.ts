@@ -84,13 +84,18 @@ export class Recipe {
     }
 
 
-    static async add_operation(operation: string, options: object) {
-        const the_recipe = this.recipe;
-        the_recipe.push({
+    static async add_operation(operation: string, options: object, index: number = undefined) {
+        const ingredient = {
             id: uuidv4(),
             operation,
             options,
-        });
+        };
+        const the_recipe = this.recipe;
+        if (index === undefined) {
+            the_recipe.push(ingredient);
+        } else {
+            the_recipe.splice(index, 0, ingredient);
+        }
         recipe.set(the_recipe);
     }
 
@@ -133,7 +138,9 @@ export class Recipe {
 
     static duplicate_operation(index: number) {
         const the_recipe = this.recipe;
-        the_recipe.splice(index, 0, JSON.parse(JSON.stringify(the_recipe[index])));
+        const copy = JSON.parse(JSON.stringify(the_recipe[index]));
+        copy.id = uuidv4();
+        the_recipe.splice(index, 0, copy);
         recipe.set(the_recipe);
     }
 
