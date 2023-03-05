@@ -4,7 +4,7 @@
     import {Recipe} from "$lib/recipe";
     import InputPanel from "$lib/InputPanel.svelte";
     import OutputPanel from "$lib/OutputPanel.svelte";
-    import {keydown, pause_baking, recipe} from "$lib/stores";
+    import {pause_baking, recipe} from "$lib/stores";
     import RecipePanel from "$lib/RecipePanel.svelte";
     import {onDestroy, onMount} from "svelte";
 
@@ -46,21 +46,6 @@
         }
         recipe_unsubscribe = recipe.subscribe(() => {
             delayed_process(input_value);
-        });
-
-        window.addEventListener("keydown", event => {
-            event.uKey = event.key.toUpperCase();
-            // if (event.ctrlKey && event.shiftKey && event.uKey === 'F') {
-            //     console.log('f')
-            //     event.preventDefault();
-            //     return;
-            // }
-            for(const handler in $keydown) {
-                if ($keydown[handler](event)) {
-                    event.preventDefault();
-                    return;
-                }
-            }
         });
     });
 

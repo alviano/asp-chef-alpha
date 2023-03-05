@@ -1,7 +1,7 @@
 <script>
     import {flip} from "svelte/animate";
     import {dndzone} from "svelte-dnd-action";
-    import {keydown, recipe} from "$lib/stores";
+    import {recipe} from "$lib/stores";
     import {Button, ButtonGroup, Card, CardBody, CardHeader, CardTitle, Icon} from "sveltestrap";
     import SearchModels from "$lib/operations/SearchModels.svelte";
     import RemoveErrors from "$lib/operations/RemoveErrors.svelte";
@@ -12,7 +12,7 @@
     import InputIntersection from "$lib/operations/InputIntersection.svelte";
     import InputUnion from "$lib/operations/InputUnion.svelte";
     import Table from "$lib/operations/Table.svelte";
-    import {Popover} from "dumbo-svelte";
+    import {keydown, Popover} from "dumbo-svelte";
     import {Recipe} from "$lib/recipe";
     import Unwrap from "$lib/operations/Unwrap.svelte";
     import Split from "$lib/operations/Split.svelte";
@@ -43,7 +43,7 @@
 
     function toggle_pause_baking() {
         $pause_baking = !$pause_baking;
-        Utils.snackbar("Backing " + ($pause_baking ? "disabled" : "enabled"));
+        Utils.snackbar("Baking " + ($pause_baking ? "disabled" : "enabled"));
     }
 
     let items = [];
@@ -56,13 +56,13 @@
     }
 
     $keydown.push((event) => {
-        if (event.ctrlKey && event.shiftKey && event.uKey === 'D') {
+        if (event.uKey === 'D') {
             toggle_show_details();
             return true;
-        } else if (event.ctrlKey && event.shiftKey && event.uKey === 'C') {
+        } else if (event.uKey === 'C') {
             copy_to_clipboard();
             return true;
-        } else if (event.ctrlKey && event.shiftKey && event.uKey === 'V') {
+        } else if (event.uKey === 'P') {
             toggle_pause_baking();
             return true;
         }
@@ -92,7 +92,7 @@
                     <Popover title="Show details">
                         <div slot="value">
                             <p>You may want to hide details when ordering your recipe.</p>
-                            <p>Keybinding: <code>Ctrl+Shift+D</code></p>
+                            <p>Keybinding: <code>D</code></p>
                         </div>
                         <Button size="sm"
                                 color={$show_ingredient_details ? "success" : "secondary"}
@@ -104,7 +104,7 @@
                     <Popover title="Pause baking">
                         <div slot="value">
                             <p>You may want to pause the baking of your recipe if it becomes too expensive.</p>
-                            <p>Keybinding: <code>Ctrl+Shift+V</code></p>
+                            <p>Keybinding: <code>P</code></p>
                         </div>
                         <Button size="sm"
                                 color={$pause_baking ? "danger" : "secondary"}
@@ -117,7 +117,7 @@
                 <Popover title="Copy recipe">
                     <div slot="value">
                         <p>Copy the recipe URL in the clipboard.</p>
-                        <p>Keybinding: <code>Ctrl+Shift+C</code></p>
+                        <p>Keybinding: <code>C</code></p>
                     </div>
                     <Button size="sm" on:click={() => copy_to_clipboard()}><Icon name="clipboard-plus" /></Button>
                 </Popover>

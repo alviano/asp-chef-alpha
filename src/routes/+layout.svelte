@@ -1,12 +1,15 @@
 <script>
   import '../app.css';
   import { Button, Container, Offcanvas, Row } from "sveltestrap";
+  import { Keybindings } from 'dumbo-svelte';
   import { privacy_policy } from '$lib/stores';
 </script>
 
 <Container fluid>
   <slot />
 </Container>
+
+<Keybindings />
 
 <Offcanvas
   header="Our Cookies and Your Privacy"

@@ -2,7 +2,6 @@ import { writable } from 'svelte/store';
 import { browser } from '$app/environment';
 
 export const privacy_policy = writable(browser ? localStorage.getItem('privacy-policy') : '');
-export const keydown = writable([]);
 export const pause_baking = writable(false);
 export const recipe = writable([]);
 export const input_rows = writable(browser ? Number.parseInt(localStorage.getItem('input-rows')) || 10 : 10);
