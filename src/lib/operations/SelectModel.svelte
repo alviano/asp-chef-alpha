@@ -26,6 +26,7 @@
     export let options;
     export let index;
     export let add_to_recipe;
+    export let keybinding;
 
     let number_of_models = options ? options.model_index : 100;
 
@@ -44,7 +45,7 @@
     });
 </script>
 
-<Operation {id} {operation} {options} {index} {default_extra_options} {add_to_recipe}>
+<Operation {id} {operation} {options} {index} {default_extra_options} {add_to_recipe} {keybinding}>
     <div slot="description">
         <p>
             The <strong>{operation}</strong> operation selects one model among those in input.

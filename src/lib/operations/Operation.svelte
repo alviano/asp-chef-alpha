@@ -19,6 +19,7 @@
     export let options = default_options();
     export let index;
     export let add_to_recipe;
+    export let keybinding;
 
     if (add_to_recipe) {
         Recipe.add_operation(operation, {...options}, index);
@@ -40,6 +41,9 @@
         <Button block outline style="border-radius: 0; text-align: left; text-transform: revert;"
                 on:click={() => Recipe.add_operation(operation, {...options}, index)}>
             {operation}
+            {#if keybinding !== undefined}
+                <code class="float-end">[{keybinding}]</code>
+            {/if}
         </Button>
     </Popover>
 {/if}

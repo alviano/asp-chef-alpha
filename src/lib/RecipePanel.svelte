@@ -129,47 +129,47 @@
             {#each items as item, index (item.id)}
                 <div animate:flip="{{duration: flipDurationMs}}" class="mt-1">
                     {#if item.operation === 'Search Models'}
-                        <SearchModels id={item.id} options={item.options} index={index} add_to_recipe={undefined} />
+                        <SearchModels id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
                     {:else if item.operation === 'Remove Errors'}
-                        <RemoveErrors id={item.id} options={item.options} index={index} add_to_recipe={undefined} />
+                        <RemoveErrors id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
                     {:else if item.operation === 'Wrap'}
-                        <Wrap id={item.id} options={item.options} index={index} add_to_recipe={undefined} />
+                        <Wrap id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
                     {:else if item.operation === 'Merge'}
-                        <Merge id={item.id} options={item.options} index={index} add_to_recipe={undefined} />
+                        <Merge id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
                     {:else if item.operation === 'Intersection'}
-                        <Intersection id={item.id} options={item.options} index={index} add_to_recipe={undefined} />
+                        <Intersection id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
                     {:else if item.operation === 'Union'}
-                        <Union id={item.id} options={item.options} index={index} add_to_recipe={undefined} />
+                        <Union id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
                     {:else if item.operation === 'Input Intersection'}
-                        <InputIntersection id={item.id} options={item.options} index={index} add_to_recipe={undefined} />
+                        <InputIntersection id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
                     {:else if item.operation === 'Input Union'}
-                        <InputUnion id={item.id} options={item.options} index={index} add_to_recipe={undefined} />
+                        <InputUnion id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
                     {:else if item.operation === 'Table'}
-                        <Table id={item.id} options={item.options} index={index} add_to_recipe={undefined} />
+                        <Table id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
                     {:else if item.operation === 'Unwrap'}
-                        <Unwrap id={item.id} options={item.options} index={index} add_to_recipe={undefined} />
+                        <Unwrap id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
                     {:else if item.operation === 'Split'}
-                        <Split id={item.id} options={item.options} index={index} add_to_recipe={undefined} />
+                        <Split id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
                     {:else if item.operation === 'Optimize'}
-                        <Optimize id={item.id} options={item.options} index={index} add_to_recipe={undefined} />
+                        <Optimize id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
                     {:else if item.operation === 'Show'}
-                        <Show id={item.id} options={item.options} index={index} add_to_recipe={undefined} />
+                        <Show id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
                     {:else if item.operation === 'Output'}
-                        <Output id={item.id} options={item.options} index={index} add_to_recipe={undefined} on:change_input />
+                        <Output id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} on:change_input />
                     {:else if item.operation === 'Nop'}
-                        <Nop id={item.id} options={item.options} index={index} add_to_recipe={undefined} />
+                        <Nop id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
                     {:else if item.operation === 'Operations'}
-                        <Operations id={item.id} options={item.options} index={index} add_to_recipe={undefined} />
+                        <Operations id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
                     {:else if item.operation === 'Filter'}
-                        <Filter id={item.id} options={item.options} index={index} add_to_recipe={undefined} />
+                        <Filter id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
                     {:else if item.operation === 'Select Predicates'}
-                        <SelectPredicates id={item.id} options={item.options} index={index} add_to_recipe={undefined} />
+                        <SelectPredicates id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
                     {:else if item.operation === 'Select Model'}
-                        <SelectModel id={item.id} options={item.options} index={index} add_to_recipe={undefined} />
+                        <SelectModel id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
                     {:else if item.operation === 'Undo'}
-                        <Undo id={item.id} options={item.options} index={index} add_to_recipe={undefined} />
+                        <Undo id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
                     {:else if item.operation === 'Encode'}
-                        <Encode id={item.id} options={item.options} index={index} add_to_recipe={undefined} />
+                        <Encode id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
                     {:else}
                         Unknown operation: {item.operation}
                     {/if}

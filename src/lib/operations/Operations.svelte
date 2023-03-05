@@ -18,14 +18,14 @@
     export let options;
     export let index;
     export let add_to_recipe;
+    export let keybinding;
 </script>
 
-<Operation {id} {operation} {options} {index} {default_extra_options} {add_to_recipe}>
+<Operation {id} {operation} {options} {index} {default_extra_options} {add_to_recipe} {keybinding}>
     <div slot="description">
         <p>
             The <strong>{operation}</strong> operation does nothing... but can be used to add other ingredients above it!
         </p>
     </div>
     <OperationsDetail {index} style="height: 50vh; overflow-y: scroll" />
-
 </Operation>

@@ -29,9 +29,14 @@
     async function onkeydown(event) {
         if (event.key === 'Enter') {
             await add_operation(0);
-        } else if (event.ctrlKey && !Number.isNaN(event.key)) {
+        } else if (event.key >= '1' && event.key <= '9') {
             await add_operation(parseInt(event.key) - 1);
+        } else if (event.key === '0') {
+            await add_operation(9);
+        } else {
+            return;
         }
+        event.preventDefault();
     }
 
     if (index === undefined) {
@@ -51,19 +56,23 @@
     <div slot="value">
         <p>Use a regular expression to filter the list of operation.</p>
         <p>Press ENTER to add the first operation in the list, or move in the list with TAB.</p>
-        <p>The <strong>n-th operation</strong> in the list can be added with the keybinding <code>Ctrl+n</code>.</p>
         {#if index === undefined}
             <p>Jump to this filter with the keybinding <code>F</code>.</p>
         {/if}
+        <p>
+            When filtering, the <strong>n-th operation</strong> in the list can be added with the keybinding <code>n</code>
+            (<code>1</code> for the <strong>1-st operation</strong>, <code>0</code> for the <strong>10-th operation</strong>).
+        </p>
     </div>
     <Input type="search" id="OperationsDetail-search" bind:value={filter} placeholder="Filter..." on:keydown={onkeydown} />
 </Popover>
 <div {style}>
-    {#each components as component}
-        <svelte:component this={component} id="{undefined}" options="{undefined}" {index} add_to_recipe="{undefined}" />
+    {#each components as component, number}
+        <svelte:component this={component} id="{undefined}" options="{undefined}" {index} add_to_recipe="{undefined}"
+                          keybinding="{number < 9 ? number + 1 : number < 10 ? 0 : undefined}" />
     {/each}
 </div>
 
 {#if component_to_add}
-    <svelte:component this={component_to_add} id="{undefined}" options="{undefined}" {index} add_to_recipe="{true}" />
+    <svelte:component this={component_to_add} id="{undefined}" options="{undefined}" {index} add_to_recipe="{true}" keybinding="{undefined}" />
 {/if}
