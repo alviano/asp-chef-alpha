@@ -1,6 +1,6 @@
 {
 	"name": "asp-chef",
-	"version": "0.1.4",
+	"version": "0.1.5",
 	"private": true,
 	"scripts": {
 		"dev": "vite dev --port 5188",
@@ -43,6 +43,7 @@
 		"d3-require": "^1.3.0",
 		"dumbo-svelte": "^0.0.15",
 		"jsdom": "^21.1.0",
+		"lodash": "^4.17.21",
 		"pegjs": "^0.10.0",
 		"sass": "^1.58.3",
 		"svelte-awesome": "^3.0.1",

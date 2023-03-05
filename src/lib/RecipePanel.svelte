@@ -30,6 +30,12 @@
     import SelectModel from "$lib/operations/SelectModel.svelte";
     import Operations from "$lib/operations/Operations.svelte";
     import {pause_baking} from "$lib/stores";
+    import SymmetricClosure from "$lib/operations/SymmetricClosure.svelte";
+    import TransitiveClosure from "$lib/operations/TransitiveClosure.svelte";
+    import Lua from "$lib/operations/Lua.svelte";
+    import SortByIncreasingSize from "$lib/operations/SortByIncreasingSize.svelte";
+    import SortByDecreasingSize from "$lib/operations/SortByDecreasingSize.svelte";
+    import SortByPredicateOrArgument from "$lib/operations/SortByPredicateOrArgument.svelte";
 
     async function copy_to_clipboard() {
         const url = Recipe.as_url();
@@ -170,6 +176,18 @@
                         <Undo id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
                     {:else if item.operation === 'Encode'}
                         <Encode id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
+                    {:else if item.operation === 'Symmetric Closure'}
+                        <SymmetricClosure id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
+                    {:else if item.operation === 'Transitive Closure'}
+                        <TransitiveClosure id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
+                    {:else if item.operation === 'Lua'}
+                        <Lua id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
+                    {:else if item.operation === 'Sort By Increasing Size'}
+                        <SortByIncreasingSize id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
+                    {:else if item.operation === 'Sort By Decreasing Size'}
+                        <SortByDecreasingSize id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
+                    {:else if item.operation === 'Sort By Predicate Or Argument'}
+                        <SortByPredicateOrArgument id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
                     {:else}
                         Unknown operation: {item.operation}
                     {/if}

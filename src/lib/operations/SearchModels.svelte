@@ -80,6 +80,7 @@
         <InputGroupText>Decode</InputGroupText>
         <Input type="search"
                bind:value={options.decode_predicate}
+               placeholder="decode predicate"
                on:input={edit}
         />
     </InputGroup>

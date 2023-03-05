@@ -1,0 +1,94 @@
+<script context="module">
+    import {Recipe} from "$lib/recipe";
+    import {Utils} from "$lib/utils";
+
+    const operation = "Lua";
+    const default_extra_options = {
+        rows: 5,
+        content: '',
+        encode_predicate: '__base64__',
+    };
+
+    Recipe.register_operation_type(operation, async (input, options) => {
+        const content = btoa(`
+#script (lua)
+
+${options.content}
+
+#end.
+        `.trim());
+        const encoded_content = `${options.encode_predicate}("${content}").`;
+        const mapper = atom => atom.str + '.';
+        const res = [];
+        for (const part of input) {
+            try {
+                const program = part.map(mapper).join('\n') + encoded_content;
+                const model = await Utils.search_model(program);
+                res.push(Utils.parse_atoms(model));
+            } catch (error) {
+                res.push([{str: error}])
+            }
+        }
+        return res;
+    });
+</script>
+
+<script>
+    import {Input, InputGroup, InputGroupText} from "sveltestrap";
+    import Operation from "$lib/operations/Operation.svelte";
+
+    export let id;
+    export let options;
+    export let index;
+    export let add_to_recipe;
+    export let keybinding;
+
+    function edit() {
+        Recipe.edit_operation(index, options);
+    }
+</script>
+
+<Operation {id} {operation} {options} {index} {default_extra_options} {add_to_recipe} {keybinding}>
+    <div slot="description">
+        <p>
+            The <strong>{operation}</strong> operation extends models in input with some encoded Lua content
+            (usually functions defining @-terms or propagators).
+        </p>
+        <p>
+            For example
+            <code class="d-block ms-3">function successor(x)</code>
+            <code class="d-block ms-3">&nbsp;&nbsp;&nbsp;&nbsp;return x.number + 1</code>
+            <code class="d-block ms-3">end</code>
+            to later use <code>@successor(1)</code> and obtain <code>2</code>.
+        </p>
+        <p>
+            The content is base64 encoded and wrapped by predicate <code>__base64__</code>.
+        </p>
+        <p>
+            The name of the unary predicate <code>__base64__</code> can be specified in the recipe.
+        </p>
+    </div>
+    <InputGroup>
+        <InputGroupText>Rows</InputGroupText>
+        <Input type="number"
+               bind:value={options.rows}
+               min="1"
+               on:input={edit}
+        />
+    </InputGroup>
+    <Input type="textarea"
+           rows={options.rows}
+           bind:value="{options.content}"
+           placeholder="One or more lines..."
+           on:input={edit}
+           data-testid="Encode-rules"
+    />
+    <InputGroup>
+        <InputGroupText style="width: 10em;">Encode predicate</InputGroupText>
+        <Input type="search"
+               bind:value={options.encode_predicate}
+               placeholder="encode predicate"
+               on:input={edit}
+        />
+    </InputGroup>
+</Operation>

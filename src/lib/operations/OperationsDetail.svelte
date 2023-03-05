@@ -55,10 +55,10 @@
 <Popover block placement="right" title="Filter operations">
     <div slot="value">
         <p>Use a regular expression to filter the list of operation.</p>
-        <p>Press ENTER to add the first operation in the list, or move in the list with TAB.</p>
         {#if index === undefined}
             <p>Jump to this filter with the keybinding <code>F</code>.</p>
         {/if}
+        <p>Press ENTER to add the first operation in the list, or move in the list with TAB.</p>
         <p>
             When filtering, the <strong>n-th operation</strong> in the list can be added with the keybinding <code>n</code>
             (<code>1</code> for the <strong>1-st operation</strong>, <code>0</code> for the <strong>10-th operation</strong>).
