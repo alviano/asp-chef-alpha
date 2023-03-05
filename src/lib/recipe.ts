@@ -31,6 +31,13 @@ export class Recipe {
         this.operation_types.set(operation, apply);
     }
 
+    static common_default_options() {
+        return {
+            stop: false,
+            apply: true,
+        };
+    }
+
     static serialize(input: string) {
         const json = {
             input: input.split(consts.SYMBOLS.MODELS_SEPARATOR),

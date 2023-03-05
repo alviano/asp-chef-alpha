@@ -7,8 +7,7 @@
 
     function default_options() {
         return {
-            stop: false,
-            apply: true,
+            ...Recipe.common_default_options(),
             ...default_extra_options,
         };
     }
