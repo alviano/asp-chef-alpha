@@ -1,8 +1,8 @@
 <script>
     import {flip} from "svelte/animate";
     import {dndzone} from "svelte-dnd-action";
-    import {recipe} from "$lib/stores";
-    import {Button, Card, CardBody, CardHeader, CardTitle, Icon} from "sveltestrap";
+    import {keydown, recipe} from "$lib/stores";
+    import {Button, ButtonGroup, Card, CardBody, CardHeader, CardTitle, Icon} from "sveltestrap";
     import SearchModels from "$lib/operations/SearchModels.svelte";
     import RemoveErrors from "$lib/operations/RemoveErrors.svelte";
     import Wrap from "$lib/operations/Wrap.svelte";
@@ -29,15 +29,21 @@
     import {show_ingredient_details} from "$lib/stores";
     import SelectModel from "$lib/operations/SelectModel.svelte";
     import Operations from "$lib/operations/Operations.svelte";
+    import {pause_baking} from "$lib/stores";
 
     async function copy_to_clipboard() {
         const url = Recipe.as_url();
         await navigator.clipboard.writeText(url);
-        Utils.snackbar("URL copied in the clipboard!");
+        Utils.snackbar("URL ready to be pasted!");
     }
 
     function toggle_show_details() {
         $show_ingredient_details = !$show_ingredient_details;
+    }
+
+    function toggle_pause_baking() {
+        $pause_baking = !$pause_baking;
+        Utils.snackbar("Backing " + ($pause_baking ? "disabled" : "enabled"));
     }
 
     let items = [];
@@ -48,6 +54,19 @@
     function handleDndFinalize(e) {
         recipe.set(e.detail.items);
     }
+
+    $keydown.push((event) => {
+        if (event.ctrlKey && event.shiftKey && event.uKey === 'D') {
+            toggle_show_details();
+            return true;
+        } else if (event.ctrlKey && event.shiftKey && event.uKey === 'C') {
+            copy_to_clipboard();
+            return true;
+        } else if (event.ctrlKey && event.shiftKey && event.uKey === 'V') {
+            toggle_pause_baking();
+            return true;
+        }
+    });
 
     let unsubscribe = null;
     onMount(() => {
@@ -69,15 +88,37 @@
                 <Popover title="Remove operation" value="Remove all ingredients from the recipe.">
                     <Button size="sm" color="danger" on:click={() => Recipe.remove_all_operations()}><Icon name="trash" /></Button>
                 </Popover>
-                <Popover title="Show details" value="You may want to hide details when ordering your recipe.">
-                    <Button size="sm"
-                            color={$show_ingredient_details ? "success" : "secondary"}
-                            outline={!$show_ingredient_details}
-                            on:click={() => toggle_show_details()}>
-                        <Icon name="binoculars" />
-                    </Button>
-                </Popover>
-                <Popover title="Copy recipe" value="Copy the recipe URL in the clipboard.">
+                <ButtonGroup>
+                    <Popover title="Show details">
+                        <div slot="value">
+                            <p>You may want to hide details when ordering your recipe.</p>
+                            <p>Keybinding: <code>Ctrl+Shift+D</code></p>
+                        </div>
+                        <Button size="sm"
+                                color={$show_ingredient_details ? "success" : "secondary"}
+                                outline={!$show_ingredient_details}
+                                on:click={() => toggle_show_details()}>
+                            <Icon name="binoculars" />
+                        </Button>
+                    </Popover>
+                    <Popover title="Pause baking">
+                        <div slot="value">
+                            <p>You may want to pause the baking of your recipe if it becomes too expensive.</p>
+                            <p>Keybinding: <code>Ctrl+Shift+V</code></p>
+                        </div>
+                        <Button size="sm"
+                                color={$pause_baking ? "danger" : "secondary"}
+                                outline={!$pause_baking}
+                                on:click={() => toggle_pause_baking()}>
+                            <Icon name="pause-fill" />
+                        </Button>
+                    </Popover>
+                </ButtonGroup>
+                <Popover title="Copy recipe">
+                    <div slot="value">
+                        <p>Copy the recipe URL in the clipboard.</p>
+                        <p>Keybinding: <code>Ctrl+Shift+C</code></p>
+                    </div>
                     <Button size="sm" on:click={() => copy_to_clipboard()}><Icon name="clipboard-plus" /></Button>
                 </Popover>
             </span>

@@ -1,10 +1,10 @@
 <script>
     import Operations from "$lib/OperationsPanel.svelte";
-    import {Col, Row} from "sveltestrap";
+    import {Col, Progress, Row} from "sveltestrap";
     import {Recipe} from "$lib/recipe";
     import InputPanel from "$lib/InputPanel.svelte";
     import OutputPanel from "$lib/OutputPanel.svelte";
-    import {recipe} from "$lib/stores";
+    import {keydown, pause_baking, recipe} from "$lib/stores";
     import RecipePanel from "$lib/RecipePanel.svelte";
     import {onDestroy, onMount} from "svelte";
 
@@ -15,23 +15,27 @@
 
     async function process(input_value) {
         output_value = await Recipe.process(input_value);
-        if (unsubscribe !== null) {
+        if (recipe_unsubscribe !== null) {
             location.hash = Recipe.serialize(input_value);
         }
     }
 
     function delayed_process(input_value) {
+        if ($pause_baking) {
+            return;
+        }
         if (process_timeout !== null) {
             clearTimeout(process_timeout);
         }
         process_timeout = setTimeout(async () => {
-            await process(input_value)
+            await process(input_value);
+            process_timeout = null;
         }, 100);
     }
 
-    $: delayed_process(input_value);
+    $: delayed_process(input_value, $pause_baking);
 
-    let unsubscribe = null;
+    let recipe_unsubscribe = null;
 
     onMount(() => {
         if (location.hash.length > 1) {
@@ -40,13 +44,28 @@
                 input_value = input;
             }
         }
-        unsubscribe = recipe.subscribe(() => {
+        recipe_unsubscribe = recipe.subscribe(() => {
             delayed_process(input_value);
+        });
+
+        window.addEventListener("keydown", event => {
+            event.uKey = event.key.toUpperCase();
+            // if (event.ctrlKey && event.shiftKey && event.uKey === 'F') {
+            //     console.log('f')
+            //     event.preventDefault();
+            //     return;
+            // }
+            for(const handler in $keydown) {
+                if ($keydown[handler](event)) {
+                    event.preventDefault();
+                    return;
+                }
+            }
         });
     });
 
     onDestroy(() => {
-        unsubscribe();
+        recipe_unsubscribe();
     });
 </script>
 
@@ -61,6 +80,16 @@
     </Col>
     <Col class="p-0 vh-100" style="overflow-x: hidden; overflow-y: auto;">
         <InputPanel bind:value={input_value} />
+        <div>
+            <Progress multi style="font-family: monospace; font-weight: bold;">
+                <Progress bar animated color="danger" value={process_timeout ? 100 : 0}>
+                    <span style="color: white;">Baking...</span>
+                </Progress>
+                <Progress bar color="success" value={process_timeout ? 0 : 100}>
+                    <span style="color: white;">Ready!</span>
+                </Progress>
+            </Progress>
+        </div>
         <OutputPanel value={output_value} on:change_input={(event) => input_value = event.detail} />
     </Col>
 </Row>

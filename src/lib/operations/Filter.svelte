@@ -37,7 +37,7 @@
     </div>
     <Input type="search"
            bind:value="{options.pattern}"
-           placeholder="filter..."
+           placeholder="Filter..."
            on:input={edit}
     />
 </Operation>

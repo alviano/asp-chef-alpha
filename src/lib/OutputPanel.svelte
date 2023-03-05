@@ -40,6 +40,7 @@
             />
         </InputGroup>
         <Input type="textarea"
+               id="OutputPanel-textarea"
                {rows}
                readonly
                name="output"

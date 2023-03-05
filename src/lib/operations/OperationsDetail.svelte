@@ -4,6 +4,7 @@
     import {tick} from "svelte";
     import {Popover} from "dumbo-svelte";
     import {Utils} from "$lib/utils";
+    import {keydown} from "$lib/stores";
 
     export let index;
     export let style = '';
@@ -34,6 +35,16 @@
         }
     }
 
+    if (index === undefined) {
+        $keydown.push((event) => {
+            if (event.ctrlKey && event.shiftKey && event.uKey === 'F') {
+                document.getElementById("OperationsDetail-search").focus()
+                Utils.snackbar("Ready to filter operations!");
+                return true;
+            }
+        });
+    }
+
     $: load_components(filter);
 </script>
 
@@ -42,8 +53,11 @@
         <p>Use a regular expression to filter the list of operation.</p>
         <p>Press ENTER to add the first operation in the list, or move in the list with TAB.</p>
         <p>The <strong>n-th operation</strong> in the list can be added with the keybinding <code>Ctrl+n</code>.</p>
+        {#if index === undefined}
+            <p>Jump to this filter with <code>Ctrl+Shift+F</code>.</p>
+        {/if}
     </div>
-    <Input type="search" bind:value={filter} placeholder="filter..." on:keydown={onkeydown} />
+    <Input type="search" id="OperationsDetail-search" bind:value={filter} placeholder="Filter..." on:keydown={onkeydown} />
 </Popover>
 <div {style}>
     {#each components as component}

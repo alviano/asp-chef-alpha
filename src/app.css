@@ -19,7 +19,7 @@ textarea {
   font-family: monospace;
 }
 
-.btn, .btn-sm, .card, .form-control, .input-group-text {
+.btn, .btn-sm, .card, .form-control, .input-group-text, .progress {
   border-radius: 0;
 }
 

@@ -64,5 +64,5 @@
         <InputGroupText><code>models: {models.length}</code></InputGroupText>
         <Button size="sm" title="Set as input" on:click={() => dispatch('change_input', text_value)}><Icon name="arrow-up-square" /></Button>
     </InputGroup>
-    <Input type="textarea" rows={options.rows} readonly name="output" value="{text_value}" />
+    <Input type="textarea" rows={options.rows} readonly name="output" value="{text_value}" placeholder="EMPTY OUTPUT" />
 </Operation>

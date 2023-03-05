@@ -35,6 +35,9 @@
         </p>
     </div>
     <InputGroup>
+        <InputGroupText class="text-end" style="width: 15em; text-align: right;">
+            <code class="text-end">Restore output from {index > options.steps ? '#' + (index - options.steps) : 'input'}</code>
+        </InputGroupText>
         <InputGroupText>Steps</InputGroupText>
         <Input type="number"
                bind:value={options.steps}

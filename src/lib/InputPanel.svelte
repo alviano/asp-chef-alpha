@@ -2,7 +2,8 @@
     import {Button, Card, CardBody, CardHeader, CardTitle, Icon, Input, InputGroup, InputGroupText} from "sveltestrap";
     import {consts} from "$lib/consts";
     import {Popover} from "dumbo-svelte";
-    import {input_rows} from "$lib/stores";
+    import {input_rows, keydown} from "$lib/stores";
+    import {Utils} from "$lib/utils";
 
     export let value;
 
@@ -14,6 +15,14 @@
 
     let rows = $input_rows;
     $: update_input_rows(rows);
+
+    $keydown.push((event) => {
+        if (event.ctrlKey && event.shiftKey && event.uKey === 'I') {
+            document.getElementById("InputPanel-textarea").focus()
+            Utils.snackbar("Focus on Input...");
+            return true;
+        }
+    });
 </script>
 
 <Card class="p-0">
@@ -36,12 +45,19 @@
                    min="1"
             />
         </InputGroup>
-        <Input type="textarea"
-               placeholder={`One or more models separated by ${consts.SYMBOLS.MODELS_SEPARATOR}`}
-               {rows}
-               name="input"
-               bind:value={value}
-               data-testid="InputPanel-textarea"
-        />
+        <Popover block placement="left" title="Input panel">
+            <div slot="value">
+                <p>Provide one or more models separated by {consts.SYMBOLS.MODELS_SEPARATOR}</p>
+                <p>Jump to this textarea with <code>Ctrl+Shift+I</code></p>
+            </div>
+            <Input type="textarea"
+                   id="InputPanel-textarea"
+                   placeholder={`One or more models separated by ${consts.SYMBOLS.MODELS_SEPARATOR}`}
+                   {rows}
+                   name="input"
+                   bind:value={value}
+                   data-testid="InputPanel-textarea"
+            />
+        </Popover>
     </CardBody>
 </Card>
