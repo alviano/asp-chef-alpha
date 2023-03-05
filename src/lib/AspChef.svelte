@@ -36,6 +36,9 @@
     $: delayed_process(input_value, $pause_baking);
 
     let recipe_unsubscribe = null;
+    let input_panel_div;
+    let output_panel_div;
+    let progress_panel_div;
 
     onMount(() => {
         if (location.hash.length > 1) {
@@ -47,6 +50,8 @@
         recipe_unsubscribe = recipe.subscribe(() => {
             delayed_process(input_value);
         });
+        input_panel_div.style.height = `${input_panel_div.offsetHeight - progress_panel_div.offsetHeight / 2}px`;
+        output_panel_div.style.height = `${output_panel_div.offsetHeight - progress_panel_div.offsetHeight / 2}px`;
     });
 
     onDestroy(() => {
@@ -54,7 +59,7 @@
     });
 </script>
 
-<Row>
+<Row class="vw-100 vh-100" style="overflow: hidden;">
     <Col class="p-0 vh-100" style="max-width: 20em; overflow-x: hidden; overflow-y: scroll;">
         <Operations />
     </Col>
@@ -63,10 +68,12 @@
                 on:change_input={(event) => input_value = event.detail}
         />
     </Col>
-    <Col class="p-0 vh-100" style="overflow-x: hidden; overflow-y: auto;">
-        <InputPanel bind:value={input_value} />
-        <div>
-            <Progress multi style="font-family: monospace; font-weight: bold;">
+    <Col class="p-0 vh-100" style="overflow: hidden;">
+        <div bind:this={input_panel_div} style="height: 50vh; overflow-x: hidden; overflow-y: scroll;">
+            <InputPanel bind:value={input_value} />
+        </div>
+        <div bind:this={progress_panel_div}>
+            <Progress class="mb-0" multi style="font-family: monospace; font-weight: bold;">
                 <Progress bar animated color="danger" value={process_timeout ? 100 : 0}>
                     <span style="color: white;">Baking...</span>
                 </Progress>
@@ -75,6 +82,8 @@
                 </Progress>
             </Progress>
         </div>
-        <OutputPanel value={output_value} on:change_input={(event) => input_value = event.detail} />
+        <div bind:this={output_panel_div} style="height: 50vh; overflow-x: hidden; overflow-y: scroll;">
+            <OutputPanel value={output_value} on:change_input={(event) => input_value = event.detail} />
+        </div>
     </Col>
 </Row>

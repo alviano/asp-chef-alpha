@@ -1,7 +1,7 @@
 <script>
     import {Button, Card, CardBody, CardHeader, CardTitle, Icon, Input, InputGroup, InputGroupText} from "sveltestrap";
     import {consts} from "$lib/consts";
-    import {keydown, Popover} from "dumbo-svelte";
+    import {CodeEditor, keydown, Popover} from "dumbo-svelte";
     import {input_rows} from "$lib/stores";
     import {Utils} from "$lib/utils";
 
@@ -25,7 +25,7 @@
     });
 </script>
 
-<Card class="p-0">
+<Card class="p-0" style="overflow-y: scroll">
     <CardHeader>
         <CardTitle>
             Input
@@ -38,13 +38,6 @@
         </CardTitle>
     </CardHeader>
     <CardBody class="p-0">
-        <InputGroup>
-            <InputGroupText>Rows</InputGroupText>
-            <Input type="number"
-                   bind:value={rows}
-                   min="1"
-            />
-        </InputGroup>
         <Popover block placement="left" title="Input panel">
             <div slot="value">
                 <p>Provide one or more models separated by {consts.SYMBOLS.MODELS_SEPARATOR}</p>
@@ -58,6 +51,7 @@
                    bind:value={value}
                    data-testid="InputPanel-textarea"
             />
+<!--            <CodeEditor value={value} />-->
         </Popover>
     </CardBody>
 </Card>

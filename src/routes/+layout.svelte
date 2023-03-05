@@ -5,7 +5,7 @@
   import { privacy_policy } from '$lib/stores';
 </script>
 
-<Container fluid>
+<Container fluid class="vw-100 vh-100" style="overflow: hidden;">
   <slot />
 </Container>
 

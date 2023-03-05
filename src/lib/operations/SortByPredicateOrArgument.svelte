@@ -16,7 +16,9 @@
                     return undefined;
                 }
                 const term = atom.terms[options.sort_index - 1];
-                if (term.number !== undefined) {
+                if (term === undefined) {
+                    return undefined
+                } else if (term.number !== undefined) {
                     return [0, term.number];
                 } else if (term.string !== undefined) {
                     return [1, term.string];

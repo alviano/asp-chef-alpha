@@ -1,6 +1,6 @@
 <script>
     import {Button, Card, CardBody, CardHeader, CardTitle, Icon, Input, InputGroup, InputGroupText} from "sveltestrap";
-    import {Popover} from "dumbo-svelte";
+    import {CodeEditor, Popover} from "dumbo-svelte";
     import {createEventDispatcher} from "svelte";
     import {output_rows} from "$lib/stores";
 
@@ -32,21 +32,6 @@
         </CardTitle>
     </CardHeader>
     <CardBody class="p-0">
-        <InputGroup>
-            <InputGroupText>Rows</InputGroupText>
-            <Input type="number"
-                   bind:value={rows}
-                   min="1"
-            />
-        </InputGroup>
-        <Input type="textarea"
-               id="OutputPanel-textarea"
-               {rows}
-               readonly
-               name="output"
-               value="{text_value}"
-               placeholder="EMPTY OUTPUT"
-               data-testid="OutputPanel-textarea"
-        />
+        <CodeEditor value="{text_value}" readonly data-testid="OutputPanel-textarea" />
     </CardBody>
 </Card>
