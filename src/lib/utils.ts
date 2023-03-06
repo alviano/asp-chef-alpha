@@ -2,11 +2,16 @@ import {default as peg} from 'pegjs';
 import {consts} from '$lib/consts';
 import {DOMPurifyConfig, Utils as BaseUtils} from "dumbo-svelte";
 import _ from 'lodash';
+import AsyncLock from "async-lock";
 // import {run} from 'clingo-wasm'
 
 const dom_purify_config = new DOMPurifyConfig(consts);
 
 export class Utils extends BaseUtils {
+    private static _clingo_timeout = 600;
+    private static _clingo_reject = null;
+    private static _clingo_lock = new AsyncLock();
+
     static render_markdown(content: string) {
         return BaseUtils.render_markdown(content, dom_purify_config)
     }
@@ -25,8 +30,55 @@ export class Utils extends BaseUtils {
         return window.clingo;
     }
 
+    static set clingo_timeout(value: number) {
+        this._clingo_timeout = value;
+    }
+
+    static async clingo_clear() {
+        const random = Math.floor(Math.random() * 1_000_000);
+        for (;;) {
+            try {
+                const result = await this.clingo.run(`#show ${random}.`);
+                if (result && result.Result === 'SATISFIABLE' && result.Models.Number === 1) {
+                    const model = result.Call[0].Witnesses[0].Value;
+                    if (model.length === 1 && model[0] === '' + random) {
+                        return;
+                    }
+                }
+                await Utils.delay(1000);
+            } catch (error) {
+                await Utils.delay(1000);
+            }
+        }
+    }
+
+    static async clingo_terminate() {
+        try {
+            this._clingo_reject('Error: terminated');
+        } catch (error) {
+            /* empty */
+        }
+        await this.clingo_clear();
+    }
+
+    static async clingo_run(program: string, number = 0, options = [], timeout = null) {
+        const the_timeout = timeout !== null ? timeout : this._clingo_timeout;
+        return await this._clingo_lock.acquire('clingo', async () => {
+            return await new Promise((resolve, reject) => {
+                this._clingo_reject = reject;
+                setTimeout(async () => {
+                    reject(`Error: TIMEOUT ${the_timeout} seconds`);
+                }, the_timeout * 1000);
+                this.clingo.run(program, number, options).then(result => {
+                    resolve(result);
+                });
+                this._clingo_reject = null;
+            });
+        });
+    }
+
     static async search_model(program: string) {
-        const result = await this.clingo.run(program);
+        const result = await this.clingo_run(program);
         if (result.Result === 'ERROR') {
             throw new Error(result.Error);
         } else if (result.Models.Number === 0) {
@@ -37,7 +89,7 @@ export class Utils extends BaseUtils {
     }
 
     static async search_models(program: string, number: number, raises: boolean) {
-        const result = await this.clingo.run(program, number);
+        const result = await this.clingo_run(program, number);
         if (result.Result === 'ERROR') {
             throw new Error(result.Error);
         } else if (raises && result.Models.Number !== number) {
@@ -48,7 +100,7 @@ export class Utils extends BaseUtils {
     }
 
     static async search_optimal_models(program: string, number: number, raises: boolean) {
-        const result = await this.clingo.run(program, number, [
+        const result = await this.clingo_run(program, number, [
             '--opt-mode=optN',
         ]);
         if (result.Result === 'ERROR') {
@@ -69,7 +121,7 @@ export class Utils extends BaseUtils {
     }
 
     static async cautious_consequences(program: string) {
-        const result = await this.clingo.run(program, 0, [
+        const result = await this.clingo_run(program, 0, [
             '--enum-mode=cautious'
         ]);
         if (result.Result === 'ERROR') {
@@ -82,7 +134,7 @@ export class Utils extends BaseUtils {
     }
 
     static async brave_consequences(program: string) {
-        const result = await this.clingo.run(program, 0, [
+        const result = await this.clingo_run(program, 0, [
             '--enum-mode=brave'
         ]);
         if (result.Result === 'ERROR') {

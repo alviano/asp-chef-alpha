@@ -36,6 +36,8 @@
     import SortByIncreasingSize from "$lib/operations/SortByIncreasingSize.svelte";
     import SortByDecreasingSize from "$lib/operations/SortByDecreasingSize.svelte";
     import SortByPredicateOrArgument from "$lib/operations/SortByPredicateOrArgument.svelte";
+    import TimeoutMinutes from "$lib/operations/TimeoutMinutes.svelte";
+    import TimeoutSeconds from "$lib/operations/TimeoutSeconds.svelte";
 
     async function copy_to_clipboard() {
         const url = Recipe.as_url();
@@ -188,6 +190,10 @@
                         <SortByDecreasingSize id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
                     {:else if item.operation === 'Sort By Predicate Or Argument'}
                         <SortByPredicateOrArgument id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
+                    {:else if item.operation === 'Timeout Minutes'}
+                        <TimeoutMinutes id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
+                    {:else if item.operation === 'Timeout Seconds'}
+                        <TimeoutSeconds id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
                     {:else}
                         Unknown operation: {item.operation}
                     {/if}
