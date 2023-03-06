@@ -30,13 +30,25 @@
         if (event.key === 'Enter') {
             await add_operation(0);
         } else if (event.key >= '1' && event.key <= '9') {
-            await add_operation(parseInt(event.key) - 1);
+            await add_operation(parseInt(event.key));
         } else if (event.key === '0') {
-            await add_operation(9);
+            await add_operation(10);
         } else {
             return;
         }
         event.preventDefault();
+    }
+
+    function keybinding(number) {
+        if (number === 0) {
+            return 'ENTER';
+        } else if (number < 10) {
+            return number;
+        } else if (number === 10) {
+            return 0;
+        } else {
+            return undefined;
+        }
     }
 
     if (index === undefined) {
@@ -58,10 +70,8 @@
         {#if index === undefined}
             <p>Jump to this filter with the keybinding <code>F</code>.</p>
         {/if}
-        <p>Press ENTER to add the first operation in the list, or move in the list with TAB.</p>
         <p>
-            When filtering, the <strong>n-th operation</strong> in the list can be added with the keybinding <code>n</code>
-            (<code>1</code> for the <strong>1-st operation</strong>, <code>0</code> for the <strong>10-th operation</strong>).
+            When filtering, the keybinding shown in the buttons below can be used to add ingredients to the recipe.
         </p>
     </div>
     <Input type="search" id="OperationsDetail-search" bind:value={filter} placeholder="Filter..." on:keydown={onkeydown} />
@@ -69,7 +79,7 @@
 <div {style}>
     {#each components as component, number}
         <svelte:component this={component} id="{undefined}" options="{undefined}" {index} add_to_recipe="{undefined}"
-                          keybinding="{number < 9 ? number + 1 : number < 10 ? 0 : undefined}" />
+                          keybinding="{keybinding(number)}" />
     {/each}
 </div>
 
