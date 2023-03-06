@@ -15,11 +15,12 @@
 </script>
 
 <script>
-    import {Badge, Button, Icon, Input, InputGroup, InputGroupText} from "sveltestrap";
+    import {Button, Icon, Input, InputGroup, InputGroupText} from "sveltestrap";
     import Operation from "$lib/operations/Operation.svelte";
     import {onDestroy, onMount} from "svelte";
     import {createEventDispatcher} from "svelte";
     import CodeMirror from "svelte-codemirror-editor";
+    import {AutoHideBadge} from "dumbo-svelte";
 
     const dispatch = createEventDispatcher();
 
@@ -31,11 +32,6 @@
 
     let models = [];
     $: text_value = models.map(atoms => atoms.map(atom => atom.str + '.').join('\n')).join('\n§\n');
-
-    let editor;
-    let is_mouse_over = false;
-
-    $: editor ? (editor.$$.ctx[15].viewState.editorHeight = 60) : null;
 
     function edit() {
         Recipe.edit_operation(index, options);
@@ -73,10 +69,8 @@
         <Button size="sm" title="Set as input" on:click={() => dispatch('change_input', text_value)}><Icon name="arrow-up-square" /></Button>
     </InputGroup>
     <div style="height: {options.height}px; overflow-y: auto">
-        <div class="float-end {is_mouse_over ? 'opacity-0' : 'opacity-75'}" on:mouseenter={() => is_mouse_over = true} on:mouseleave={() => is_mouse_over = false}>
-            <Badge color="warning">readonly</Badge>
-        </div>
-        <CodeMirror bind:this={editor} bind:value={text_value} readonly placeholder="EMPTY OUTPUT" lineWrapping="{true}" />
+        <AutoHideBadge color="warning">readonly</AutoHideBadge>
+        <CodeMirror bind:value={text_value} readonly placeholder="EMPTY OUTPUT" lineWrapping="{true}" />
         <Input type="textarea" class="d-none" value="{text_value}" data-testid="OutputPanel-textarea" />
     </div>
 </Operation>

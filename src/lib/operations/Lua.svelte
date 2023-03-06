@@ -4,7 +4,7 @@
 
     const operation = "Lua";
     const default_extra_options = {
-        rows: 5,
+        height: 200,
         content: '',
         encode_predicate: '__base64__',
     };
@@ -36,6 +36,7 @@ ${options.content}
 <script>
     import {Input, InputGroup, InputGroupText} from "sveltestrap";
     import Operation from "$lib/operations/Operation.svelte";
+    import CodeMirror from "svelte-codemirror-editor";
 
     export let id;
     export let options;
@@ -69,20 +70,25 @@ ${options.content}
         </p>
     </div>
     <InputGroup>
-        <InputGroupText>Rows</InputGroupText>
+        <InputGroupText>Height</InputGroupText>
         <Input type="number"
-               bind:value={options.rows}
+               bind:value={options.height}
                min="1"
                on:input={edit}
         />
     </InputGroup>
-    <Input type="textarea"
-           rows={options.rows}
-           bind:value="{options.content}"
-           placeholder="One or more lines..."
-           on:input={edit}
-           data-testid="Encode-rules"
-    />
+    <div style="height: {options.height}px; overflow-y: auto">
+        <CodeMirror bind:value={options.content}
+                    placeholder={`One or more lines...`}
+                    lineWrapping="{true}"
+                    on:change={edit}
+        />
+        <Input type="textarea"
+               class="d-none"
+               value="{options.content}"
+               data-testid="Lua-content"
+        />
+    </div>
     <InputGroup>
         <InputGroupText style="width: 10em;">Encode predicate</InputGroupText>
         <Input type="search"

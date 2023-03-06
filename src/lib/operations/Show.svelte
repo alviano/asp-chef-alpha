@@ -4,7 +4,7 @@
 
     const operation = "Show";
     const default_extra_options = {
-        rows: 5,
+        height: 200,
         rules: '',
     };
 
@@ -27,6 +27,7 @@
 <script>
     import {Input, InputGroup, InputGroupText} from "sveltestrap";
     import Operation from "$lib/operations/Operation.svelte";
+    import CodeMirror from "svelte-codemirror-editor";
 
     export let id;
     export let options;
@@ -52,9 +53,9 @@
         </p>
     </div>
     <InputGroup>
-        <InputGroupText>Rows</InputGroupText>
+        <InputGroupText>Height</InputGroupText>
         <Input type="number"
-               bind:value={options.rows}
+               bind:value={options.height}
                min="1"
                on:input={edit}
         />
@@ -65,4 +66,16 @@
            placeholder="One or more #show directives..."
            on:input={edit}
     />
+    <div style="height: {options.height}px; overflow-y: auto">
+        <CodeMirror bind:value={options.rules}
+                    placeholder={`One or more #show directives...`}
+                    lineWrapping="{true}"
+                    on:change={edit}
+        />
+        <Input type="textarea"
+               class="d-none"
+               value="{options.content}"
+               data-testid="Show-content"
+        />
+    </div>
 </Operation>

@@ -4,7 +4,7 @@
 
     const operation = "Union";
     const default_extra_options = {
-        rows: 5,
+        height: 200,
         rules: '',
         decode_predicate: '__base64__',
     };
@@ -33,6 +33,7 @@
 <script>
     import {Input, InputGroup, InputGroupText} from "sveltestrap";
     import Operation from "$lib/operations/Operation.svelte";
+    import CodeMirror from "svelte-codemirror-editor";
 
     export let id;
     export let options;
@@ -59,9 +60,9 @@
         </p>
     </div>
     <InputGroup>
-        <InputGroupText>Rows</InputGroupText>
+        <InputGroupText>Height</InputGroupText>
         <Input type="number"
-               bind:value={options.rows}
+               bind:value={options.height}
                min="1"
                style="max-width: 5em;"
                on:input={edit}
@@ -72,10 +73,16 @@
                on:input={edit}
         />
     </InputGroup>
-    <Input type="textarea"
-           rows={options.rows}
-           bind:value="{options.rules}"
-           placeholder="One or more ASP rules..."
-           on:input={edit}
-    />
+    <div style="height: {options.height}px; overflow-y: auto">
+        <CodeMirror bind:value={options.rules}
+                    placeholder={`One or more ASP rules...`}
+                    lineWrapping="{true}"
+                    on:change={edit}
+        />
+        <Input type="textarea"
+               class="d-none"
+               value="{options.content}"
+               data-testid="Union-rules"
+        />
+    </div>
 </Operation>
