@@ -9,6 +9,7 @@
     export let style = '';
 
     let filter = '';
+    let filter_focused = false;
     let components = [];
     let component_to_add = null;
 
@@ -39,8 +40,10 @@
         event.preventDefault();
     }
 
-    function keybinding(number) {
-        if (number === 0) {
+    function keybinding(number, filter_focused) {
+        if (!filter_focused) {
+            return undefined;
+        } else if (number === 0) {
             return 'ENTER';
         } else if (number < 10) {
             return number;
@@ -74,12 +77,19 @@
             When filtering, the keybinding shown in the buttons below can be used to add ingredients to the recipe.
         </p>
     </div>
-    <Input type="search" id="OperationsDetail-search" bind:value={filter} placeholder="Filter..." on:keydown={onkeydown} />
+    <Input type="search"
+           id="OperationsDetail-search"
+           bind:value={filter}
+           placeholder="Filter..."
+           on:keydown={onkeydown}
+           on:focus={() => console.log(filter_focused = true)}
+           on:blur={() => filter_focused = false}
+    />
 </Popover>
 <div {style}>
     {#each components as component, number}
         <svelte:component this={component} id="{undefined}" options="{undefined}" {index} add_to_recipe="{undefined}"
-                          keybinding="{keybinding(number)}" />
+                          keybinding="{keybinding(number, filter_focused)}" />
     {/each}
 </div>
 

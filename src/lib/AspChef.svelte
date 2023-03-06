@@ -21,11 +21,11 @@
     }
 
     function delayed_process(input_value) {
-        if ($pause_baking) {
-            return;
-        }
         if (process_timeout !== null) {
             clearTimeout(process_timeout);
+        }
+        if ($pause_baking) {
+            return;
         }
         process_timeout = setTimeout(async () => {
             await process(input_value);

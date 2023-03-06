@@ -12,7 +12,7 @@
 
 <script>
     import Operation from "$lib/operations/Operation.svelte";
-    import OperationsDetail from "$lib/operations/OperationsDetail.svelte";
+    import OperationsList from "$lib/operations/OperationsList.svelte";
 
     export let id;
     export let options;
@@ -27,5 +27,5 @@
             The <strong>{operation}</strong> operation does nothing... but can be used to add other ingredients above it!
         </p>
     </div>
-    <OperationsDetail {index} style="height: 50vh; overflow-y: scroll" />
+    <OperationsList {index} style="height: 50vh; overflow-y: scroll" />
 </Operation>

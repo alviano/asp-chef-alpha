@@ -37,7 +37,12 @@
     </Card>
 {:else}
     <Popover block placement="right" title="Add {operation} Operation">
-        <div slot="value"><slot name="description" /></div>
+        <div slot="value">
+            <slot name="description" />
+            {#if keybinding !== undefined}
+                <p>Keybinding: <code>{keybinding}</code></p>
+            {/if}
+        </div>
         <Button block outline style="border-radius: 0; text-align: left; text-transform: revert;"
                 on:click={() => Recipe.add_operation(operation, {...options}, index)}>
             {operation}

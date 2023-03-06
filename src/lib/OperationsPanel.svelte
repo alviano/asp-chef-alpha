@@ -1,7 +1,7 @@
 <script>
     import {Card, CardBody, CardHeader, CardTitle} from "sveltestrap";
     import Nav from '$lib/Nav.svelte';
-    import OperationsDetail from "$lib/operations/OperationsDetail.svelte";
+    import OperationsList from "$lib/operations/OperationsList.svelte";
 </script>
 
 <Nav />
@@ -11,6 +11,6 @@
         <CardTitle>Operations</CardTitle>
     </CardHeader>
     <CardBody class="p-0">
-        <OperationsDetail index="{undefined}" />
+        <OperationsList index="{undefined}" />
     </CardBody>
 </Card>
