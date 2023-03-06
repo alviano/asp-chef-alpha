@@ -1,22 +1,15 @@
 <script>
-    import {Button, Card, CardBody, CardHeader, CardTitle, Icon, Input, InputGroup, InputGroupText} from "sveltestrap";
-    import {CodeEditor, Popover} from "dumbo-svelte";
+    import CodeMirror from "svelte-codemirror-editor";
+    import {Badge, Button, Card, CardBody, CardHeader, CardTitle, Icon, Input} from "sveltestrap";
+    import {Popover} from "dumbo-svelte";
     import {createEventDispatcher} from "svelte";
-    import {output_rows} from "$lib/stores";
 
     const dispatch = createEventDispatcher();
 
     export let value = [];
     $: text_value = value.map(atoms => atoms.map(atom => atom.str + '.').join('\n')).join('\n§\n');
 
-    function update_output_rows(rows) {
-        if (rows !== $output_rows) {
-            $output_rows = rows;
-        }
-    }
-
-    let rows = $output_rows;
-    $: update_output_rows(rows);
+    let is_mouse_over = false;
 </script>
 
 <Card class="p-0">
@@ -32,6 +25,10 @@
         </CardTitle>
     </CardHeader>
     <CardBody class="p-0">
-        <CodeEditor value="{text_value}" readonly data-testid="OutputPanel-textarea" />
+        <div class="float-end {is_mouse_over ? 'opacity-0' : 'opacity-75'}" on:mouseenter={() => is_mouse_over = true} on:mouseleave={() => is_mouse_over = false}>
+            <Badge color="warning">readonly</Badge>
+        </div>
+        <CodeMirror bind:value={text_value} readonly placeholder="EMPTY OUTPUT" lineWrapping="{true}" />
+        <Input type="textarea" class="d-none" value="{text_value}" data-testid="OutputPanel-textarea" />
     </CardBody>
 </Card>

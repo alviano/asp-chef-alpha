@@ -1,24 +1,17 @@
 <script>
-    import {Button, Card, CardBody, CardHeader, CardTitle, Icon, Input, InputGroup, InputGroupText} from "sveltestrap";
+    import {Button, Card, CardBody, CardHeader, CardTitle, Icon, Input} from "sveltestrap";
     import {consts} from "$lib/consts";
-    import {CodeEditor, keydown, Popover} from "dumbo-svelte";
-    import {input_rows} from "$lib/stores";
+    import {keydown, Popover} from "dumbo-svelte";
     import {Utils} from "$lib/utils";
+    import CodeMirror from "svelte-codemirror-editor";
 
     export let value;
 
-    function update_input_rows(rows) {
-        if (rows !== $input_rows) {
-            $input_rows = rows;
-        }
-    }
-
-    let rows = $input_rows;
-    $: update_input_rows(rows);
+    let editor;
 
     $keydown.push((event) => {
         if (event.uKey === 'I') {
-            document.getElementById("InputPanel-textarea").focus()
+            editor.$$.ctx[15].focus();  // a bit fragile, but I have not find any other way to get the EditorView
             Utils.snackbar("Focus on Input...");
             return true;
         }
@@ -43,15 +36,15 @@
                 <p>Provide one or more models separated by {consts.SYMBOLS.MODELS_SEPARATOR}</p>
                 <p>Jump to this textarea with the keybinding <code>I</code></p>
             </div>
+            <CodeMirror bind:this={editor} bind:value
+                        placeholder={`One or more models separated by ${consts.SYMBOLS.MODELS_SEPARATOR}`}
+                        lineWrapping="{true}"
+            />
             <Input type="textarea"
-                   id="InputPanel-textarea"
-                   placeholder={`One or more models separated by ${consts.SYMBOLS.MODELS_SEPARATOR}`}
-                   {rows}
-                   name="input"
-                   bind:value={value}
+                   class="d-none"
+                   {value}
                    data-testid="InputPanel-textarea"
             />
-<!--            <CodeEditor value={value} />-->
         </Popover>
     </CardBody>
 </Card>
