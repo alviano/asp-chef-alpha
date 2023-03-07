@@ -11,6 +11,7 @@ export class Utils extends BaseUtils {
     private static _clingo_timeout = 600;
     private static _clingo_reject = null;
     private static _clingo_lock = new AsyncLock();
+    private static _clingo_options = new Map();
 
     static render_markdown(content: string) {
         return BaseUtils.render_markdown(content, dom_purify_config)
@@ -32,6 +33,14 @@ export class Utils extends BaseUtils {
 
     static set clingo_timeout(value: number) {
         this._clingo_timeout = value;
+    }
+
+    static reset_clingo_options() {
+        this._clingo_options.clear();
+    }
+
+    static change_clingo_option(key, value) {
+        this._clingo_options.set(key, value);
     }
 
     static async clingo_clear() {
@@ -69,7 +78,10 @@ export class Utils extends BaseUtils {
                 setTimeout(async () => {
                     reject(`Error: TIMEOUT ${the_timeout} seconds`);
                 }, the_timeout * 1000);
-                this.clingo.run(program, number, options).then(result => {
+                this.clingo.run(program, number, [
+                    ...options,
+                    ...Array.from(this._clingo_options, ([key, value]) => `${key}${value}`),
+                ]).then(result => {
                     resolve(result);
                 });
                 this._clingo_reject = null;

@@ -70,7 +70,7 @@ export class Recipe {
         try {
             let result = await this.process_input(input);
             for (const [index, ingredient] of this.recipe.entries()) {
-                where = `#${index}. ${ingredient.operation}`;
+                where = `#${index + 1}. ${ingredient.operation}`;
                 this.input_at_index.push(result);
                 if (ingredient.options.apply) {
                     result = await Recipe.apply_operation_type(index, ingredient, result);

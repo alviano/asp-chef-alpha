@@ -1,0 +1,63 @@
+<script context="module">
+    import {Recipe} from "$lib/recipe";
+    import {Utils} from "$lib/utils";
+
+    const operation = "Set Configuration";
+    const default_extra_options = {
+        configuration: 'auto',
+    };
+
+    const values = {
+        "auto" : "Select configuration based on problem type",
+        "frumpy" : "Use conservative defaults",
+        "jumpy" : "Use aggressive defaults",
+        "tweety" : "Use defaults geared towards asp problems",
+        "handy" : "Use defaults geared towards large problems",
+        "crafty" : "Use defaults geared towards crafted problems",
+        "trendy" : "Use defaults geared towards industrial problems",
+        "many" : "Use default portfolio to configure solver(s)",
+    };
+
+    Recipe.register_operation_type(operation, async (input, options) => {
+        Utils.change_clingo_option('--configuration=', options.configuration);
+        return input;
+    });
+</script>
+
+<script>
+    import {Input} from "sveltestrap";
+    import Operation from "$lib/operations/Operation.svelte";
+
+    export let id;
+    export let options;
+    export let index;
+    export let add_to_recipe;
+    export let keybinding;
+
+    function edit() {
+        Recipe.edit_operation(index, options);
+    }
+</script>
+
+<Operation {id} {operation} {options} {index} {default_extra_options} {add_to_recipe} {keybinding}>
+    <div slot="description">
+        <p>
+            The <strong>{operation}</strong> operation sets the default configuration of clingo.
+        </p>
+        <p>
+            Default value is auto. Possible values:
+        </p>
+        <ul>
+            {#each Object.keys(values) as key}
+                <li>{key}: {values[key]}</li>
+            {/each}
+        </ul>
+    </div>
+    <Input type="select" bind:value={options.configuration} on:change={edit}>
+        {#each Object.keys(values) as key}
+            <option value="{key}">{key}: {values[key]}</option>
+        {/each}
+    </Input>
+    <div class="m-3">
+    </div>
+</Operation>
