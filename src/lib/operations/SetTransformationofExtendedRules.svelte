@@ -2,24 +2,24 @@
     import {Recipe} from "$lib/recipe";
     import {Utils} from "$lib/utils";
 
-    const operation = "Set Configuration";
+    const operation = "Set Transformation of Extended Rules";
     const default_extra_options = {
-        value: 'auto',
+        value: 'all',
     };
 
     const values = {
-        "auto" : "Select configuration based on problem type",
-        "frumpy" : "Use conservative defaults",
-        "jumpy" : "Use aggressive defaults",
-        "tweety" : "Use defaults geared towards asp problems",
-        "handy" : "Use defaults geared towards large problems",
-        "crafty" : "Use defaults geared towards crafted problems",
-        "trendy" : "Use defaults geared towards industrial problems",
-        "many" : "Use default portfolio to configure solver(s)",
+        "all" : "Transform all extended rules to basic rules",
+        "choice" : "Transform choice rules, but keep cardinality and weight rules",
+        "card" : "Transform cardinality rules, but keep choice and weight rules",
+        "weight" : "Transform cardinality and weight rules, but keep choice rules",
+        "scc" : "Transform \"recursive\" cardinality and weight rules",
+        "integ" : "Transform cardinality integrity constraints",
+        "dynamic" : "Transform \"simple\" extended rules, but keep more complex ones",
+        "no": "Disable"
     };
 
     Recipe.register_operation_type(operation, async (input, options) => {
-        Utils.change_clingo_option('--configuration=', options.value);
+        Utils.change_clingo_option('--trans-ext=', options.value);
         return input;
     });
 </script>
@@ -42,10 +42,10 @@
 <Operation {id} {operation} {options} {index} {default_extra_options} {add_to_recipe} {keybinding}>
     <div slot="description">
         <p>
-            The <strong>{operation}</strong> operation sets the default configuration of clingo.
+            The <strong>{operation}</strong> operation configure handling of extended rules in clingo.
         </p>
         <p>
-            Possible values:
+            Default value is 2. Possible values:
         </p>
         <ul>
             {#each Object.keys(values) as key}

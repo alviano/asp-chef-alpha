@@ -39,6 +39,8 @@
     import TimeoutMinutes from "$lib/operations/TimeoutMinutes.svelte";
     import TimeoutSeconds from "$lib/operations/TimeoutSeconds.svelte";
     import SetConfiguration from "$lib/operations/SetConfiguration.svelte";
+    import SetSATPreprocessing from "$lib/operations/SetSATPreprocessing.svelte";
+    import SetTransformationOfExtendedRules from "$lib/operations/SetTransformationofExtendedRules.svelte";
 
     async function copy_to_clipboard() {
         const url = Recipe.as_url();
@@ -197,6 +199,10 @@
                         <TimeoutSeconds id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
                     {:else if item.operation === 'Set Configuration'}
                         <SetConfiguration id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
+                    {:else if item.operation === 'Set SAT Preprocessing'}
+                        <SetSATPreprocessing id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
+                    {:else if item.operation === 'Set Transformation of Extended Rules'}
+                        <SetTransformationOfExtendedRules id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
                     {:else}
                         Unknown operation: {item.operation}
                     {/if}

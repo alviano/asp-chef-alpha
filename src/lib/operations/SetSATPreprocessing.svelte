@@ -2,24 +2,20 @@
     import {Recipe} from "$lib/recipe";
     import {Utils} from "$lib/utils";
 
-    const operation = "Set Configuration";
+    const operation = "Set SAT Preprocessing";
     const default_extra_options = {
-        value: 'auto',
+        value: '2',
     };
 
     const values = {
-        "auto" : "Select configuration based on problem type",
-        "frumpy" : "Use conservative defaults",
-        "jumpy" : "Use aggressive defaults",
-        "tweety" : "Use defaults geared towards asp problems",
-        "handy" : "Use defaults geared towards large problems",
-        "crafty" : "Use defaults geared towards crafted problems",
-        "trendy" : "Use defaults geared towards industrial problems",
-        "many" : "Use default portfolio to configure solver(s)",
+        "1" : "Variable elimination with subsumption (VE)",
+        "2" : "VE with limited blocked clause elimination (BCE)",
+        "3" : "Full BCE followed by VE",
+        "no": "Disable"
     };
 
     Recipe.register_operation_type(operation, async (input, options) => {
-        Utils.change_clingo_option('--configuration=', options.value);
+        Utils.change_clingo_option('--sat-prepro=', options.value);
         return input;
     });
 </script>
@@ -42,7 +38,7 @@
 <Operation {id} {operation} {options} {index} {default_extra_options} {add_to_recipe} {keybinding}>
     <div slot="description">
         <p>
-            The <strong>{operation}</strong> operation sets the default configuration of clingo.
+            The <strong>{operation}</strong> operation sets the preprocessing level of clingo.
         </p>
         <p>
             Possible values:

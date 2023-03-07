@@ -65,6 +65,7 @@ export class Recipe {
     }
 
     static async process(input: string): Promise<object[][]> {
+        Utils.reset_clingo_options();
         this.input_at_index.length = 0;
         let where = 'Input';
         try {
