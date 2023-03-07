@@ -4,6 +4,7 @@
     import {tick} from "svelte";
     import {keydown, Popover} from "dumbo-svelte";
     import {Utils} from "$lib/utils";
+    import {consts} from "$lib/consts";
 
     export let index;
     export let style = '';
@@ -44,7 +45,7 @@
         if (!filter_focused) {
             return undefined;
         } else if (number === 0) {
-            return 'ENTER';
+            return consts.SYMBOLS.NEW_LINE;
         } else if (number < 10) {
             return number;
         } else if (number === 10) {

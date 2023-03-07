@@ -67,7 +67,7 @@
                on:input={edit}
         />
         <InputGroupText><code>models: {models.length}</code></InputGroupText>
-        <Button size="sm" title="Set as input" on:click={() => dispatch('change_input', Utils.flatten_output(value, '')))}>
+        <Button size="sm" title="Set as input" on:click={() => dispatch('change_input', Utils.flatten_output(models, ''))}>
             <Icon name="arrow-up-square" />
         </Button>
     </InputGroup>
