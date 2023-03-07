@@ -167,6 +167,13 @@ export class Utils extends BaseUtils {
     static async parse_answer_set(atoms: string) {
         return this.parse_atoms(await this.search_model(atoms));
     }
+
+    static flatten_output(output_value, empty_model = 'EMPTY MODEL') {
+        return output_value.map(atoms =>
+            atoms.length === 0 ? empty_model :
+                atoms.map(atom => atom.str + '.')
+                .join('\n')).join('\n§\n');
+    }
 }
 
 const GRAMMAR = `

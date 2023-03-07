@@ -7,7 +7,6 @@
     };
 
     Recipe.register_operation_type(operation, async (input, options) => {
-
         return input.filter(part =>
             part.length !== 1 ||
             !String(part[0].str).startsWith('Error: ') ||

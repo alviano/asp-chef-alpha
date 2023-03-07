@@ -21,6 +21,7 @@
     import {createEventDispatcher} from "svelte";
     import CodeMirror from "svelte-codemirror-editor";
     import {AutoHideBadge} from "dumbo-svelte";
+    import {Utils} from "$lib/utils";
 
     const dispatch = createEventDispatcher();
 
@@ -31,7 +32,7 @@
     export let keybinding;
 
     let models = [];
-    $: text_value = models.map(atoms => atoms.map(atom => atom.str + '.').join('\n')).join('\n§\n');
+    $: text_value = Utils.flatten_output(models);
 
     function edit() {
         Recipe.edit_operation(index, options);
@@ -66,11 +67,13 @@
                on:input={edit}
         />
         <InputGroupText><code>models: {models.length}</code></InputGroupText>
-        <Button size="sm" title="Set as input" on:click={() => dispatch('change_input', text_value)}><Icon name="arrow-up-square" /></Button>
+        <Button size="sm" title="Set as input" on:click={() => dispatch('change_input', Utils.flatten_output(value, '')))}>
+            <Icon name="arrow-up-square" />
+        </Button>
     </InputGroup>
     <div style="height: {options.height}px; overflow-y: auto">
         <AutoHideBadge color="warning">readonly</AutoHideBadge>
-        <CodeMirror bind:value={text_value} readonly placeholder="EMPTY OUTPUT" lineWrapping="{true}" />
+        <CodeMirror bind:value={text_value} readonly placeholder="NO MODELS" lineWrapping="{true}" />
         <Input type="textarea" class="d-none" value="{text_value}" data-testid="OutputPanel-textarea" />
     </div>
 </Operation>

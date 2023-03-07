@@ -66,9 +66,11 @@ export class Recipe {
 
     static async process(input: string): Promise<object[][]> {
         this.input_at_index.length = 0;
+        let where = 'Input';
         try {
             let result = await this.process_input(input);
             for (const [index, ingredient] of this.recipe.entries()) {
+                where = `#${index}. ${ingredient.operation}`;
                 this.input_at_index.push(result);
                 if (ingredient.options.apply) {
                     result = await Recipe.apply_operation_type(index, ingredient, result);
@@ -79,7 +81,10 @@ export class Recipe {
             }
             return result;
         } catch (error) {
-            return [[{str: error}]];
+            return [[
+                { str: `Unrecoverable Error in ${where}` },
+                { str: error },
+            ]];
         }
     }
 

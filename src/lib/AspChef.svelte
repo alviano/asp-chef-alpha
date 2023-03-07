@@ -34,9 +34,11 @@
                 Utils.clingo_terminate();
                 return;
             }
-            while (processing) {
-                Utils.snackbar('Waiting for previous process to terminate...', { position: 'is-bottom-right' });
-                await Utils.delay(3000);
+            for (let count_attempt = 0; processing; count_attempt++) {
+                if (count_attempt % 30 === 0) {
+                    Utils.snackbar('Waiting for previous process to terminate...', { position: 'is-bottom-right' });
+                }
+                await Utils.delay(100);
             }
             process_timeout = setTimeout(async () => {
                 processing = true;
@@ -44,7 +46,7 @@
                 await Utils.clingo_terminate();
                 process_timeout = null;
                 processing = false;
-            }, 1000);
+            }, 100);
         });
     }
 
