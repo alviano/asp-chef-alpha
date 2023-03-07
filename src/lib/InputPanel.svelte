@@ -11,14 +11,14 @@
 
     $keydown.push((event) => {
         if (event.uKey === 'I') {
-            editor.$$.ctx[15].focus();  // a bit fragile, but I have not find any other way to get the EditorView
+            editor.$$.ctx[15].focus();  // a bit fragile, but I have not found any other way to get the EditorView
             Utils.snackbar("Focus on Input...");
             return true;
         }
     });
 </script>
 
-<Card class="p-0" style="overflow-y: scroll">
+<Card class="p-0">
     <CardHeader>
         <CardTitle>
             Input
