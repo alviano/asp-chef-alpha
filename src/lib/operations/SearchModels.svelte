@@ -99,6 +99,7 @@
                bind:value={options.number}
                min="0"
                on:input={edit}
+               data-testid="SearchModels-models"
         />
         <Button outline="{!options.raises}" on:click={() => { options.raises = !options.raises; edit(); }}>Raise error</Button>
         <Button outline="{!options.input_as_constraints}" on:click={() => { options.input_as_constraints = !options.input_as_constraints; edit(); }}>Use constraints</Button>

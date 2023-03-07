@@ -106,8 +106,10 @@ export class Utils extends BaseUtils {
             throw new Error(result.Error);
         } else if (raises && result.Models.Number !== number) {
             throw new Error(`Expecting ${number} models, found ${result.Models.Number}`);
-        } else {
+        } else if (result.Call[0].Witnesses) {
             return result.Call[0].Witnesses.map(witness => witness.Value);
+        } else {
+            return [];
         }
     }
 
