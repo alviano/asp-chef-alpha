@@ -49,11 +49,11 @@
             {/each}
         </ul>
     </div>
-    <Input type="select" bind:value={options.value} on:change={edit}>
-        {#each Object.keys(values) as key}
-            <option value="{key}">{key}: {values[key]}</option>
-        {/each}
-    </Input>
     <div class="m-3">
+        <Input type="select" bind:value={options.value} on:change={edit}>
+            {#each Object.keys(values) as key}
+                <option value="{key}">{key}: {values[key]}</option>
+            {/each}
+        </Input>
     </div>
 </Operation>

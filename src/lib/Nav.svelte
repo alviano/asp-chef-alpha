@@ -13,7 +13,7 @@
           title: "About",
           message: `
           ASP Chef is a simple, intuitive web app for analysing answer sets without having to deal with complex tools or programming languages.
-          Proudly brought to you by Mario Alviano and Davide Cirimele.
+          Proudly brought to you by Mario Alviano, Davide Cirimele and Luis Angel Rodriguez Reiners.
           `
       });
   }

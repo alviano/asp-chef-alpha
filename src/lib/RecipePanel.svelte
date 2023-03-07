@@ -41,6 +41,7 @@
     import SetConfiguration from "$lib/operations/SetConfiguration.svelte";
     import SetSATPreprocessing from "$lib/operations/SetSATPreprocessing.svelte";
     import SetTransformationOfExtendedRules from "$lib/operations/SetTransformationofExtendedRules.svelte";
+    import SetOptimizationStrategy from "$lib/operations/SetOptimizationStrategy.svelte";
 
     async function copy_to_clipboard() {
         const url = Recipe.as_url();
@@ -203,6 +204,8 @@
                         <SetSATPreprocessing id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
                     {:else if item.operation === 'Set Transformation of Extended Rules'}
                         <SetTransformationOfExtendedRules id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
+                    {:else if item.operation === 'Set Optimization Strategy'}
+                        <SetOptimizationStrategy id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
                     {:else}
                         Unknown operation: {item.operation}
                     {/if}

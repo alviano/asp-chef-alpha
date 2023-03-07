@@ -91,10 +91,7 @@
                     lineWrapping="{true}"
                     on:change={edit}
         />
-        <Input type="textarea"
-               class="d-test"
-               value="{options.content}"
-        />
+        <pre type="textarea" class="d-test">{options.content}</pre>
     </div>
     <InputGroup>
         <InputGroupText># of models</InputGroupText>
