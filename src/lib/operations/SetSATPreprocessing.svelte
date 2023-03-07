@@ -45,7 +45,7 @@
         </p>
         <ul>
             {#each Object.keys(values) as key}
-                <li>{key}: {values[key]}</li>
+                <li><code>{key}:</code> {values[key]}</li>
             {/each}
         </ul>
     </div>

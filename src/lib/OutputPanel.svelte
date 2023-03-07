@@ -27,7 +27,9 @@
     </CardHeader>
     <CardBody class="p-0">
         <AutoHideBadge color="warning">readonly</AutoHideBadge>
-        <CodeMirror bind:value={text_value} readonly placeholder="NO MODELS" lineWrapping="{true}" />
-        <Input type="textarea" class="d-none" value="{text_value}" data-testid="OutputPanel-textarea" />
+        <div data-testid="OutputPanel-textarea">
+            <CodeMirror bind:value={text_value} readonly placeholder="NO MODELS" lineWrapping="{true}" />
+            <pre class="d-test">{text_value}</pre>
+        </div>
     </CardBody>
 </Card>

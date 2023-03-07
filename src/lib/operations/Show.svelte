@@ -66,16 +66,12 @@
            placeholder="One or more #show directives..."
            on:input={edit}
     />
-    <div style="height: {options.height}px; overflow-y: auto">
+    <div style="height: {options.height}px; overflow-y: auto" data-testid="Show-content">
         <CodeMirror bind:value={options.rules}
                     placeholder={`One or more #show directives...`}
                     lineWrapping="{true}"
                     on:change={edit}
         />
-        <Input type="textarea"
-               class="d-none"
-               value="{options.content}"
-               data-testid="Show-content"
-        />
+        <pre class="d-test">{options.content}</pre>
     </div>
 </Operation>

@@ -62,17 +62,13 @@
                on:input={edit}
         />
     </InputGroup>
-    <div style="height: {options.height}px; overflow-y: auto">
+    <div style="height: {options.height}px; overflow-y: auto" data-testid="Encode-content">
         <CodeMirror bind:value={options.content}
                     placeholder={`One or more lines...`}
                     lineWrapping="{true}"
                     on:change={edit}
         />
-        <Input type="textarea"
-               class="d-none"
-               value="{options.content}"
-               data-testid="Encode-content"
-        />
+        <pre class="d-test">{options.content}</pre>
     </div>
     <Input type="search"
            bind:value="{options.predicate}"

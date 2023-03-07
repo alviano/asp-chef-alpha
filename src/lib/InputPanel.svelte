@@ -36,15 +36,13 @@
                 <p>Provide one or more models separated by {consts.SYMBOLS.MODELS_SEPARATOR}</p>
                 <p>Jump to this textarea with the keybinding <code>I</code></p>
             </div>
-            <CodeMirror bind:this={editor} bind:value
-                        placeholder={`One or more models separated by ${consts.SYMBOLS.MODELS_SEPARATOR}`}
-                        lineWrapping="{true}"
-            />
-            <Input type="textarea"
-                   class="d-none"
-                   {value}
-                   data-testid="InputPanel-textarea"
-            />
+            <div data-testid="InputPanel-textarea">
+                <CodeMirror bind:this={editor} bind:value
+                            placeholder={`One or more models separated by ${consts.SYMBOLS.MODELS_SEPARATOR}`}
+                            lineWrapping="{true}"
+                />
+                <pre class="d-test">{value}</pre>
+            </div>
         </Popover>
     </CardBody>
 </Card>

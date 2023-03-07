@@ -85,16 +85,15 @@
                on:input={edit}
         />
     </InputGroup>
-    <div style="height: {options.height}px; overflow-y: auto">
+    <div style="height: {options.height}px; overflow-y: auto" data-testid="SearchModels-rules">
         <CodeMirror bind:value={options.rules}
                     placeholder={`One or more ASP rules...`}
                     lineWrapping="{true}"
                     on:change={edit}
         />
         <Input type="textarea"
-               class="d-none"
+               class="d-test"
                value="{options.content}"
-               data-testid="SearchModels-rules"
         />
     </div>
     <InputGroup>
