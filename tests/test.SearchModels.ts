@@ -1,10 +1,9 @@
 import { test } from '@playwright/test';
-import { check_recipe } from "./utils.mjs";
+import {check_recipe, visit_homepage_and_accept_privacy_policy} from "./utils.mjs";
 
 test.describe("Search Model operation", () => {
 	test.beforeEach(async ({ page }) => {
-		await page.goto('/');
-		await page.getByRole('button').filter({ hasText: 'Accept and close' }).click();
+		await visit_homepage_and_accept_privacy_policy(page);
 	});
 
 	test("search for a single model", async ({ page }) => {
@@ -63,5 +62,21 @@ a(1,2).
 		await page.getByRole('button').filter({ hasText: 'Search Models' }).click();
 		await page.getByTestId('SearchModels-rules').getByRole('textbox').fill('world.');
 		await check_recipe(page, '__base64__("aGVsbG8u").',  "hello.\nworld.");
+	});
+
+	test("each model in input is processed individually", async ({ page }) => {
+		await page.getByRole('button').filter({ hasText: 'Search Models' }).click();
+		await page.getByTestId('SearchModels-rules').getByRole('textbox').fill('hello :- world. world :- hello.');
+		await check_recipe(page, "hello.§world.",  "world.\nhello.\n§\nworld.\nhello.");
+	});
+
+	test("search models after search models", async ({ page }) => {
+		await page.getByRole('button').filter({ hasText: 'Search Models' }).click();
+		await page.getByRole('button').filter({ hasText: 'Search Models' }).click();
+		await page.getByTestId('Operation').filter({ hasText: '#1.' })
+			.getByTestId('SearchModels-rules').getByRole('textbox').fill('a(1..4).');
+		await page.getByTestId('Operation').filter({ hasText: '#2.' })
+			.getByTestId('SearchModels-rules').getByRole('textbox').fill('#show.\n#show SUM : SUM = #sum{X : a(X)}.');
+		await check_recipe(page, "",  "10.");
 	});
 });
