@@ -35,6 +35,7 @@ export class Recipe {
         return {
             stop: false,
             apply: true,
+            show: true,
         };
     }
 
@@ -166,6 +167,12 @@ export class Recipe {
     static toggle_apply_operation(index: number) {
         const the_recipe = this.recipe;
         the_recipe[index].options.apply = !the_recipe[index].options.apply;
+        recipe.set(the_recipe);
+    }
+
+    static toggle_show_operation(index: number) {
+        const the_recipe = this.recipe;
+        the_recipe[index].options.show = !the_recipe[index].options.show;
         recipe.set(the_recipe);
     }
 }

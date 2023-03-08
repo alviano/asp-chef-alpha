@@ -33,9 +33,9 @@
             if (property === 'label') {
                 node.label = `${terms[0].string || terms[0].number || terms[0].str}`;
             } else if (property === 'color') {
-                node.color = terms[0].string;
+                node.color = terms[0].string || terms[0].str;
             } else if (property === 'text_color') {
-                node.text_color = terms[0].string;
+                node.text_color = terms[0].string || terms[0].str;
             } else {
                 Utils.snackbar('Unknown node property: ' + property);
             }

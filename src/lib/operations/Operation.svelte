@@ -29,7 +29,7 @@
 {#if id !== undefined}
     <Card style="border-top: 3px solid black;" data-testid="Operation">
         <IngredientHeader {id} {operation} {index} {options} />
-        {#if $show_ingredient_details}
+        {#if $show_ingredient_details && options.show}
         <CardBody class="p-0">
             <slot />
         </CardBody>
