@@ -15,6 +15,7 @@ export const consts = {
     LOCKED: '🔒',
     UNLOCKED: '🔓',
     MODELS_SEPARATOR: '§',
+    SEARCH_FAIL: '§',
     NEW_LINE: '⏎',
   },
 };

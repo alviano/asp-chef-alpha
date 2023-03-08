@@ -188,6 +188,19 @@ export class Utils extends BaseUtils {
                 atoms.map(atom => atom.str + '.')
                 .join('\n')).join('\n§\n');
     }
+
+    static keep_occurrences(input_string, regex) {
+        const res = [];
+        let last_index = 0;
+        [...input_string.matchAll(regex)].map(match => {
+            const index = match.index || 0;
+            res.push(consts.SYMBOLS.MODELS_SEPARATOR.repeat(index - last_index));
+            res.push(match[0]);
+            last_index = index + match[0].length;
+        });
+        res.push(consts.SYMBOLS.MODELS_SEPARATOR.repeat(input_string.length - last_index));
+        return res.join('');
+    }
 }
 
 const GRAMMAR = `
@@ -205,14 +218,14 @@ terms
 term
 = functor:string_id args:(space? "(" space? t:terms space? ")" space? { return t; })? { return { functor : functor, terms : args !== null ? args : [], str : args !== null ? functor + '(' + args.map(term => term.str).join(',') + ')' : functor }; }
 / functor:string_id { return { functor : functor, str : functor }; }
-/ the_string:quoted_string { return { string : the_string, str : the_string }; }
+/ the_string:quoted_string { return { string : the_string, str : '"' + the_string + '"' }; }
 / the_number:number { return { number : the_number, str : '' + the_number }; }
 
 string_id
 = prefix:[_]* head:[a-z] tail:[A-Za-z0-9_]* { return prefix.join("") + head + tail.join(""); }
 
 quoted_string
-= '"' str:('\\\\"' / [^"${consts.SYMBOLS.MODELS_SEPARATOR}])* '"' { return '"' + str.join("") + '"'; }
+= '"' str:('\\\\"' / [^"${consts.SYMBOLS.MODELS_SEPARATOR}])* '"' { return str.join(""); }
 
 number
 = str:[0-9]+ { return parseInt(str.join("")); }

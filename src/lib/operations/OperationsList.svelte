@@ -83,7 +83,7 @@
            bind:value={filter}
            placeholder="Filter..."
            on:keydown={onkeydown}
-           on:focus={() => console.log(filter_focused = true)}
+           on:focus={() => filter_focused = true}
            on:blur={() => filter_focused = false}
     />
 </Popover>
