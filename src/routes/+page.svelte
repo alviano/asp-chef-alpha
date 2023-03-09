@@ -2,6 +2,7 @@
     import AspChef from "$lib/AspChef.svelte";
     import {Spinner} from "sveltestrap";
     import {Utils} from "$lib/utils";
+    import Nav from "$lib/Nav.svelte";
 
     async function clingo_to_be_loaded() {
         while (window.clingo === undefined) {
@@ -16,6 +17,7 @@
 </svelte:head>
 
 {#await clingo_to_be_loaded()}
+    <Nav />
     <Spinner />
 {:then _}
     <AspChef />

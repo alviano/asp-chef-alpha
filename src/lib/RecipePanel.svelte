@@ -43,6 +43,7 @@
     import SetTransformationOfExtendedRules from "$lib/operations/SetTransformationofExtendedRules.svelte";
     import SetOptimizationStrategy from "$lib/operations/SetOptimizationStrategy.svelte";
     import Graph from "$lib/operations/Graph.svelte";
+    import ExtensionalRelation from "$lib/operations/ExtensionalRelation.svelte";
 
     async function copy_to_clipboard() {
         const url = Recipe.as_url();
@@ -209,6 +210,8 @@
                         <SetOptimizationStrategy id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
                     {:else if item.operation === 'Graph'}
                         <Graph id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
+                    {:else if item.operation === 'Extensional Relation'}
+                        <ExtensionalRelation id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
                     {:else}
                         Unknown operation: {item.operation}
                     {/if}

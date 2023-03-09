@@ -2,18 +2,20 @@
     import {Recipe} from "$lib/recipe";
     import {Utils} from "$lib/utils";
 
-    const operation = "Show";
+    const operation = "Extensional Relation";
     const default_extra_options = {
         height: 200,
-        rules: '',
+        predicate: '__edb__',
+        instances: '',
     };
 
     Recipe.register_operation_type(operation, async (input, options) => {
+        const facts = options.instances.split('\n').map(line => `${options.predicate}(${line}).`).join('\n');
         const mapper = atom => atom.str + '.';
         const res = [];
         for (const part of input) {
             try {
-                const program = part.map(mapper).join('\n') + '\n#show.\n' + options.rules;
+                const program = part.map(mapper).join('\n') + '\n' + facts;
                 const model = await Utils.search_model(program);
                 res.push(Utils.parse_atoms(model));
             } catch (error) {
@@ -43,13 +45,10 @@
 <Operation {id} {operation} {options} {index} {default_extra_options} {add_to_recipe} {keybinding}>
     <div slot="description">
         <p>
-            The <strong>{operation}</strong> operation replaces each model according to the specified <code>#show</code> directives.
+            The <strong>{operation}</strong> operation adds to each model the given extensional relation.
         </p>
         <p>
-            Each model in input is used as the input of a program given in the recipe.
-        </p>
-        <p>
-            A program can be specified in general, but the target should be the set of <code>#show</code> directives.
+            Each provided row is mapped to a fact of the specified predicate (default to <code>__edb__</code>).
         </p>
     </div>
     <InputGroup>
@@ -57,15 +56,22 @@
         <Input type="number"
                bind:value={options.height}
                min="1"
+               style="max-width: 5em;"
+               on:input={edit}
+        />
+        <InputGroupText>Predicate</InputGroupText>
+        <Input type="search"
+               bind:value={options.predicate}
+               placeholder="relation predicate"
                on:input={edit}
         />
     </InputGroup>
-    <div style="height: {options.height}px; overflow-y: auto" data-testid="Show-content">
-        <CodeMirror bind:value={options.rules}
-                    placeholder={`One or more #show directives...`}
+    <div style="height: {options.height}px; overflow-y: auto" data-testid="ExtensionalRelation-content">
+        <CodeMirror bind:value={options.instances}
+                    placeholder={`One or more instances...`}
                     lineWrapping="{true}"
                     on:change={edit}
         />
-        <pre class="d-test">{options.content}</pre>
+        <pre class="d-test">{options.instances}</pre>
     </div>
 </Operation>
