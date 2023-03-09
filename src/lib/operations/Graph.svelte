@@ -201,7 +201,11 @@
         <Input type="text" placeholder="predicate" bind:value={options.predicate} on:input={edit} />
     </InputGroup>
     {#if number_of_models !== 1}
-        Error: expecting 1 model in input, {number_of_models} models found!
+        <InputGroup>
+            <InputGroupText>
+                Error: expecting 1 model in input, {number_of_models} models found!
+            </InputGroupText>
+        </InputGroup>
     {/if}
     <div bind:this={container}>
         {#each graphs as graph}

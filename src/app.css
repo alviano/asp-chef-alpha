@@ -19,7 +19,7 @@ h6 {
   pointer-events: none;
 }
 
-textarea {
+input, textarea {
   font-family: monospace;
 }
 

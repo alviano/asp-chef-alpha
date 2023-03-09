@@ -44,6 +44,7 @@
     import SetOptimizationStrategy from "$lib/operations/SetOptimizationStrategy.svelte";
     import Graph from "$lib/operations/Graph.svelte";
     import ExtensionalRelation from "$lib/operations/ExtensionalRelation.svelte";
+    import JSONPath from "$lib/operations/JSONPath.svelte";
 
     async function copy_to_clipboard() {
         const url = Recipe.as_url();
@@ -212,6 +213,8 @@
                         <Graph id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
                     {:else if item.operation === 'Extensional Relation'}
                         <ExtensionalRelation id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
+                    {:else if item.operation === 'JSON Path'}
+                        <JSONPath id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
                     {:else}
                         Unknown operation: {item.operation}
                     {/if}
