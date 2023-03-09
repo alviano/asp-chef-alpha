@@ -7,6 +7,9 @@
         height: 500,
         node_radius: 20,
         predicate: '__graph__',
+        search: '',
+        search_color: 'yellow',
+        search_text_color: 'red',
     };
 
     const listeners = new Map();
@@ -22,7 +25,6 @@
             nodes.set(key, {
                 id: key,
                 label: '',
-                color: undefined,
             });
         }
         const node = nodes.get(key);
@@ -36,6 +38,10 @@
                 node.color = terms[0].string || terms[0].str;
             } else if (property === 'text_color') {
                 node.text_color = terms[0].string || terms[0].str;
+            } else if (property === 'radius') {
+                node.radius = terms[0].number;
+            } else if (property === 'opacity') {
+                node.opacity = terms[0].number / 100;
             } else {
                 Utils.snackbar('Unknown node property: ' + property);
             }
@@ -49,7 +55,6 @@
                 source: atom.terms[0].terms[0].str,
                 target: atom.terms[0].terms[1].str,
                 label: '',
-                color: undefined,
             });
         }
         const link = links.get(key);
@@ -63,6 +68,8 @@
                 link.color = terms[0].string || terms[0].str;
             } else if (property === 'text_color') {
                 link.text_color = terms[0].string || terms[0].str;
+            } else if (property === 'opacity') {
+                link.opacity = terms[0].number / 100;
             } else {
                 Utils.snackbar('Unknown link property: ' + property);
             }
@@ -80,10 +87,14 @@
             defaults.node_text_color = terms[0].string || terms[0].str;
         } else if (property === 'node_font') {
             defaults.node_font = terms[0].string;
+        } else if (property === 'node_opacity') {
+            defaults.node_opacity = terms[0].number / 100;
         } else if (property === 'link_color') {
             defaults.link_color = terms[0].string || terms[0].str;
         } else if (property === 'link_text_color') {
             defaults.link_text_color = terms[0].string;
+        } else if (property === 'link_opacity') {
+            defaults.link_opacity = terms[0].number / 100;
         } else {
             Utils.snackbar('Unknown default property: ' + property);
         }
@@ -131,8 +142,6 @@
     let container;
     let graphs = [];
     let number_of_models = 0;
-    let search = '';
-    let search_color = 'yellow';
 
     function edit() {
         Recipe.edit_operation(index, options);
@@ -165,13 +174,21 @@
             The other terms have the form <code>property(VALUE)</code>.
         </p>
         <p>
-            Node properties: label, color, text_color.
+            Node properties: label, color, radius, text_color.
         </p>
         <p>
             Link properties: label, color, text_color.
         </p>
         <p>
-            Defaults properties: node_radius, node_color, node_text_color, node_font, link_color, link_text_color.
+            Defaults properties:
+            node_radius (also defining the capture area for dragging nodes),
+            node_color,
+            node_text_color,
+            node_font,
+            node_opacity,
+            link_color,
+            link_text_color,
+            link_opacity.
         </p>
         <p>
             Labels can be searched in the graph (result not stored in the recipe).
@@ -192,16 +209,20 @@
                     {graph}
                     maxHeight="{options.height}"
                     maxWidth="{container ? container.width : 100}"
-                    node_radius="{options.node_radius}"
-                    {search}
-                    {search_color}
+                    search={options.search}
+                    search_color={options.search_color}
+                    search_text_color={options.search_text_color}
             />
         {/each}
     </div>
     <InputGroup>
         <InputGroupText>Search</InputGroupText>
-        <Input type="search" placeholder="Search..." bind:value={search} />
+        <Input type="search" placeholder="Search..." bind:value={options.search} on:change={edit} />
+    </InputGroup>
+    <InputGroup>
         <InputGroupText>Highlight color</InputGroupText>
-        <Input type="search" placeholder="Color..." bind:value={search_color} />
+        <Input type="search" placeholder="Color..." bind:value={options.search_color} on:change={edit} />
+        <InputGroupText>Highlight text color</InputGroupText>
+        <Input type="search" placeholder="Text color..." bind:value={options.search_text_color} on:change={edit} />
     </InputGroup>
 </Operation>

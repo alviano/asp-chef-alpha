@@ -38,13 +38,16 @@
         node_color: "lightgray",
         node_text_color: "black",
         node_font: "8px monospace",
+        node_opacity:  1,
         link_color:  "darkgrey",
         link_text_color:  "white",
+        link_opacity:  1,
     };
     defaults = {...defaults, ...graph.defaults}
 
     export let search = null;
     export let search_color = "yellow";
+    export let search_text_color = "red";
 
     $: search_color, update_search(search);
 
@@ -98,20 +101,21 @@
     function draw_link(link, width4px) {
         const dx = link.target.x - link.source.x;
         const dy = link.target.y - link.source.y;
+        const source_radius = link.source.radius || defaults.node_radius;
+        const target_radius = link.target.radius || defaults.node_radius;
         const angle = Math.atan2(dy, dx);
-        const length = Math.sqrt(dx * dx + dy * dy) - 2 * defaults.node_radius;
+        const length = Math.sqrt(dx * dx + dy * dy) - source_radius - target_radius;
 
-        context.globalAlpha = 0.3;
+        context.globalAlpha = link.opacity || defaults.link_opacity;
         context.lineWidth = 6;
-        context.strokeStyle = link.search_result !== null ? search_color : (link.color || defaults.link_color);
-        context.fillStyle = context.strokeStyle;
+        context.fillStyle = context.strokeStyle = link.search_result !== null && search_color !== '' ? search_color : (link.color || defaults.link_color);
         context.beginPath();
-        context.moveTo(link.source.x + defaults.node_radius * Math.cos(angle), link.source.y + defaults.node_radius * Math.sin(angle));
-        context.lineTo(link.target.x - (defaults.node_radius + arrowLength - 1) * Math.cos(angle), link.target.y - (defaults.node_radius + arrowLength - 1) * Math.sin(angle));
+        context.moveTo(link.source.x + source_radius * Math.cos(angle), link.source.y + source_radius * Math.sin(angle));
+        context.lineTo(link.target.x - (target_radius + arrowLength - 1) * Math.cos(angle), link.target.y - (target_radius + arrowLength - 1) * Math.sin(angle));
         context.stroke();
-        context.moveTo(link.target.x - defaults.node_radius * Math.cos(angle), link.target.y - defaults.node_radius * Math.sin(angle));
-        context.lineTo(link.target.x - (defaults.node_radius + arrowLength) * Math.cos(angle - arrowAngle), link.target.y - (defaults.node_radius + arrowLength) * Math.sin(angle - arrowAngle));
-        context.lineTo(link.target.x - (defaults.node_radius + arrowLength) * Math.cos(angle + arrowAngle), link.target.y - (defaults.node_radius + arrowLength) * Math.sin(angle + arrowAngle));
+        context.moveTo(link.target.x - target_radius * Math.cos(angle), link.target.y - target_radius * Math.sin(angle));
+        context.lineTo(link.target.x - (target_radius + arrowLength) * Math.cos(angle - arrowAngle), link.target.y - (target_radius + arrowLength) * Math.sin(angle - arrowAngle));
+        context.lineTo(link.target.x - (target_radius + arrowLength) * Math.cos(angle + arrowAngle), link.target.y - (target_radius + arrowLength) * Math.sin(angle + arrowAngle));
         context.fill();
         context.globalAlpha = 1;
 
@@ -119,30 +123,29 @@
         context.fillStyle = link.text_color || defaults.link_text_color;
         context.textAlign = "start";
         context.textBaseline = "middle";
-        context.translate(link.source.x + defaults.node_radius * Math.cos(angle), link.source.y + defaults.node_radius * Math.sin(angle))
+        context.translate(link.source.x + source_radius * Math.cos(angle), link.source.y + source_radius * Math.sin(angle))
         context.rotate(angle);
         if (link.search_result !== null) {
             context.lineWidth = 1.5;
-            context.strokeStyle = search_color;
+            context.strokeStyle = search_text_color;
             context.strokeText(Utils.abbreviate(link.search_result.replaceAll(consts.SYMBOLS.SEARCH_FAIL, ' '), Math.floor(length / width4px) - 2), width4px, 0);
         }
         context.fillText(Utils.abbreviate(link.label, Math.floor(length / width4px) - 2), width4px, 0);
         context.rotate(-angle);
-        context.translate(-link.source.x - defaults.node_radius * Math.cos(angle), -link.source.y - defaults.node_radius * Math.sin(angle))
+        context.translate(-link.source.x - source_radius * Math.cos(angle), -link.source.y - source_radius * Math.sin(angle))
     }
 
     function draw_node(node) {
+        context.globalAlpha = node.opacity || defaults.node_opacity;
         context.beginPath();
-        context.arc(node.x, node.y, defaults.node_radius, 0, 2 * Math.PI);
-        if (node.search_result !== null) {
-            context.lineWidth = 3;
-            context.strokeStyle = search_color;
+        context.arc(node.x, node.y, node.radius || defaults.node_radius, 0, 2 * Math.PI);
+        if (node.search_result !== null && search_color !== '') {
             context.fillStyle = search_color;
-            context.stroke();
         } else {
             context.fillStyle = node.color || defaults.node_color;
         }
         context.fill();
+        context.globalAlpha = 1;
 
         context.font = defaults.node_font;
         context.fillStyle = node.text_color || defaults.node_text_color;
@@ -150,7 +153,7 @@
         context.textBaseline = "middle";
         if (node.search_result !== null) {
             context.lineWidth = 1.5;
-            context.strokeStyle = search_color;
+            context.strokeStyle = search_text_color;
             context.strokeText(node.search_result.replaceAll(consts.SYMBOLS.SEARCH_FAIL, ' '), node.x, node.y);
         }
         context.fillText(node.label, node.x, node.y);
@@ -235,7 +238,7 @@
             .force("link", d3.forceLink(graph.links).id((link) => link.id).distance((link) => link.target.y - link.source.y))
             .force("charge", d3.forceManyBody().strength(5))
             .force("center", d3.forceCenter(canvas.width / 2, canvas.height / 2))
-            .force('collide', d3.forceCollide().radius(() => defaults.node_radius * 2))
+            .force('collide', d3.forceCollide().radius((node) => (node.radius || defaults.node_radius) * 2))
             .on("tick", simulationUpdate);
 
         // select node
