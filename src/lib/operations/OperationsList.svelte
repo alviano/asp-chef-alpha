@@ -82,6 +82,7 @@
            id="OperationsDetail-search"
            bind:value={filter}
            placeholder="Filter..."
+           autocomplete="off"
            on:keydown={onkeydown}
            on:focus={() => filter_focused = true}
            on:blur={() => filter_focused = false}

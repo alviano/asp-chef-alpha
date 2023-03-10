@@ -8,7 +8,7 @@ import AsyncLock from "async-lock";
 const dom_purify_config = new DOMPurifyConfig(consts);
 
 export class Utils extends BaseUtils {
-    private static _clingo_timeout = 600;
+    private static _clingo_timeout = 5;
     private static _clingo_reject = null;
     private static _clingo_lock = new AsyncLock();
     private static _clingo_options = new Map();
@@ -36,6 +36,7 @@ export class Utils extends BaseUtils {
     }
 
     static reset_clingo_options() {
+        this.clingo_timeout = 5;
         this._clingo_options.clear();
     }
 
@@ -62,12 +63,16 @@ export class Utils extends BaseUtils {
     }
 
     static async clingo_terminate() {
+        await this.clingo_reject();
+        await this.clingo_clear();
+    }
+
+    static async clingo_reject() {
         try {
             this._clingo_reject('Error: terminated');
         } catch (error) {
             /* empty */
         }
-        await this.clingo_clear();
     }
 
     static async clingo_run(program: string, number = 0, options = [], timeout = null) {
@@ -77,14 +82,15 @@ export class Utils extends BaseUtils {
                 this._clingo_reject = reject;
                 setTimeout(async () => {
                     reject(`Error: TIMEOUT ${the_timeout} seconds`);
+                    this._clingo_reject = null;
                 }, the_timeout * 1000);
                 this.clingo.run(program, number, [
                     ...options,
                     ...Array.from(this._clingo_options, ([key, value]) => `${key}${value}`),
                 ]).then(result => {
                     resolve(result);
+                    this._clingo_reject = null;
                 });
-                this._clingo_reject = null;
             });
         });
     }

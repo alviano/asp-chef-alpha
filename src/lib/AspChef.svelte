@@ -24,30 +24,40 @@
     }
 
     const lock = new AsyncLock();
-
-    function delayed_process(input_value) {
+    let delayed_process_counter = 0;
+    async function delayed_process(input_value) {
+        let id;
         lock.acquire('process', async () => {
-            if (process_timeout !== null) {
-                clearTimeout(process_timeout);
-            }
-            if ($pause_baking) {
-                Utils.clingo_terminate();
+            delayed_process_counter++;
+            id = delayed_process_counter;
+        });
+        if (process_timeout !== null) {
+            clearTimeout(process_timeout);
+        }
+        if ($pause_baking) {
+            await Utils.clingo_terminate();
+            return;
+        }
+        for (let count_attempt = 0; processing; count_attempt++) {
+            if (id !== delayed_process_counter) {
                 return;
             }
-            for (let count_attempt = 0; processing; count_attempt++) {
-                if (count_attempt % 30 === 0) {
-                    Utils.snackbar('Waiting for previous process to terminate...', { position: 'is-bottom-right' });
-                }
-                await Utils.delay(100);
+            if (count_attempt % 30 === 0) {
+                await Utils.snackbar('Waiting for previous process to terminate...', { position: 'is-bottom-right' });
             }
-            process_timeout = setTimeout(async () => {
-                processing = true;
-                await process(input_value);
-                await Utils.clingo_terminate();
-                process_timeout = null;
-                processing = false;
-            }, 100);
-        });
+            await Utils.clingo_reject();
+            await Utils.delay(100);
+        }
+        process_timeout = setTimeout(async () => {
+            if (id !== delayed_process_counter) {
+                return;
+            }
+            processing = true;
+            await process(input_value);
+            await Utils.clingo_terminate();
+            process_timeout = null;
+            processing = false;
+        }, 100);
     }
 
     $: delayed_process(input_value, $pause_baking);
