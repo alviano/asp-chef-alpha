@@ -91,6 +91,7 @@ ${options.content}
                bind:value={options.encode_predicate}
                placeholder="encode predicate"
                on:input={edit}
+               data-testid="Lua-encode-predicate"
         />
     </InputGroup>
 </Operation>

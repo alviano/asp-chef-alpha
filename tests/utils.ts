@@ -33,8 +33,10 @@ export class TestRecipe {
 
 	async ingredient_with_d_test_elements(operation: string, callback: (ingredient) => Promise<void> = async () => { /* empty */ }) {
 		const locator = add_ingredient(this.page, operation);
-		locator.then(async (locator) => {
-			await with_d_test_elements(locator, callback);
+		await locator.then(async (locator) => {
+			await with_d_test_elements(locator, async ingredient => {
+				await callback(ingredient);
+			});
 		});
 		return locator;
 	}
@@ -43,6 +45,13 @@ export class TestRecipe {
 		const the_output = trim ? output.trim() : output;
 		await with_d_test_elements(this.page.getByTestId("OutputPanel-textarea"), async () => {
 			await expect(await this.page.getByTestId("OutputPanel-textarea").locator('.d-test')).toHaveText(the_output);
+		});
+	}
+
+	async output_ingredient(output: string, trim = true) {
+		const the_output = trim ? output.trim() : output;
+		return this.ingredient_with_d_test_elements('Output', async ingredient => {
+			await expect(await ingredient.getByTestId("Output-textarea").locator('.d-test')).toHaveText(the_output);
 		});
 	}
 
@@ -96,6 +105,47 @@ export class TestRecipe {
 				await ingredient.getByRole('button').filter({ hasText: 'Use constraints' }).click();
 			}
 		});
+	}
+
+	async optimize(rules: string, {
+		number = 1,
+		click_raise_error = false,
+		click_use_constraints = false,
+		decode_predicate = '__base64__'
+	} = {}) {
+		return this.ingredient('Optimize', async ingredient => {
+			await ingredient.getByTestId('Optimize-rules').getByRole('textbox').fill(rules.trim());
+			await ingredient.getByTestId('Optimize-models').fill(`${number}`);
+			await ingredient.getByTestId('Optimize-decode-predicate').fill(decode_predicate);
+			if (click_raise_error) {
+				await ingredient.getByRole('button').filter({ hasText: 'Raise error' }).click();
+			}
+			if (click_use_constraints) {
+				await ingredient.getByRole('button').filter({ hasText: 'Use constraints' }).click();
+			}
+		});
+	}
+
+	async lua(content: string, encode_predicate = '__base64__') {
+		return this.ingredient('Lua', async ingredient => {
+			await ingredient.getByTestId('Lua-content').getByRole('textbox').fill(content.trim());
+			await ingredient.getByTestId('Lua-encode-predicate').fill(encode_predicate);
+		});
+	}
+
+	async merge(predicate = '__model__') {
+		return this.ingredient('Merge', async ingredient => {
+			await ingredient.getByTestId('Merge-predicate').fill(predicate);
+		});
+	}
+
+	async split(predicate = '__model__') {
+		return this.ingredient('Split', async ingredient => {
+			await ingredient.getByTestId('Split-predicate').fill(predicate);
+		});
+	}
+	async sort_by_increasing_size() {
+		return this.ingredient('Sort by Increasing Size');
 	}
 }
 

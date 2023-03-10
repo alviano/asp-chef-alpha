@@ -82,6 +82,7 @@
         <Input type="search"
                bind:value={options.decode_predicate}
                on:input={edit}
+               data-testid="Optimize-decode-predicate"
         />
     </InputGroup>
     <div style="height: {options.height}px; overflow-y: auto" data-testid="Optimize-rules">
@@ -98,6 +99,7 @@
                bind:value={options.number}
                min="0"
                on:input={edit}
+               data-testid="Optimize-models"
         />
         <Button outline="{!options.raises}" on:click={() => { options.raises = !options.raises; edit(); }}>Raise error</Button>
         <Button outline="{!options.input_as_constraints}" on:click={() => { options.input_as_constraints = !options.input_as_constraints; edit(); }}>Use constraints</Button>
