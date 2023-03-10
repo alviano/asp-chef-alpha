@@ -144,8 +144,51 @@ export class TestRecipe {
 			await ingredient.getByTestId('Split-predicate').fill(predicate);
 		});
 	}
+
 	async sort_by_increasing_size() {
 		return this.ingredient('Sort by Increasing Size');
+	}
+
+	async sort_by_decreasing_size() {
+		return this.ingredient('Sort by Decreasing Size');
+	}
+
+	async sort_by_predicate_or_argument(sort_index, click_descending = false) {
+		return this.ingredient('Sort by Predicate or Argument', async ingredient => {
+			await ingredient.getByTestId('SortByPredicateOrArgument-sort-index').fill(`${sort_index}`);
+			if (click_descending) {
+				await ingredient.getByRole('button').filter({ hasText: 'Descending' }).click();
+			}
+		});
+	}
+
+	async undo(steps) {
+		return this.ingredient('Undo', async ingredient => {
+			await ingredient.getByTestId('Undo-steps').fill(`${steps}`);
+		});
+	}
+
+	async symmetric_closure(input_predicate, closure_predicate, encode_predicate) {
+		return this.ingredient('Symmetric Closure', async ingredient => {
+			await ingredient.getByTestId('SymmetricClosure-input-predicate').fill(input_predicate);
+			await ingredient.getByTestId('SymmetricClosure-closure-predicate').fill(closure_predicate);
+			await ingredient.getByTestId('SymmetricClosure-encode-predicate').fill(encode_predicate);
+		});
+	}
+
+	async transitive_closure(input_predicate, closure_predicate, encode_predicate) {
+		return this.ingredient('Transitive Closure', async ingredient => {
+			await ingredient.getByTestId('TransitiveClosure-input-predicate').fill(input_predicate);
+			await ingredient.getByTestId('TransitiveClosure-closure-predicate').fill(closure_predicate);
+			await ingredient.getByTestId('TransitiveClosure-encode-predicate').fill(encode_predicate);
+		});
+	}
+
+	async extensional_relation(content, predicate = '__edb__') {
+		return this.ingredient('Extensional Relation', async ingredient => {
+			await ingredient.getByTestId('ExtensionalRelation-content').getByRole('textbox').fill(content);
+			await ingredient.getByTestId('ExtensionalRelation-predicate').fill(predicate);
+		});
 	}
 }
 

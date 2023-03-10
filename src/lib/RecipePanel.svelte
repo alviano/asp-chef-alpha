@@ -35,7 +35,7 @@
     import Lua from "$lib/operations/Lua.svelte";
     import SortByIncreasingSize from "$lib/operations/SortbyIncreasingSize.svelte";
     import SortByDecreasingSize from "$lib/operations/SortbyDecreasingSize.svelte";
-    import SortByPredicateOrArgument from "$lib/operations/SortbyPredicateOrArgument.svelte";
+    import SortByPredicateOrArgument from "$lib/operations/SortbyPredicateorArgument.svelte";
     import TimeoutMinutes from "$lib/operations/TimeoutMinutes.svelte";
     import TimeoutSeconds from "$lib/operations/TimeoutSeconds.svelte";
     import SetConfiguration from "$lib/operations/SetConfiguration.svelte";
@@ -195,7 +195,7 @@
                         <SortByIncreasingSize id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
                     {:else if item.operation === 'Sort by Decreasing Size'}
                         <SortByDecreasingSize id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
-                    {:else if item.operation === 'Sort by Predicate Or Argument'}
+                    {:else if item.operation === 'Sort by Predicate or Argument'}
                         <SortByPredicateOrArgument id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
                     {:else if item.operation === 'Timeout Minutes'}
                         <TimeoutMinutes id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />

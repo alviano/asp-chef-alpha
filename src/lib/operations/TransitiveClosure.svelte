@@ -83,6 +83,7 @@ ${options.closure_predicate}(X,Z) :- ${options.closure_predicate}(X,Y); ${option
                bind:value={options.input_predicate}
                placeholder="input predicate"
                on:input={edit}
+               data-testid="TransitiveClosure-input-predicate"
         />
         <Button on:click={() => toggle_show_predicate_list()}>
             <Icon name="list-ul" />
@@ -105,6 +106,7 @@ ${options.closure_predicate}(X,Z) :- ${options.closure_predicate}(X,Y); ${option
                bind:value={options.closure_predicate}
                placeholder="closure predicate"
                on:input={edit}
+               data-testid="TransitiveClosure-closure-predicate"
         />
     </InputGroup>
     <InputGroup>
@@ -113,6 +115,7 @@ ${options.closure_predicate}(X,Z) :- ${options.closure_predicate}(X,Y); ${option
                bind:value={options.encode_predicate}
                placeholder="encode predicate"
                on:input={edit}
+               data-testid="TransitiveClosure-encode-predicate"
         />
     </InputGroup>
 </Operation>

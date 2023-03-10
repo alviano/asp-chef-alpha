@@ -2,7 +2,7 @@
     import {Recipe} from "$lib/recipe";
     import _ from 'lodash';
 
-    const operation = "Sort by Predicate Or Argument";
+    const operation = "Sort by Predicate or Argument";
     const default_extra_options = {
         sort_index: 0,
         descending: false,
@@ -77,6 +77,7 @@
                min="0"
                bind:value={options.sort_index}
                on:input={edit}
+               data-testid="SortByPredicateOrArgument-sort-index"
         />
         <Button outline="{!options.descending}" on:click={toggle_descending}>Descending</Button>
     </InputGroup>

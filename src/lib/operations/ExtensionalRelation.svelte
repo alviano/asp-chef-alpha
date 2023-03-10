@@ -64,6 +64,7 @@
                bind:value={options.predicate}
                placeholder="relation predicate"
                on:input={edit}
+               data-testid="ExtensionalRelation-predicate"
         />
     </InputGroup>
     <div style="height: {options.height}px; overflow-y: auto" data-testid="ExtensionalRelation-content">

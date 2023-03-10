@@ -44,6 +44,7 @@
                bind:value={options.steps}
                min="1"
                on:input={edit}
+               data-testid="Undo-steps"
         />
     </InputGroup>
 </Operation>

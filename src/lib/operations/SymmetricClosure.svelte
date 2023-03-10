@@ -83,6 +83,7 @@ ${options.closure_predicate}(Y,X) :- ${options.input_predicate}(X,Y).
                bind:value={options.input_predicate}
                placeholder="input predicate"
                on:input={edit}
+               data-testid="SymmetricClosure-input-predicate"
         />
         <Button on:click={() => toggle_show_predicate_list()}>
             <Icon name="list-ul" />
@@ -105,6 +106,7 @@ ${options.closure_predicate}(Y,X) :- ${options.input_predicate}(X,Y).
                bind:value={options.closure_predicate}
                placeholder="closure predicate"
                on:input={edit}
+               data-testid="SymmetricClosure-closure-predicate"
         />
     </InputGroup>
     <InputGroup>
@@ -113,6 +115,7 @@ ${options.closure_predicate}(Y,X) :- ${options.input_predicate}(X,Y).
                bind:value={options.encode_predicate}
                placeholder="encode predicate"
                on:input={edit}
+               data-testid="SymmetricClosure-encode-predicate"
         />
     </InputGroup>
 </Operation>
