@@ -2,7 +2,7 @@
     import {Recipe} from "$lib/recipe";
     import _ from "lodash";
 
-    const operation = "Sort By Increasing Size";
+    const operation = "Sort by Increasing Size";
     const default_extra_options = {
     };
 

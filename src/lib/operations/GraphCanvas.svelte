@@ -45,10 +45,11 @@
     };
     defaults = {...defaults, ...graph.defaults}
 
-    export let search = null;
+    export let search_pattern = "";
     export let search_color = "yellow";
     export let search_text_color = "red";
 
+    $: search = build_regex(search_pattern);
     $: search_color, update_search(search);
 
     let canvas;
@@ -62,6 +63,14 @@
     const zoom_graph = d3.zoom()
         .scaleExtent([1 / 10, 8])
         .on("zoom", zoomed);
+
+    function build_regex(search_pattern) {
+        try {
+            return new RegExp(search_pattern, 'i');
+        } catch (error) {
+            return null;
+        }
+    }
 
     function init() {
         fullSizeCanvas();

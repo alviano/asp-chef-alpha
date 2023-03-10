@@ -2,7 +2,7 @@
     import {Recipe} from "$lib/recipe";
     import _ from 'lodash';
 
-    const operation = "Sort By Predicate Or Argument";
+    const operation = "Sort by Predicate Or Argument";
     const default_extra_options = {
         sort_index: 0,
         descending: false,
