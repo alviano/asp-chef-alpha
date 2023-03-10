@@ -76,23 +76,21 @@
             Objects are mapped to functions (keys are expected to be valid terms).
             An example is reported below.
         </p>
-        <code><pre>{@html `{
-    "nodes": [1, 2, 3],
-    "links": [
-        [1, 2],
-        [2, 3],
-        [3, 1]
-    ]
-}`}</pre></code>
+        <code class="d-block ms-3">{'{'}</code>
+        <code class="d-block ms-3">&nbsp;&nbsp;"nodes": [1, 2, 3],</code>
+        <code class="d-block ms-3">&nbsp;&nbsp;"links": [</code>
+        <code class="d-block ms-3">&nbsp;&nbsp;&nbsp;&nbsp;[1, 2],</code>
+        <code class="d-block ms-3">&nbsp;&nbsp;&nbsp;&nbsp;[2, 3],</code>
+        <code class="d-block ms-3">&nbsp;&nbsp;&nbsp;&nbsp;[3, 1]</code>
+        <code class="d-block ms-3">&nbsp;&nbsp;]</code>
+        <code class="d-block ms-3">{'}'}</code>
         <p>
-            Add two JSON Path queries, <code>$.nodes.*</code> and <code>$.links.*</code> to produce
+            Two JSON Path queries, <code>$.nodes.*</code> and <code>$.links.*</code> can produce
         </p>
-        <code><pre>node(1).
-node(2).
-node(3).
-link(1,2).
-link(2,3).
-link(3,1).</pre></code>
+        <code class="d-block ms-3">node(1). node(2). node(3).</code>
+        <code class="d-block ms-3">link(1,2).</code>
+        <code class="d-block ms-3">link(2,3).</code>
+        <code class="d-block ms-3">link(3,1).</code>
     </div>
     <InputGroup>
         <InputGroupText>Height</InputGroupText>
@@ -113,7 +111,7 @@ link(3,1).</pre></code>
            bind:value={options.query}
            placeholder="$.phoneNumbers[:1].type"
            on:input={edit}
-           data-testid="JSONPath-path"
+           data-testid="JSONPath-query"
     />
     <InputGroup>
         <InputGroupText>Output predicate</InputGroupText>

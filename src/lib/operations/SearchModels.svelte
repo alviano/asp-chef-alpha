@@ -83,6 +83,7 @@
                bind:value={options.decode_predicate}
                placeholder="decode predicate"
                on:input={edit}
+               data-testid="SearchModels-decode-predicate"
         />
     </InputGroup>
     <div style="height: {options.height}px; overflow-y: auto" data-testid="SearchModels-rules">

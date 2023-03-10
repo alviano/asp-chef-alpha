@@ -54,5 +54,6 @@
            bind:value="{options.predicate}"
            placeholder="predicate"
            on:input={edit}
+           data-testid="Wrap-predicate"
     />
 </Operation>
