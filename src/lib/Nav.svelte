@@ -1,6 +1,7 @@
 <script>
   import { Collapse, Icon, Nav, Navbar, NavbarBrand, NavItem, NavLink, NavbarToggler } from 'sveltestrap/src';
   import {Utils} from "$lib/utils";
+  import {Popover} from "dumbo-svelte";
 
   let isOpen = false;
 
@@ -28,9 +29,23 @@
   <NavbarToggler on:click={() => (isOpen = !isOpen)} />
   <Collapse {isOpen} navbar expand="md" on:update={handleUpdate}>
     <Nav class="ms-auto" navbar>
-      <NavItem>
-        <NavLink on:click={() => about()}><Icon name="question-circle" /></NavLink>
-      </NavItem>
+      <Popover title="About">
+        <div slot="value">
+          <p>
+            ASP Chef is a simple, intuitive web app for analysing answer sets without having to deal with complex tools or programming languages.
+          </p>
+          <p>
+            Proudly brought to you by Mario Alviano, Davide Cirimele and Luis Angel Rodriguez Reiners.
+          </p>
+          <p>
+            Hide/show the Operations panel with the keybinding <code>O</code>.
+            Enter/leave the fully immersive view on the Recipe panel with the keybinding <code>R</code>.
+          </p>
+        </div>
+        <NavItem>
+          <NavLink on:click={() => about()}><Icon name="question-circle" /></NavLink>
+        </NavItem>
+      </Popover>
     </Nav>
   </Collapse>
 </Navbar>

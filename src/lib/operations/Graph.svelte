@@ -150,7 +150,6 @@
     export let add_to_recipe;
     export let keybinding;
 
-    let container;
     let graphs = [];
     let number_of_models = 0;
 
@@ -219,18 +218,15 @@
             </InputGroupText>
         </InputGroup>
     {/if}
-    <div bind:this={container}>
-        {#each graphs as graph}
-            <GraphCanvas
-                    {graph}
-                    maxHeight="{options.height}"
-                    maxWidth="{container ? container.width : 100}"
-                    search_pattern={options.search}
-                    search_color={options.search_color}
-                    search_text_color={options.search_text_color}
-            />
-        {/each}
-    </div>
+    {#each graphs as graph}
+        <GraphCanvas
+                {graph}
+                max_height="{options.height}"
+                search_pattern={options.search}
+                search_color={options.search_color}
+                search_text_color={options.search_text_color}
+        />
+    {/each}
     <InputGroup>
         <InputGroupText>Search</InputGroupText>
         <Input type="search" placeholder="Search..." bind:value={options.search} on:change={edit} />

@@ -1,5 +1,5 @@
 <script>
-    import {onMount, tick} from "svelte";
+    import {onDestroy, onMount, tick} from "svelte";
     import {scaleLinear, scaleOrdinal} from "d3-scale";
     import {zoom, zoomIdentity} from "d3-zoom";
     import {schemeCategory10} from "d3-scale-chromatic";
@@ -30,8 +30,7 @@
     };
 
     export let graph;
-    export let maxHeight;
-    export let maxWidth;
+    export let max_height;
 
     let defaults = {
         node_radius: 20,
@@ -273,8 +272,14 @@
         canvas.height = canvas.offsetHeight;
     }
 
+    const resizeObserver = new ResizeObserver(() => {
+        init();
+    });
+
     onMount(async () => {
+        resizeObserver.observe(canvas);
         context = canvas.getContext("2d");
+
         await tick();
         await init();
 
@@ -313,8 +318,12 @@
             .call(zoom_graph)
             .call(zoom_graph.transform, transform);
     });
+
+    onDestroy(() => {
+        resizeObserver.unobserve(canvas);
+    });
 </script>
 
-<Card style="height: {maxHeight}px; width: {maxWidth}px;">
+<Card style="height: {max_height}px;">
     <canvas bind:this={canvas}></canvas>
 </Card>

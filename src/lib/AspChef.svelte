@@ -9,6 +9,7 @@
     import {onDestroy, onMount} from "svelte";
     import {Utils} from "$lib/utils";
     import AsyncLock from "async-lock";
+    import {keydown} from "dumbo-svelte";
 
     let input_value = '';
     let output_value = [];
@@ -66,6 +67,20 @@
     let input_panel_div;
     let output_panel_div;
     let progress_panel_div;
+    let show_operations = true;
+    let recipe_fullscreen = false;
+
+    $keydown.push((event) => {
+        if (event.uKey === 'O') {
+            show_operations = !show_operations;
+            Utils.snackbar(show_operations ? "Operations panel shown..." : "Operations panel hidden...");
+            return true;
+        } else if (event.uKey === 'R') {
+            recipe_fullscreen = !recipe_fullscreen;
+            Utils.snackbar(recipe_fullscreen ? "Entering fully immersive mode..." : "Leaving fully immersive mode...");
+            return true;
+        }
+    });
 
     onMount(() => {
         if (location.hash.length > 1) {
@@ -87,30 +102,34 @@
 </script>
 
 <Row class="vw-100 vh-100" style="overflow: hidden;">
-    <Col class="p-0 vh-100" style="max-width: 20em; overflow-x: hidden; overflow-y: scroll;">
-        <Operations />
-    </Col>
+    {#if show_operations && !recipe_fullscreen}
+        <Col class="p-0 vh-100" style="max-width: 20em; overflow-x: hidden; overflow-y: scroll;">
+            <Operations />
+        </Col>
+    {/if}
     <Col class="p-0 vh-100" style="background-color: lightgray; overflow-x: hidden; overflow-y: scroll;">
         <RecipePanel
                 on:change_input={(event) => input_value = event.detail}
         />
     </Col>
-    <Col class="p-0 vh-100" style="overflow: hidden;">
-        <div bind:this={input_panel_div} style="height: 50vh; overflow-x: hidden; overflow-y: scroll;">
-            <InputPanel bind:value={input_value} />
-        </div>
-        <div bind:this={progress_panel_div}>
-            <Progress class="mb-0" multi style="font-family: monospace; font-weight: bold;">
-                <Progress bar animated color="danger" value={process_timeout ? 100 : 0}>
-                    <span style="color: white;">Baking...</span>
+    {#if !recipe_fullscreen}
+        <Col class="p-0 vh-100" style="overflow: hidden;">
+            <div bind:this={input_panel_div} style="height: 50vh; overflow-x: hidden; overflow-y: scroll;">
+                <InputPanel bind:value={input_value} />
+            </div>
+            <div bind:this={progress_panel_div}>
+                <Progress class="mb-0" multi style="font-family: monospace; font-weight: bold;">
+                    <Progress bar animated color="danger" value={process_timeout ? 100 : 0}>
+                        <span style="color: white;">Baking...</span>
+                    </Progress>
+                    <Progress bar color="success" value={process_timeout ? 0 : 100}>
+                        <span style="color: white;">Ready!</span>
+                    </Progress>
                 </Progress>
-                <Progress bar color="success" value={process_timeout ? 0 : 100}>
-                    <span style="color: white;">Ready!</span>
-                </Progress>
-            </Progress>
-        </div>
-        <div bind:this={output_panel_div} style="height: 50vh; overflow-x: hidden; overflow-y: scroll;">
-            <OutputPanel value={output_value} on:change_input={(event) => input_value = event.detail} />
-        </div>
-    </Col>
+            </div>
+            <div bind:this={output_panel_div} style="height: 50vh; overflow-x: hidden; overflow-y: scroll;">
+                <OutputPanel value={output_value} on:change_input={(event) => input_value = event.detail} />
+            </div>
+        </Col>
+    {/if}
 </Row>
