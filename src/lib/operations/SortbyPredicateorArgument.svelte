@@ -19,9 +19,7 @@
                 if (term === undefined) {
                     return undefined
                 } else if (term.number !== undefined) {
-                    return [0, term.number];
-                } else if (term.string !== undefined) {
-                    return [1, term.string];
+                    return term.number;
                 } else {
                     return [2, term.str];
                 }
