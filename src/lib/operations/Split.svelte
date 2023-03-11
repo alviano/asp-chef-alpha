@@ -7,7 +7,7 @@
         predicate: '__model__',
     };
 
-    Recipe.register_operation_type(operation, async (input, options) => {
+    Recipe.register_operation_type(operation, async (input, options, index) => {
         const res = [];
         for (let index = 0; index < input.length; index++) {
             const part = input[index];
@@ -19,7 +19,7 @@
                 `, 0, false);
                 res.push(...models.map(model => Utils.parse_atoms(model)));
             } catch (error) {
-                res.push([{str: error}]);
+                Recipe.set_errors_at_index(index, error, res);;
             }
         }
         return res;

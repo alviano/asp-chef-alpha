@@ -1,6 +1,6 @@
 <script>
     import {Badge, Button, ButtonGroup, CardHeader, CardTitle, Icon} from "sveltestrap";
-    import {recipe} from "$lib/stores";
+    import {recipe, errors_at_index} from "$lib/stores";
     import {Popover} from "dumbo-svelte";
     import {Recipe} from "$lib/recipe";
 
@@ -21,6 +21,9 @@
             {operation}
         </Popover>
         <span class="float-end">
+            {#if $errors_at_index[index]}
+                <Badge color="danger me-2">Errors!</Badge>
+            {/if}
             <Popover title="Remove operation" value="Remove ingredient #{index + 1} from the recipe.">
                 <Button size="sm" color="danger" on:click={() => Recipe.remove_operation(index)}><Icon name="trash" /></Button>
             </Popover>

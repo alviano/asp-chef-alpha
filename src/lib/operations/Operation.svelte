@@ -1,9 +1,9 @@
 <script>
-    import {Button, Card, CardBody} from "sveltestrap";
+    import {Alert, Button, Card, CardBody} from "sveltestrap";
     import IngredientHeader from "$lib/operations/IngredientHeader.svelte";
     import {Recipe} from "$lib/recipe";
     import {Popover} from "dumbo-svelte";
-    import {show_ingredient_details} from "$lib/stores";
+    import {errors_at_index, show_ingredient_details} from "$lib/stores";
 
     function default_options() {
         return {
@@ -32,6 +32,12 @@
         {#if $show_ingredient_details && options.show}
         <CardBody class="p-0">
             <slot />
+            {#if $errors_at_index[index]}
+                <Alert color="danger">
+                    <h5 class="alert-heading">Errors</h5>
+                    <pre>{$errors_at_index[index]}</pre>
+                </Alert>
+            {/if}
         </CardBody>
         {/if}
     </Card>

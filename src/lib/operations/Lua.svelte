@@ -9,7 +9,7 @@
         encode_predicate: '__base64__',
     };
 
-    Recipe.register_operation_type(operation, async (input, options) => {
+    Recipe.register_operation_type(operation, async (input, options, index) => {
         const content = btoa(`
 #script (lua)
 
@@ -26,7 +26,7 @@ ${options.content}
                 const model = await Utils.search_model(program);
                 res.push(Utils.parse_atoms(model));
             } catch (error) {
-                res.push([{str: error}])
+                Recipe.set_errors_at_index(index, error, res);
             }
         }
         return res;

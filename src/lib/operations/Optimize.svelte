@@ -13,7 +13,7 @@
         echo_encoded_content: false,
     };
 
-    Recipe.register_operation_type(operation, async (input, options) => {
+    Recipe.register_operation_type(operation, async (input, options, index) => {
         const mapper = options.input_as_constraints ?
             atom => `:- not ${atom.str}.` :
             atom => atom.str + '.';
@@ -31,7 +31,7 @@
                     res.push(Utils.parse_atoms(model));
                 });
             } catch (error) {
-                res.push([{str: error}])
+                Recipe.set_errors_at_index(index, error, res);
             }
         }
         return res;

@@ -10,7 +10,7 @@
         echo_encoded_content: false,
     };
 
-    Recipe.register_operation_type(operation, async (input, options) => {
+    Recipe.register_operation_type(operation, async (input, options, index) => {
         const mapper = atom => atom.str + '.';
         const res = [];
         for (const part of input) {
@@ -24,7 +24,7 @@
                 const consequences = await Utils.cautious_consequences(program);
                 res.push(Utils.parse_atoms(consequences));
             } catch (error) {
-                res.push([{str: error}])
+                Recipe.set_errors_at_index(index, error, res);
             }
         }
         return res;

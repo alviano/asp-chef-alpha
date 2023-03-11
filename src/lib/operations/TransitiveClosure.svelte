@@ -29,7 +29,7 @@ ${options.closure_predicate}(X,Z) :- ${options.closure_predicate}(X,Y); ${option
                 const model = await Utils.search_model(program);
                 res.push(Utils.parse_atoms(model));
             } catch (error) {
-                res.push([{str: error}])
+                Recipe.set_errors_at_index(index, error, res);
             }
         }
         return res;

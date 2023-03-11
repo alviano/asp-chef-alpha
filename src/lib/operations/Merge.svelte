@@ -7,7 +7,7 @@
         predicate: '__model__',
     };
 
-    Recipe.register_operation_type(operation, async (input, options) => {
+    Recipe.register_operation_type(operation, async (input, options, index) => {
         const res = [];
         for (let index = 0; index < input.length; index++) {
             const part = input[index];
@@ -15,7 +15,7 @@
                 const model = await Utils.search_model(`${options.predicate}(${index + 1}).` + part.map(atom => `${options.predicate}(${index + 1}, ${atom.str}).`).join('\n'));
                 res.push(Utils.parse_atoms(model));
             } catch (error) {
-                res.push([{str: error}])
+                Recipe.set_errors_at_index(index, error, res);
             }
         }
         return [res.flatMap(model => model)];

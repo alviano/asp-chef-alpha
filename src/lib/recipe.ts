@@ -1,6 +1,6 @@
 import {get} from "svelte/store";
 import {Utils} from "$lib/utils";
-import {recipe} from "$lib/stores";
+import {errors_at_index, recipe} from "$lib/stores";
 import {consts} from "$lib/consts";
 import {v4 as uuidv4} from 'uuid';
 
@@ -11,6 +11,10 @@ export class Recipe {
 
     private static get recipe() {
         return get(recipe);
+    }
+
+    private static get errors_at_index() {
+        return get(errors_at_index);
     }
 
     static async svelte_components(filter: string) {
@@ -65,6 +69,18 @@ export class Recipe {
         return this.input_at_index[index];
     }
 
+    static set_errors_at_index(index: number, errors: string, result: object[] = null) {
+        const the_errors = this.errors_at_index;
+        while (the_errors.length < index) {
+            the_errors.push('');
+        }
+        the_errors[index] = errors;
+        errors_at_index.set(the_errors);
+        if (result !== null) {
+            result.push([{str: errors}])
+        }
+    }
+
     static async process(input: string): Promise<object[][]> {
         Utils.reset_clingo_options();
         this.input_at_index.length = 0;
@@ -73,6 +89,7 @@ export class Recipe {
             let result = await this.process_input(input);
             for (const [index, ingredient] of this.recipe.entries()) {
                 where = `#${index + 1}. ${ingredient.operation}`;
+                this.set_errors_at_index(index, '');
                 this.input_at_index.push(result);
                 if (ingredient.options.apply) {
                     result = await Recipe.apply_operation_type(index, ingredient, result);

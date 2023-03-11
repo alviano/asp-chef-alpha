@@ -11,7 +11,7 @@
         output_predicate: '__json__'
     };
 
-    Recipe.register_operation_type(operation, async (input, options) => {
+    Recipe.register_operation_type(operation, async (input, options, index) => {
         const object_mapper = object => {
             if (typeof object === 'string') {
                 return `"${object.replaceAll('"', '\\"')}"`;
@@ -42,7 +42,7 @@
                     res.push(Utils.parse_atoms(model));
                 });
             } catch (error) {
-                res.push([{str: error}])
+                Recipe.set_errors_at_index(index, error, res);
             }
         }
         return res;

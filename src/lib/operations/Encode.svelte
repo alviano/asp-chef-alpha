@@ -9,7 +9,7 @@
         content: '',
     };
 
-    Recipe.register_operation_type(operation, async (input, options) => {
+    Recipe.register_operation_type(operation, async (input, options, index) => {
         const content = btoa(options.content);
         const encoded_content = `${options.predicate}("${content}").`;
         const mapper = atom => atom.str + '.';
@@ -20,7 +20,7 @@
                 const model = await Utils.search_model(program);
                 res.push(Utils.parse_atoms(model));
             } catch (error) {
-                res.push([{str: error}])
+                Recipe.set_errors_at_index(index, error, res);
             }
         }
         return res;
@@ -61,6 +61,12 @@
                step="20"
                on:input={edit}
         />
+        <InputGroupText>Predicate</InputGroupText>
+        <Input type="search"
+               bind:value="{options.predicate}"
+               placeholder="predicate"
+               on:input={edit}
+        />
     </InputGroup>
     <div style="height: {options.height}px; overflow-y: auto" data-testid="Encode-content">
         <CodeMirror bind:value={options.content}
@@ -70,9 +76,4 @@
         />
         <pre class="d-test">{options.content}</pre>
     </div>
-    <Input type="search"
-           bind:value="{options.predicate}"
-           placeholder="predicate"
-           on:input={edit}
-    />
 </Operation>
