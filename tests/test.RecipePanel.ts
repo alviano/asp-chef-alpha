@@ -21,11 +21,11 @@ test.describe("Recipe Panel", () => {
     ]
 }
 		`);
-		await recipe.json_path('$.nodes.*', 'node');
-		await recipe.json_path('$.links.*', 'link');
+		await recipe.json_path('$.nodes.*', 'node', true);
+		await recipe.json_path('$.links.*', 'link', true);
 		await recipe.select_predicates('node', 'link');
 		await recipe.wrap('__graph__');
-		await recipe.ingredient('Graph');
+		await recipe.graph('__graph__', true);
 		await recipe.unwrap('__graph__');
 		await recipe.output(`
 node(1).

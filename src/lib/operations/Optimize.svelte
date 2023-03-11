@@ -10,6 +10,7 @@
         raises: true,
         input_as_constraints: false,
         decode_predicate: '__base64__',
+        echo_encoded_content: false,
     };
 
     Recipe.register_operation_type(operation, async (input, options) => {
@@ -21,7 +22,7 @@
             try {
                 const program = part.map(atom => {
                     if (atom.predicate === options.decode_predicate) {
-                        return atob(atom.terms[0].str.slice(1, -1));
+                        return atob(atom.terms[0].str.slice(1, -1)) + (options.echo_encoded_content ? '\n' + atom.str + '.' : '');
                     }
                     return mapper(atom);
                 }).join('\n') + options.rules;
@@ -84,6 +85,7 @@
                on:input={edit}
                data-testid="Optimize-decode-predicate"
         />
+        <Button outline="{!options.echo_encoded_content}" on:click={() => { options.echo_encoded_content = !options.echo_encoded_content; edit(); }}>Echo</Button>
     </InputGroup>
     <div style="height: {options.height}px; overflow-y: auto" data-testid="Optimize-rules">
         <CodeMirror bind:value={options.rules}

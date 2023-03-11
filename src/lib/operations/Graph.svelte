@@ -7,6 +7,7 @@
         height: 500,
         node_radius: 20,
         predicate: '__graph__',
+        echo: false,
         search: '',
         search_color: 'yellow',
         search_text_color: 'red',
@@ -16,7 +17,7 @@
 
     Recipe.register_operation_type(operation, async (input, options, index, id) => {
         listeners.get(id)(input, options);
-        return input;
+        return options.echo ? input : input.map(model => model.filter(atom => atom.predicate !== options.predicate));
     });
 
     function process_node(nodes, links, atom) {
@@ -128,7 +129,7 @@
 </script>
 
 <script>
-    import {Input, InputGroup, InputGroupText} from "sveltestrap";
+    import {Button, Input, InputGroup, InputGroupText} from "sveltestrap";
     import Operation from "$lib/operations/Operation.svelte";
     import {onDestroy, onMount, tick} from "svelte";
     import GraphCanvas from "$lib/operations/GraphCanvas.svelte";
@@ -198,7 +199,18 @@
         <InputGroupText>Height</InputGroupText>
         <Input type="number" min="50" step="50" bind:value={options.height} on:input={edit} style="max-width: 5em;" />
         <InputGroupText>Predicate</InputGroupText>
-        <Input type="text" placeholder="predicate" bind:value={options.predicate} on:input={edit} />
+        <Input type="text" placeholder="predicate" bind:value={options.predicate} on:input={edit} data-testid="Graph-predicate" />
+        <Button outline="{!options.echo}" on:click={() => { options.echo = !options.echo; edit(); }}>Echo</Button>
+    </InputGroup>
+    <InputGroup>
+        <InputGroupText>Search</InputGroupText>
+        <Input type="search" placeholder="Search..." bind:value={options.search} on:change={edit} />
+    </InputGroup>
+    <InputGroup>
+        <InputGroupText>Highlight color</InputGroupText>
+        <Input type="search" placeholder="Color..." bind:value={options.search_color} on:change={edit} />
+        <InputGroupText>Highlight text color</InputGroupText>
+        <Input type="search" placeholder="Text color..." bind:value={options.search_text_color} on:change={edit} />
     </InputGroup>
     {#if number_of_models !== 1}
         <InputGroup>
@@ -219,14 +231,4 @@
             />
         {/each}
     </div>
-    <InputGroup>
-        <InputGroupText>Search</InputGroupText>
-        <Input type="search" placeholder="Search..." bind:value={options.search} on:change={edit} />
-    </InputGroup>
-    <InputGroup>
-        <InputGroupText>Highlight color</InputGroupText>
-        <Input type="search" placeholder="Color..." bind:value={options.search_color} on:change={edit} />
-        <InputGroupText>Highlight text color</InputGroupText>
-        <Input type="search" placeholder="Text color..." bind:value={options.search_text_color} on:change={edit} />
-    </InputGroup>
 </Operation>

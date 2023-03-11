@@ -55,6 +55,20 @@ export class TestRecipe {
 		});
 	}
 
+	async output_encoded_content(expected_output: string, trim = true, {
+		predicate = '__base64__',
+		echo = false,
+	} = {}) {
+		const the_output = trim ? expected_output.trim() : expected_output;
+		return this.ingredient_with_d_test_elements('Output Encoded Content', async ingredient => {
+			await ingredient.getByTestId('OutputEncodedContent-predicate').fill(predicate);
+			if (echo) {
+				await ingredient.getByRole('button').filter({ hasText: 'Echo' }).click();
+			}
+			await expect(await ingredient.getByTestId("OutputEncodedContent-textarea").locator('.d-test')).toHaveText(the_output);
+		});
+	}
+
 	async encode(content: string, trim = true) {
 		return await this.ingredient('Encode', async ingredient => {
 			await ingredient.getByTestId('Encode-content').getByRole('textbox').fill(trim ? content.trim() : content);
@@ -69,10 +83,13 @@ export class TestRecipe {
 		});
 	}
 
-	async json_path(query: string, output_predicate: string) {
+	async json_path(query: string, output_predicate: string, click_echo = false) {
 		return await this.ingredient('JSON Path', async ingredient => {
 			await ingredient.getByTestId('JSONPath-query').fill(query);
 			await ingredient.getByTestId('JSONPath-output-predicate').fill(output_predicate);
+			if (click_echo) {
+				await ingredient.getByRole('button').filter({ hasText: 'Echo' }).click();
+			}
 		});
 	}
 
@@ -188,6 +205,31 @@ export class TestRecipe {
 		return this.ingredient('Extensional Relation', async ingredient => {
 			await ingredient.getByTestId('ExtensionalRelation-content').getByRole('textbox').fill(content);
 			await ingredient.getByTestId('ExtensionalRelation-predicate').fill(predicate);
+		});
+	}
+
+	async graph(predicate, click_echo = false) {
+		return this.ingredient('Graph', async ingredient => {
+			await ingredient.getByTestId('Graph-predicate').fill(predicate);
+			if (click_echo) {
+				await ingredient.getByRole('button').filter({ hasText: 'Echo' }).click();
+			}
+		});
+	}
+
+	async parse_csv({
+		decode_predicate = '__base64__',
+		click_echo = false,
+		separator = 'TAB',
+		output_predicate = '__cell__',
+					} = {}) {
+		return this.ingredient('Parse CSV', async ingredient => {
+			await ingredient.getByTestId('ParseCSV-decode-predicate').fill(decode_predicate);
+			await ingredient.getByTestId('ParseCSV-separator').fill(separator);
+			if (click_echo) {
+				await ingredient.getByRole('button').filter({ hasText: 'Echo' }).click();
+			}
+			await ingredient.getByTestId('ParseCSV-output-predicate').fill(output_predicate);
 		});
 	}
 }

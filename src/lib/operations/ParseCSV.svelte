@@ -85,7 +85,7 @@
                bind:value={options.decode_predicate}
                placeholder="decode predicate"
                on:input={edit}
-               data-testid="ParseCSV-decode-predciate"
+               data-testid="ParseCSV-decode-predicate"
         />
         <Button outline="{!options.echo_encoded_content}" on:click={() => { options.echo_encoded_content = !options.echo_encoded_content; edit(); }}>Echo</Button>
         <InputGroupText>Separator</InputGroupText>

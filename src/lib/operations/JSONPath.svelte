@@ -32,7 +32,8 @@
                     if (atom.predicate === options.decode_predicate) {
                         const data = JSON.parse(atob(atom.terms[0].str.slice(1, -1)));
                         const answer = jsonpath.query(data, options.query);
-                        return answer.map(object_mapper).map(term => `${options.output_predicate}(${term}).`).join('\n') + '\n' + mapper(atom);
+                        return answer.map(object_mapper).map(term => `${options.output_predicate}(${term}).`).join('\n') +
+                            (options.echo_encoded_content ? '\n' + mapper(atom) : '');
                     }
                     return mapper(atom);
                 }).join('\n');

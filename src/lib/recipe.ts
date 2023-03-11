@@ -15,7 +15,7 @@ export class Recipe {
 
     static async svelte_components(filter: string) {
         const res = [];
-        for (const [key] of Array.from(this.operation_types).sort()) {
+        for (const key of Array.from(this.operation_types.keys()).sort()) {
             if (String(key).match(new RegExp(filter, 'i'))) {
                 const component = (await import(`./operations/${String(key).replace(/ /g, '')}.svelte`)).default;
                 res.push(component);
