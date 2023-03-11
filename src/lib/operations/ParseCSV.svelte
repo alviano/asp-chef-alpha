@@ -3,7 +3,7 @@
     import {Utils} from "$lib/utils";
     import XLSX from "xlsx";
 
-    const operation = "Decode CSV";
+    const operation = "Parse CSV";
     const default_extra_options = {
         decode_predicate: '__base64__',
         echo_encoded_content: false,
@@ -85,7 +85,7 @@
                bind:value={options.decode_predicate}
                placeholder="decode predicate"
                on:input={edit}
-               data-testid="CSV-decode-predciate"
+               data-testid="ParseCSV-decode-predciate"
         />
         <Button outline="{!options.echo_encoded_content}" on:click={() => { options.echo_encoded_content = !options.echo_encoded_content; edit(); }}>Echo</Button>
         <InputGroupText>Separator</InputGroupText>
@@ -93,7 +93,7 @@
                bind:value={options.separator}
                placeholder="TAB|SPACE|char"
                on:input={edit}
-               data-testid="CSV-separator"
+               data-testid="ParseCSV-separator"
         />
     </InputGroup>
     <InputGroup>
@@ -102,7 +102,7 @@
                bind:value={options.output_predicate}
                placeholder="predicate"
                on:input={edit}
-               data-testid="CSV-output-predicate"
+               data-testid="ParseCSV-output-predicate"
         />
     </InputGroup>
 </Operation>

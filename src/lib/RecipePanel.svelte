@@ -45,7 +45,8 @@
     import Graph from "$lib/operations/Graph.svelte";
     import ExtensionalRelation from "$lib/operations/ExtensionalRelation.svelte";
     import JSONPath from "$lib/operations/JSONPath.svelte";
-    import DecodeCSV from "$lib/operations/DecodeCSV.svelte";
+    import ParseCSV from "$lib/operations/ParseCSV.svelte";
+    import GenerateCSV from "$lib/operations/GenerateCSV.svelte";
 
     async function copy_to_clipboard() {
         const url = Recipe.as_url();
@@ -216,8 +217,10 @@
                         <ExtensionalRelation id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
                     {:else if item.operation === 'JSON Path'}
                         <JSONPath id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
-                    {:else if item.operation === 'Decode CSV'}
-                        <DecodeCSV id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
+                    {:else if item.operation === 'Parse CSV'}
+                        <ParseCSV id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
+                    {:else if item.operation === 'Generate CSV'}
+                        <GenerateCSV id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
                     {:else}
                         Unknown operation: {item.operation}
                     {/if}
