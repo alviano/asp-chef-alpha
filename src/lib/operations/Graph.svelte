@@ -223,7 +223,7 @@
                     {graph}
                     maxHeight="{options.height}"
                     maxWidth="{container ? container.width : 100}"
-                    search={options.search}
+                    search_pattern={options.search}
                     search_color={options.search_color}
                     search_text_color={options.search_text_color}
             />

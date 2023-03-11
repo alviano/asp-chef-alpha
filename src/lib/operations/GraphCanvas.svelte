@@ -66,7 +66,7 @@
 
     function build_regex(search_pattern) {
         try {
-            return new RegExp(search_pattern, 'i');
+            return new RegExp(search_pattern, 'ig');
         } catch (error) {
             return null;
         }
