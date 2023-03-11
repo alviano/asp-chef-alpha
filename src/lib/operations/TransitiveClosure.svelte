@@ -12,7 +12,10 @@
     const listeners = new Map();
 
     Recipe.register_operation_type(operation, async (input, options, index, id) => {
-        listeners.get(id)(input);
+        try {
+            listeners.get(id)(input);
+        } catch (error) { /* component not mounted, possibly because of headless mode */ }
+
         const content = btoa(`
 ${options.closure_predicate}(X,Y) :- ${options.input_predicate}(X,Y).
 ${options.closure_predicate}(X,Z) :- ${options.closure_predicate}(X,Y); ${options.input_predicate}(Y,Z).

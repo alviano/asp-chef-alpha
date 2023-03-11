@@ -11,7 +11,9 @@
     const listeners = new Map();
 
     Recipe.register_operation_type(operation, async (input, options, index, id) => {
-        listeners.get(id)(input);
+        try {
+            listeners.get(id)(input);
+        } catch (error) { /* component not mounted, possibly because of headless mode */ }
         return options.echo ? input : input.map(model => model.filter(atom => atom.predicate !== options.predicate));
     });
 </script>
