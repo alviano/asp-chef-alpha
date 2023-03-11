@@ -48,6 +48,7 @@
     import ParseCSV from "$lib/operations/ParseCSV.svelte";
     import GenerateCSV from "$lib/operations/GenerateCSV.svelte";
     import OutputEncodedContent from "$lib/operations/OutputEncodedContent.svelte";
+    import {v4 as uuidv4} from "uuid";
 
     async function copy_to_clipboard() {
         const url = Recipe.as_url();
@@ -73,28 +74,32 @@
         recipe.set(e.detail.items);
     }
 
-    $keydown.push((event) => {
-        if (event.uKey === 'D') {
-            toggle_show_details();
-            return true;
-        } else if (event.uKey === 'C') {
-            copy_to_clipboard();
-            return true;
-        } else if (event.uKey === 'P') {
-            toggle_pause_baking();
-            return true;
-        }
-    });
-
     let unsubscribe = null;
+    const keydown_uuid = uuidv4();
+
     onMount(() => {
         unsubscribe = recipe.subscribe((value) => {
             items = value;
         });
+
+        $keydown.push([keydown_uuid, (event) => {
+            if (event.uKey === 'D') {
+                toggle_show_details();
+                return true;
+            } else if (event.uKey === 'C') {
+                copy_to_clipboard();
+                return true;
+            } else if (event.uKey === 'P') {
+                toggle_pause_baking();
+                return true;
+            }
+        }]);
+
     });
 
     onDestroy(() => {
         unsubscribe();
+        $keydown = $keydown.filter(key_value => key_value[0] !== keydown_uuid);
     });
 </script>
 

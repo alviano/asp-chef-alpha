@@ -4,17 +4,27 @@
     import {keydown, Popover} from "dumbo-svelte";
     import {Utils} from "$lib/utils";
     import CodeMirror from "svelte-codemirror-editor";
+    import {onDestroy, onMount} from "svelte";
+    import {v4 as uuidv4} from "uuid";
 
     export let value;
 
     let editor;
 
-    $keydown.push((event) => {
-        if (event.uKey === 'I') {
-            editor.$$.ctx[15].focus();  // a bit fragile, but I have not found any other way to get the EditorView
-            Utils.snackbar("Focus on Input...");
-            return true;
-        }
+    const keydown_uuid = uuidv4();
+
+    onMount(() => {
+        $keydown.push([keydown_uuid, (event) => {
+            if (event.uKey === 'I') {
+                editor.$$.ctx[15].focus();  // a bit fragile, but I have not found any other way to get the EditorView
+                Utils.snackbar("Focus on Input...");
+                return true;
+            }
+        }]);
+    });
+
+    onDestroy(() => {
+        $keydown = $keydown.filter(key_value => key_value[0] !== keydown_uuid);
     });
 </script>
 

@@ -1,10 +1,11 @@
 <script>
     import {Recipe} from "$lib/recipe";
     import {Input} from "sveltestrap";
-    import {tick} from "svelte";
+    import {onDestroy, onMount, tick} from "svelte";
     import {keydown, Popover} from "dumbo-svelte";
     import {Utils} from "$lib/utils";
     import {consts} from "$lib/consts";
+    import {v4 as uuidv4} from "uuid";
 
     export let index;
     export let style = '';
@@ -55,15 +56,23 @@
         }
     }
 
-    if (index === undefined) {
-        $keydown.push((event) => {
-            if (event.uKey === 'F') {
-                document.getElementById("OperationsDetail-search").focus()
-                Utils.snackbar("Ready to filter operations!");
-                return true;
-            }
-        });
-    }
+    const keydown_uuid = uuidv4();
+
+    onMount(() => {
+        if (index === undefined) {
+            $keydown.push([keydown_uuid, (event) => {
+                if (event.uKey === 'F') {
+                    document.getElementById("OperationsDetail-search").focus()
+                    Utils.snackbar("Ready to filter operations!");
+                    return true;
+                }
+            }]);
+        }
+    });
+
+    onDestroy(() => {
+        $keydown = $keydown.filter(key_value => key_value[0] !== keydown_uuid);
+    });
 
     $: load_components(filter);
 </script>

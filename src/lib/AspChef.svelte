@@ -10,6 +10,7 @@
     import {Utils} from "$lib/utils";
     import AsyncLock from "async-lock";
     import {keydown} from "dumbo-svelte";
+    import {v4 as uuidv4} from 'uuid';
 
     let input_value = '';
     let output_value = [];
@@ -70,17 +71,7 @@
     let show_operations = true;
     let recipe_fullscreen = false;
 
-    $keydown.push((event) => {
-        if (event.uKey === 'O') {
-            show_operations = !show_operations;
-            Utils.snackbar(show_operations ? "Operations panel shown..." : "Operations panel hidden...");
-            return true;
-        } else if (event.uKey === 'R') {
-            recipe_fullscreen = !recipe_fullscreen;
-            Utils.snackbar(recipe_fullscreen ? "Entering fully immersive mode..." : "Leaving fully immersive mode...");
-            return true;
-        }
-    });
+    const keydown_uuid = uuidv4();
 
     onMount(() => {
         if (location.hash.length > 1) {
@@ -94,10 +85,23 @@
         });
         input_panel_div.style.height = `${input_panel_div.offsetHeight - progress_panel_div.offsetHeight / 2}px`;
         output_panel_div.style.height = `${output_panel_div.offsetHeight - progress_panel_div.offsetHeight / 2}px`;
+
+        $keydown.push([keydown_uuid, (event) => {
+            if (event.uKey === 'O') {
+                show_operations = !show_operations;
+                Utils.snackbar(show_operations ? "Operations panel shown..." : "Operations panel hidden...");
+                return true;
+            } else if (event.uKey === 'R') {
+                recipe_fullscreen = !recipe_fullscreen;
+                Utils.snackbar(recipe_fullscreen ? "Entering fully immersive mode..." : "Leaving fully immersive mode...");
+                return true;
+            }
+        }]);
     });
 
     onDestroy(() => {
         recipe_unsubscribe();
+        $keydown = $keydown.filter(key_value => key_value[0] !== keydown_uuid);
     });
 </script>
 
