@@ -72,14 +72,14 @@
         }
     }
 
-    function init() {
+    async function init() {
         fullSizeCanvas();
 
         graph.nodes.forEach(node => {
             node.search_result = null;
         });
 
-        update_search(search);
+        await update_search(search);
     }
 
     async function update_search(search) {
@@ -276,7 +276,7 @@
     onMount(async () => {
         context = canvas.getContext("2d");
         await tick();
-        init();
+        await init();
 
         simulation = d3
             .forceSimulation(graph.nodes)
