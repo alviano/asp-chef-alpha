@@ -5,8 +5,8 @@
 
     const operation = "JSON Path";
     const default_extra_options = {
-        height: 200,
         decode_predicate: '__base64__',
+        echo_encoded_content: false,
         query: '',
         output_predicate: '__json__'
     };
@@ -49,7 +49,7 @@
 </script>
 
 <script>
-    import {Input, InputGroup, InputGroupText} from "sveltestrap";
+    import {Button, Input, InputGroup, InputGroupText} from "sveltestrap";
     import Operation from "$lib/operations/Operation.svelte";
 
     export let id;
@@ -93,19 +93,13 @@
         <code class="d-block ms-3">link(3,1).</code>
     </div>
     <InputGroup>
-        <InputGroupText>Height</InputGroupText>
-        <Input type="number"
-               bind:value={options.height}
-               min="1"
-               style="max-width: 5em;"
-               on:input={edit}
-        />
         <InputGroupText>Decode</InputGroupText>
         <Input type="search"
                bind:value={options.decode_predicate}
                placeholder="decode predicate"
                on:input={edit}
         />
+        <Button outline="{!options.echo_encoded_content}" on:click={() => { options.echo_encoded_content = !options.echo_encoded_content; edit(); }}>Echo</Button>
     </InputGroup>
     <Input type="search"
            bind:value={options.query}

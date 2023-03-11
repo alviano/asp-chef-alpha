@@ -226,6 +226,7 @@ term
 / functor:string_id { return { functor : functor, str : functor }; }
 / the_string:quoted_string { return { string : the_string, str : '"' + the_string + '"' }; }
 / the_number:number { return { number : the_number, str : '' + the_number }; }
+/ "(" space? args:terms space? ")" { return { functor : '', terms : args, str : '(' + args.map(term => term.str).join(',') + ')' }; }
 
 string_id
 = prefix:[_]* head:[a-z] tail:[A-Za-z0-9_]* { return prefix.join("") + head + tail.join(""); }
