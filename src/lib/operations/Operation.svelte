@@ -30,7 +30,7 @@
     <Card style="border-top: 3px solid black;" data-testid="Operation">
         <IngredientHeader {id} {operation} {index} {options} />
         {#if $show_ingredient_details && options.show}
-        <CardBody class="p-0">
+        <CardBody class="p-0" style="cursor: auto;">
             <slot />
             {#if $errors_at_index[index]}
                 <Alert color="danger">
