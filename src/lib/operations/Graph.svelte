@@ -183,10 +183,10 @@
             The other terms have the form <code>property(VALUE)</code>.
         </p>
         <p>
-            Node properties: label, color, fx, fy, radius, shape, text_color.
+            Node properties: label, color, fx, fy, opacity, radius, shape, text_color.
         </p>
         <p>
-            Link properties: label, color, undirected, text_color.
+            Link properties: label, color, opacity, undirected, text_color.
         </p>
         <p>
             Defaults properties:
@@ -210,16 +210,6 @@
         <Input type="text" placeholder="predicate" bind:value={options.predicate} on:input={edit} data-testid="Graph-predicate" />
         <Button outline="{!options.echo}" on:click={() => { options.echo = !options.echo; edit(); }}>Echo</Button>
     </InputGroup>
-    <InputGroup>
-        <InputGroupText>Search</InputGroupText>
-        <Input type="search" placeholder="Search..." bind:value={options.search} on:change={edit} />
-    </InputGroup>
-    <InputGroup>
-        <InputGroupText>Highlight color</InputGroupText>
-        <Input type="search" placeholder="Color..." bind:value={options.search_color} on:change={edit} />
-        <InputGroupText>Highlight text color</InputGroupText>
-        <Input type="search" placeholder="Text color..." bind:value={options.search_text_color} on:change={edit} />
-    </InputGroup>
     {#if number_of_models !== 1}
         <InputGroup>
             <InputGroupText>
@@ -239,4 +229,14 @@
             />
         {/each}
     </div>
+    <InputGroup>
+        <InputGroupText>Search</InputGroupText>
+        <Input type="search" placeholder="Search..." bind:value={options.search} on:change={edit} />
+    </InputGroup>
+    <InputGroup>
+        <InputGroupText>Highlight color</InputGroupText>
+        <Input type="search" placeholder="Color..." bind:value={options.search_color} on:change={edit} />
+        <InputGroupText>Highlight text color</InputGroupText>
+        <Input type="search" placeholder="Text color..." bind:value={options.search_text_color} on:change={edit} />
+    </InputGroup>
 </Operation>

@@ -41,7 +41,7 @@
 
     function add_sort(sort_index = 0, descending = false) {
         Recipe.add_operation(
-            'Sort by Predicate Or Argument',
+            'Sort by Predicate or Argument',
             { ...Recipe.common_default_options(), sort_index: sort_index, descending: descending },
             index
         );

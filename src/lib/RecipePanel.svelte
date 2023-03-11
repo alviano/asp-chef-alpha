@@ -2,7 +2,7 @@
     import {flip} from "svelte/animate";
     import {dndzone} from "svelte-dnd-action";
     import {recipe} from "$lib/stores";
-    import {Button, ButtonGroup, Card, CardBody, CardHeader, CardTitle, Icon} from "sveltestrap";
+    import {Alert, Button, ButtonGroup, Card, CardBody, CardHeader, CardTitle, Icon} from "sveltestrap";
     import SearchModels from "$lib/operations/SearchModels.svelte";
     import RemoveErrors from "$lib/operations/RemoveErrors.svelte";
     import Wrap from "$lib/operations/Wrap.svelte";
@@ -225,7 +225,10 @@
                     {:else if item.operation === 'Output Encoded Content'}
                         <OutputEncodedContent id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
                     {:else}
-                        Unknown operation: {item.operation}
+                        <Nop id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
+                        <Alert color="danger">
+                            Unknown operation replaced by Nop: {item.operation}
+                        </Alert>
                     {/if}
                 </div>
             {/each}
