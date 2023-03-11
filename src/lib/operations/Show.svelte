@@ -56,7 +56,8 @@
         <InputGroupText>Height</InputGroupText>
         <Input type="number"
                bind:value={options.height}
-               min="1"
+               min="20"
+               step="20"
                on:input={edit}
         />
     </InputGroup>
