@@ -41,8 +41,14 @@
                 node.text_color = terms[0].string || terms[0].str;
             } else if (property === 'radius') {
                 node.radius = terms[0].number;
+            } else if (property === 'shape') {
+                node.shape = terms.length > 1 ? terms.map(term => term.number) : terms[0].string || terms[0].str;
             } else if (property === 'opacity') {
                 node.opacity = terms[0].number / 100;
+            } else if (property === 'fx') {
+                node.fx = terms[0].number;
+            } else if (property === 'fy') {
+                node.fy = terms[0].number;
             } else {
                 Utils.snackbar('Unknown node property: ' + property);
             }
@@ -67,6 +73,8 @@
                 link.label = `${terms[0].string || terms[0].number || terms[0].str}`;
             } else if (property === 'color') {
                 link.color = terms[0].string || terms[0].str;
+            } else if (property === 'undirected') {
+                link.undirected = true;
             } else if (property === 'text_color') {
                 link.text_color = terms[0].string || terms[0].str;
             } else if (property === 'opacity') {
@@ -175,10 +183,10 @@
             The other terms have the form <code>property(VALUE)</code>.
         </p>
         <p>
-            Node properties: label, color, radius, text_color.
+            Node properties: label, color, fx, fy, radius, shape, text_color.
         </p>
         <p>
-            Link properties: label, color, text_color.
+            Link properties: label, color, undirected, text_color.
         </p>
         <p>
             Defaults properties:

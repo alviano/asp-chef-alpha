@@ -198,7 +198,7 @@ export class Utils extends BaseUtils {
     static keep_occurrences(input_string, regex) {
         const res = [];
         let last_index = 0;
-        [...input_string.matchAll(regex)].map(match => {
+        [...input_string.matchAll(new RegExp(regex, 'ig'))].map(match => {
             const index = match.index || 0;
             res.push(consts.SYMBOLS.MODELS_SEPARATOR.repeat(index - last_index));
             res.push(match[0]);

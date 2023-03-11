@@ -120,12 +120,17 @@
         context.fillStyle = context.strokeStyle = link.search_result !== null && search_color !== '' ? search_color : (link.color || defaults.link_color);
         context.beginPath();
         context.moveTo(link.source.x + source_radius * Math.cos(angle), link.source.y + source_radius * Math.sin(angle));
-        context.lineTo(link.target.x - (target_radius + arrowLength - 1) * Math.cos(angle), link.target.y - (target_radius + arrowLength - 1) * Math.sin(angle));
-        context.stroke();
-        context.moveTo(link.target.x - target_radius * Math.cos(angle), link.target.y - target_radius * Math.sin(angle));
-        context.lineTo(link.target.x - (target_radius + arrowLength) * Math.cos(angle - arrowAngle), link.target.y - (target_radius + arrowLength) * Math.sin(angle - arrowAngle));
-        context.lineTo(link.target.x - (target_radius + arrowLength) * Math.cos(angle + arrowAngle), link.target.y - (target_radius + arrowLength) * Math.sin(angle + arrowAngle));
-        context.fill();
+        if (link.undirected) {
+            context.lineTo(link.target.x - (target_radius - 1) * Math.cos(angle), link.target.y - (target_radius - 1) * Math.sin(angle));
+            context.stroke();
+        } else {
+            context.lineTo(link.target.x - (target_radius + arrowLength - 1) * Math.cos(angle), link.target.y - (target_radius + arrowLength - 1) * Math.sin(angle));
+            context.stroke();
+            context.moveTo(link.target.x - target_radius * Math.cos(angle), link.target.y - target_radius * Math.sin(angle));
+            context.lineTo(link.target.x - (target_radius + arrowLength) * Math.cos(angle - arrowAngle), link.target.y - (target_radius + arrowLength) * Math.sin(angle - arrowAngle));
+            context.lineTo(link.target.x - (target_radius + arrowLength) * Math.cos(angle + arrowAngle), link.target.y - (target_radius + arrowLength) * Math.sin(angle + arrowAngle));
+            context.fill();
+        }
         context.globalAlpha = 1;
 
         context.font = "4px monospace";
@@ -134,7 +139,8 @@
         context.textBaseline = "middle";
         context.translate(link.source.x + source_radius * Math.cos(angle), link.source.y + source_radius * Math.sin(angle))
         context.rotate(angle);
-        if (link.search_result !== null) {
+        if (link.search_result) {
+            console.log(link.search_result)
             context.lineWidth = 1.5;
             context.strokeStyle = search_text_color;
             context.strokeText(Utils.abbreviate(link.search_result.replaceAll(consts.SYMBOLS.SEARCH_FAIL, ' '), Math.floor(length / width4px) - 2), width4px, 0);
@@ -147,7 +153,23 @@
     function draw_node(node) {
         context.globalAlpha = node.opacity || defaults.node_opacity;
         context.beginPath();
-        context.arc(node.x, node.y, node.radius || defaults.node_radius, 0, 2 * Math.PI);
+        const radius = node.radius || defaults.node_radius;
+        if (node.shape === undefined || node.shape === 'circle') {
+            context.arc(node.x, node.y, radius, 0, 2 * Math.PI);
+        } else if (node.shape === 'square') {
+            context.moveTo(node.x - radius, node.y - radius);
+            context.lineTo(node.x + radius, node.y - radius);
+            context.lineTo(node.x + radius, node.y + radius);
+            context.lineTo(node.x - radius, node.y + radius);
+            context.closePath();
+        } else if (Array.isArray(node.shape)) {
+            const coords = node.shape;
+            context.moveTo(node.x + coords[0], node.y + coords[1]);
+            for (let i = 2; i < coords.length; i += 2) {
+                context.lineTo(node.x + coords[i], node.y + coords[i+1]);
+            }
+            context.closePath();
+        }
         if (node.search_result !== null && search_color !== '') {
             context.fillStyle = search_color;
         } else {
@@ -211,6 +233,12 @@
         if (!currentEvent.active) {
             simulation.alphaTarget(0.3).restart();
         }
+        if (currentEvent.subject.fx && currentEvent.subject._fx === undefined) {
+            currentEvent.subject._fx = currentEvent.subject.fx;
+        }
+        if (currentEvent.subject.fy && currentEvent.subject._fy === undefined) {
+            currentEvent.subject._fy = currentEvent.subject.fy;
+        }
         currentEvent.subject.fx = transform.invertX(currentEvent.subject.x);
         currentEvent.subject.fy = transform.invertY(currentEvent.subject.y);
     }
@@ -224,8 +252,16 @@
         if (!currentEvent.active) {
             simulation.alphaTarget(0);
         }
-        currentEvent.subject.fx = null;
-        currentEvent.subject.fy = null;
+        if (currentEvent.subject._fx !== undefined) {
+            currentEvent.subject.fx = currentEvent.subject._fx;
+        } else {
+            currentEvent.subject.fx = null;
+        }
+        if (currentEvent.subject._fy !== undefined) {
+            currentEvent.subject.fy = currentEvent.subject._fy;
+        } else {
+            currentEvent.subject.fy = null;
+        }
     }
 
     function fullSizeCanvas() {
