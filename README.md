@@ -28,7 +28,14 @@ The recipe and its input are encoded in the URL, which can be used to restore th
 As the list of operations grows, and the operations are extended and modified, it is possible that a previously crafted recipe becomes incompatible with the current deployed version of ASP Chef.
 While it is possible that in the future a mechanism to preserve retro-compatibility will be implemented, it must be noted that at the moment the main goal of ASP Chef is to ease the fast prototyping of ASP pipelines rather than their long terming usage. 
 
-## Example
+## Examples
+
+### Billy the Kid
+
+A problem from the [LP/CP Programming Contest 2019](https://github.com/lpcp-contest/lpcp-contest-2019).
+It is described [here](https://github.com/lpcp-contest/lpcp-contest-2019/blob/master/billykid/billykid.md).
+An ASP Chef recipe solving the problem and including a graphical representation of intermediate steps can be found
+[here](https://asp-chef.alviano.net/#eJzFVm1v2zYQ/iuC+mE2JhqiRPHF2IAB/TC0QNoAy4AETSBQJGULVShPktdlQfbbd6TtyJKzAfO21F8sPnc83stzRz6Gld1s+3D5KeybL3aG54vg8Lu1HkpOofQUIqdQdgrRERRMf7dWNdYa1Rs9w5E3OYaSKZRE6RRKTzemUTaFyCmURXQHveCX876rbN/KX03t4g/vorA1qtoYyN1jWOlwGaZCZIliGvFYF4iQIkZFnDKEs5KnScZYoUQYhc3GtLKvGgtbfnq4vzd9W6ngbd1029Z4uRN24fIx7PpmEy5LWXcmCuVmUz+Ey77dwqJbN18O376E+aY1ulKyB4fC56DAnNoZ/ku5gRTosTjPC9kZSvI8fHqK9tFhFhcp1RwxphJEVEJRYVSMdCpFwamMuVHT6Ixs1Tq4APt1d05ka1Ot1sDOJI4h3dvawN7wcSP7NZDhah4sA0+rq/lT8H2AF7d2J3v3LUi/ceKhulcO8WrBEgU7NTARBePSXn102LvguwC+wOBY13++jw4q70Hh1lY297jzZ6+dg8oCArbb+8K04dJ5L6vOub8PeVcz2eXgYQdngwODUJu/KwmUTK2bfFc37Qz0xvb7zUO9jODKKElQWgoB9cIGcc5jWFJRpoyQEpOTetWQrODycO5ZNdsMu2GqtEaqdeji9UmCL5dv+NuvBibeDa5nqSmJzgh0DmOICJUhbqhEZYxThnGiCsamrjdtH7yVtrFwdv3P/R4Ol1jGJSkwUirmiKSEIUkKjlQmVZnEjItyyvOfbfXL9rzWXdkG8pWPk+Zzc5SPhIpCKZogzDIDg4VwVJSlQkQKyngM3tFk4tKFaVdneTQm3b1r3dEYyLApSqwEElhAbUxKkZCcIJNxRY3KMOH6VcaAb7SL6F2067tnXwEbWna+GPrz4iXNoXmd6n6anGjtcacyTJTr6GaimUfBWDwaAngYAsdz+/+cAVrLgmgKJcooFAvLFHHMCqRVxiRLYHLr4vVmwHgAHN9Bh+lwxHktqNFCFIgSQqENgXFcpRkSJNUxyZQGEk5c/whu3le/n0X7l2+azifD3y9Q6D0LgATN59mlr/2zwsCky8irgHBAcpDbpg/8Pn9pLP8Y9i6CT/gHHAVXd07ydRmTMIkF4RzuChpD2k2JhFAcGc6oLIwgCXmd9l7NLBj0ma3h4Nq137gIRxqqqZt2BoHPx1XxqV7N6sp+9v0YBVurq9bTzmuO2zUKruFWv/G71uBT7fza1ZA6WxPsMAAm8OXhoXAJw+n6aAGvkuMzzrB2M7Z2fWRtFOUuH6vWGDufn9p0SouvzbQ0TWLKBEZp6maTIQqJMjEICMbhvUxlKaaz6cdWbtb/hmGZY5hjTd5KXW07x7nxlbfau/9ss/PsBkl4+M59dgF5MHUNZzzjvfmtfxaCzaNbUyWMlmXJUAxhwSCmKYI3DDxr4hjHWBSMcj5tq7W3/d900xunse8LIPsH9zb+AI/hN6rZ2v7xCpbDrFuA43dPfwJ2x3kg!).
 
 ### Buttons and Scissors
 

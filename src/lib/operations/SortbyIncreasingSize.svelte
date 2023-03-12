@@ -24,7 +24,7 @@
 <Operation {id} {operation} {options} {index} {default_extra_options} {add_to_recipe} {keybinding}>
     <div slot="description">
         <p>
-            The <strong>{operation}</strong> operation sort the models in input by increasing size.
+            The <strong>{operation}</strong> operation sorts the models in input by increasing size.
         </p>
         <p>
             Models with less atoms will come first.

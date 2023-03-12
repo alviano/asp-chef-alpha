@@ -78,7 +78,7 @@ export class TestRecipe {
 	async select_predicates(...predicates: string[]) {
 		return await this.ingredient('Select Predicates', async ingredient => {
 			for (const predicate of predicates) {
-				await ingredient.getByLabel(predicate).click();
+				await ingredient.locator('div.input-group').filter({ hasText: predicate }).click();
 			}
 		});
 	}
@@ -150,6 +150,12 @@ export class TestRecipe {
 		});
 	}
 
+	async index(predicate = '__index__') {
+		return this.ingredient('Index', async ingredient => {
+			await ingredient.getByTestId('Index-predicate').fill(predicate);
+		});
+	}
+
 	async merge(predicate = '__model__') {
 		return this.ingredient('Merge', async ingredient => {
 			await ingredient.getByTestId('Merge-predicate').fill(predicate);
@@ -175,6 +181,26 @@ export class TestRecipe {
 			await ingredient.getByTestId('SortByPredicateOrArgument-sort-index').fill(`${sort_index}`);
 			if (click_descending) {
 				await ingredient.getByRole('button').filter({ hasText: 'Descending' }).click();
+			}
+		});
+	}
+
+	async sort_canonical() {
+		return this.ingredient('Sort Canonical');
+	}
+
+	async sort_models_canonically(...predicates: string[]) {
+		return this.ingredient('Sort Models Canonically', async ingredient => {
+			for (const predicate of predicates) {
+				await ingredient.locator('div.input-group').filter({ hasText: predicate }).click();
+			}
+		});
+	}
+
+	async unique(...predicates: string[]) {
+		return this.ingredient('Unique', async ingredient => {
+			for (const predicate of predicates) {
+				await ingredient.locator('div.input-group').filter({ hasText: predicate }).click();
 			}
 		});
 	}

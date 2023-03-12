@@ -55,7 +55,7 @@
 <Operation {id} {operation} {options} {index} {default_extra_options} {add_to_recipe} {keybinding}>
     <div slot="description">
         <p>
-            The <strong>{operation}</strong> operation sort each model in input according to the specified criteria.
+            The <strong>{operation}</strong> operation sorts each model in input according to the specified criteria.
         </p>
         <p>
             If the specified index is 0, atoms are sorted by predicate.

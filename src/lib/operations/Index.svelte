@@ -17,7 +17,7 @@
                 Recipe.set_errors_at_index(index, error, res);
             }
         }
-        return [res.flatMap(model => model)];
+        return res;
     });
 </script>
 

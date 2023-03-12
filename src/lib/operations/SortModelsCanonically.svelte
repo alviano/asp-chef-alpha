@@ -1,10 +1,10 @@
 <script context="module">
     import {Recipe} from "$lib/recipe";
-    import {Utils} from "$lib/utils";
+    import _ from 'lodash';
 
-    const operation = "Select Predicates";
+    const operation = "Sort Models Canonically";
     const default_extra_options = {
-        predicates: [],
+        ignored_predicates: [],
     };
 
     const listeners = new Map();
@@ -13,15 +13,19 @@
         try {
             listeners.get(id)(input);
         } catch (error) { /* component not mounted, possibly because of headless mode */ }
-        const included_predicates = new Set(options.predicates);
-        return input.map(model => model.filter(atom => included_predicates.has(atom.predicate || 'CONSTANTS')));
+
+        return _.sortBy(input, model => {
+            return model.filter(atom => !options.ignored_predicates.includes(atom.predicate))
+                .map(atom => atom.str).toString();
+        });
     });
 </script>
 
 <script>
-    import {Input, InputGroup, Label} from "sveltestrap";
     import Operation from "$lib/operations/Operation.svelte";
     import {onDestroy, onMount} from "svelte";
+    import {Utils} from "$lib/utils";
+    import {Input, InputGroup, Label} from "sveltestrap";
 
     export let id;
     export let options;
@@ -36,11 +40,11 @@
     }
 
     function toggle_predicate(predicate) {
-        const index_of_predicate = options.predicates.indexOf(predicate);
+        const index_of_predicate = options.ignored_predicates.indexOf(predicate);
         if (index_of_predicate !== -1) {
-            options.predicates.splice(index_of_predicate, 1);
+            options.ignored_predicates.splice(index_of_predicate, 1);
         } else {
-            options.predicates.push(predicate);
+            options.ignored_predicates.push(predicate);
         }
         edit();
     }
@@ -59,14 +63,18 @@
 <Operation {id} {operation} {options} {index} {default_extra_options} {add_to_recipe} {keybinding}>
     <div slot="description">
         <p>
-            The <strong>{operation}</strong> operation selects some predicates from the models in input.
+            The <strong>{operation}</strong> operation sorts the array of models in input according to their string representation.
+        </p>
+        <p>
+            A list of predicates can be ignored.
         </p>
     </div>
     <div class="m-3">
+        <Label>Excluded predicates</Label>
         {#each input_predicates as predicate}
             <div on:click={() => toggle_predicate(predicate)}>
                 <InputGroup>
-                    <Input type="switch" checked="{options.predicates.includes(predicate)}" />
+                    <Input type="switch" checked="{options.ignored_predicates.includes(predicate)}"/>
                     <Label>{predicate}</Label>
                 </InputGroup>
             </div>

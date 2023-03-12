@@ -50,6 +50,9 @@
     import OutputEncodedContent from "$lib/operations/OutputEncodedContent.svelte";
     import {v4 as uuidv4} from "uuid";
     import Index from "$lib/operations/Index.svelte";
+    import SortCanonical from "$lib/operations/SortCanonical.svelte";
+    import Unique from "$lib/operations/Unique.svelte";
+    import SortModelsCanonically from "$lib/operations/SortModelsCanonically.svelte";
 
     async function copy_to_clipboard() {
         const url = Recipe.as_url();
@@ -236,6 +239,12 @@
                         <OutputEncodedContent id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
                     {:else if item.operation === 'Index'}
                         <Index id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
+                    {:else if item.operation === 'Sort Canonical'}
+                        <SortCanonical id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
+                    {:else if item.operation === 'Sort Models Canonically'}
+                        <SortModelsCanonically id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
+                    {:else if item.operation === 'Unique'}
+                        <Unique id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
                     {:else}
                         <Nop id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
                         <Alert color="danger">

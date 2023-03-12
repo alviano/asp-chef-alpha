@@ -2,12 +2,12 @@
     import {Recipe} from "$lib/recipe";
     import _ from 'lodash';
 
-    const operation = "Sort by Decreasing Size";
+    const operation = "Sort Canonical";
     const default_extra_options = {
     };
 
     Recipe.register_operation_type(operation, async (input) => {
-        return _.sortBy(input, [model => -model.length]);
+        return input.map(model => _.sortBy(model, atom => atom.str));
     });
 </script>
 
@@ -24,10 +24,7 @@
 <Operation {id} {operation} {options} {index} {default_extra_options} {add_to_recipe} {keybinding}>
     <div slot="description">
         <p>
-            The <strong>{operation}</strong> operation sorts the models in input by decreasing size.
-        </p>
-        <p>
-            Models with more atoms will come first.
+            The <strong>{operation}</strong> operation sorts elements of each model according to their string representation.
         </p>
     </div>
 </Operation>

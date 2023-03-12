@@ -60,7 +60,6 @@ ${options.closure_predicate}(Y,X) :- ${options.input_predicate}(X,Y).
 
     onMount(() => {
         listeners.set(id, (input) => {
-            console.log(input)
             input_predicates = Utils.predicates(input).filter(predicate => predicate !== 'CONSTANTS');
         });
     });
