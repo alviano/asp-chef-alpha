@@ -192,7 +192,7 @@
             Link properties: label, color, opacity, undirected, text_color.
         </p>
         <p>
-            Defaults properties:
+            Default properties:
             node_radius (also defining the capture area for dragging nodes),
             node_color,
             node_text_color,

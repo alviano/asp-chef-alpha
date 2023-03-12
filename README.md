@@ -1,14 +1,17 @@
 # ASP Chef
 
-ASP Chef is a simple, intuitive web app for analysing answer sets without having to deal with complex tools or programming languages.
+[ASP Chef](https://asp-chef.alviano.net/) is a simple, intuitive web app for analysing answer sets without having to deal with complex tools or programming languages...
+well, excluding ASP!
+
+ASP Chef inspired by [CyberChef](https://gchq.github.io/CyberChef/#input=UVZOUUlFTm9aV1lo), and as such it is designed to ease the creation of pipelines of operations over arrays of models rather than being an IDE or editor for ASP.
 
 ## Prerequisites
 
 A modern browser!
 [Firefox](https://www.mozilla.org/en-US/firefox/new/) is a good choice as it has no restriction on the length of URLs.
-Large pipelines may hit the restriction on the URL length due to the way ASP Chef encodes recipes in the URL.
+Large pipelines may hit the restriction on the URL length of other browsers due to the way ASP Chef encodes recipes in the URL.
 
-No other software is needed as everything is run on the browser thanks to [SvelteKit](https://kit.svelte.dev/), [clingo-wasm](https://github.com/domoritz/clingo-wasm), and many other Javascript libraries.
+No other software is needed as everything is run in the browser thanks to [SvelteKit](https://kit.svelte.dev/), [clingo-wasm](https://github.com/domoritz/clingo-wasm), and many other Javascript libraries.
 
 ## Usage
 

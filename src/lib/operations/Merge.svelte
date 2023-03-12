@@ -7,7 +7,7 @@
         predicate: '__model__',
     };
 
-    Recipe.register_operation_type(operation, async (input, options, index) => {
+    Recipe.register_operation_type(operation, async (input, options) => {
         const res = [];
         for (let index = 0; index < input.length; index++) {
             const part = input[index];
