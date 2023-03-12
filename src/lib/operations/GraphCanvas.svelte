@@ -177,7 +177,7 @@
         context.fill();
         context.globalAlpha = 1;
 
-        context.font = defaults.node_font;
+        context.font = node.font || defaults.node_font;
         context.fillStyle = node.text_color || defaults.node_text_color;
         context.textAlign = "center";
         context.textBaseline = "middle";

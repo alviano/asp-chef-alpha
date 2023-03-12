@@ -49,6 +49,7 @@
     import GenerateCSV from "$lib/operations/GenerateCSV.svelte";
     import OutputEncodedContent from "$lib/operations/OutputEncodedContent.svelte";
     import {v4 as uuidv4} from "uuid";
+    import Index from "$lib/operations/Index.svelte";
 
     async function copy_to_clipboard() {
         const url = Recipe.as_url();
@@ -108,9 +109,11 @@
         <CardTitle class="h4">
             Recipe
             <span class="float-end">
-                <Popover title="Remove operation" value="Remove all ingredients from the recipe.">
-                    <Button size="sm" color="danger" on:click={() => Recipe.remove_all_operations()}><Icon name="trash" /></Button>
-                </Popover>
+                <ButtonGroup>
+                    <Popover title="Remove operation" value="Remove all ingredients from the recipe.">
+                        <Button size="sm" color="danger" on:click={() => Recipe.remove_all_operations()}><Icon name="trash" /></Button>
+                    </Popover>
+                </ButtonGroup>
                 <ButtonGroup>
                     <Popover title="Show details">
                         <div slot="value">
@@ -137,13 +140,15 @@
                         </Button>
                     </Popover>
                 </ButtonGroup>
-                <Popover title="Copy recipe">
-                    <div slot="value">
-                        <p>Copy the recipe URL in the clipboard.</p>
-                        <p>Keybinding: <code>C</code></p>
-                    </div>
-                    <Button size="sm" on:click={() => copy_to_clipboard()}><Icon name="clipboard-plus" /></Button>
-                </Popover>
+                <ButtonGroup>
+                    <Popover title="Copy recipe">
+                        <div slot="value">
+                            <p>Copy the recipe URL in the clipboard.</p>
+                            <p>Keybinding: <code>C</code></p>
+                        </div>
+                        <Button size="sm" on:click={() => copy_to_clipboard()}><Icon name="clipboard-plus" /></Button>
+                    </Popover>
+                </ButtonGroup>
             </span>
         </CardTitle>
     </CardHeader>
@@ -229,6 +234,8 @@
                         <GenerateCSV id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
                     {:else if item.operation === 'Output Encoded Content'}
                         <OutputEncodedContent id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
+                    {:else if item.operation === 'Index'}
+                        <Index id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
                     {:else}
                         <Nop id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
                         <Alert color="danger">

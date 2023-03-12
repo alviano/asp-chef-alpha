@@ -1,6 +1,6 @@
 import {get} from "svelte/store";
 import {Utils} from "$lib/utils";
-import {errors_at_index, recipe} from "$lib/stores";
+import {errors_at_index, processing_index, recipe} from "$lib/stores";
 import {consts} from "$lib/consts";
 import {v4 as uuidv4} from 'uuid';
 
@@ -85,10 +85,12 @@ export class Recipe {
         Utils.reset_clingo_options();
         this.input_at_index.length = 0;
         let where = 'Input';
+        processing_index.set(0);
         try {
             let result = await this.process_input(input);
             for (const [index, ingredient] of this.recipe.entries()) {
                 where = `#${index + 1}. ${ingredient.operation}`;
+                processing_index.set(index + 1);
                 this.set_errors_at_index(index, '');
                 this.input_at_index.push(result);
                 if (ingredient.options.apply) {
@@ -104,6 +106,8 @@ export class Recipe {
                 { str: `Unrecoverable Error in ${where}` },
                 { str: error },
             ]];
+        } finally {
+            processing_index.set(this.recipe.length);
         }
     }
 

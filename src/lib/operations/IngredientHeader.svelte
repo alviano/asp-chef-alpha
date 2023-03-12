@@ -1,6 +1,6 @@
 <script>
     import {Badge, Button, ButtonGroup, CardHeader, CardTitle, Icon} from "sveltestrap";
-    import {recipe, errors_at_index} from "$lib/stores";
+    import {recipe, errors_at_index, processing_index} from "$lib/stores";
     import {Popover} from "dumbo-svelte";
     import {Recipe} from "$lib/recipe";
 
@@ -21,6 +21,11 @@
             {operation}
         </Popover>
         <span class="float-end">
+            {#if $processing_index === index}
+                <Badge color="warning me-2">Processing</Badge>
+            {:else if $processing_index < index}
+                <Badge color="info me-2">Waiting</Badge>
+            {/if}
             {#if $errors_at_index[index]}
                 <Badge color="danger me-2">Errors!</Badge>
             {/if}

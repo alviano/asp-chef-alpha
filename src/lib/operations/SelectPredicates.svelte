@@ -19,7 +19,7 @@
 </script>
 
 <script>
-    import {Input} from "sveltestrap";
+    import {Input, InputGroup, Label} from "sveltestrap";
     import Operation from "$lib/operations/Operation.svelte";
     import {onDestroy, onMount} from "svelte";
 
@@ -64,11 +64,12 @@
     </div>
     <div class="m-3">
         {#each input_predicates as predicate}
-            <Input type="switch"
-                   label="{predicate}"
-                   checked="{options.predicates.includes(predicate)}"
-                   on:change={() => toggle_predicate(predicate)}
-                   />
+            <div on:click={() => toggle_predicate(predicate)}>
+            <InputGroup>
+                <Input type="switch" checked="{options.predicates.includes(predicate)}" />
+                <Label>{predicate}</Label>
+            </InputGroup>
+            </div>
         {/each}
     </div>
 </Operation>

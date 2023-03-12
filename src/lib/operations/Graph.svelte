@@ -41,6 +41,8 @@
                 node.color = terms[0].string || terms[0].str;
             } else if (property === 'text_color') {
                 node.text_color = terms[0].string || terms[0].str;
+            } else if (property === 'font') {
+                node.font = terms[0].string;
             } else if (property === 'radius') {
                 node.radius = terms[0].number;
             } else if (property === 'shape') {
@@ -184,7 +186,7 @@
             The other terms have the form <code>property(VALUE)</code>.
         </p>
         <p>
-            Node properties: label, color, fx, fy, opacity, radius, shape, text_color.
+            Node properties: label, color, font, fx, fy, opacity, radius, shape, text_color.
         </p>
         <p>
             Link properties: label, color, opacity, undirected, text_color.
@@ -201,7 +203,7 @@
             link_opacity.
         </p>
         <p>
-            Labels can be searched in the graph (result not stored in the recipe).
+            Labels can be searched in the graph.
         </p>
     </div>
     <InputGroup>
