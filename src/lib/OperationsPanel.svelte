@@ -19,7 +19,7 @@
             {/if}
         </CardTitle>
     </CardHeader>
-    <CardBody class="p-0">
+    <CardBody class="p-0" data-testid="OperationsPanel-list">
         <OperationsList index="{undefined}" />
     </CardBody>
 </Card>

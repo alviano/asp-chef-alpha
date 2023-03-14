@@ -1,17 +1,22 @@
 <script>
     import CodeMirror from "svelte-codemirror-editor";
-    import {Button, Card, CardBody, CardHeader, CardTitle, Icon, Input} from "sveltestrap";
+    import {Button, Card, CardBody, CardHeader, CardTitle, Icon} from "sveltestrap";
     import {AutoHideBadge, Popover} from "dumbo-svelte";
     import {createEventDispatcher} from "svelte";
     import {Utils} from "$lib/utils";
+    import {consts} from "$lib/consts";
 
     const dispatch = createEventDispatcher();
 
     export let value = [];
-    $: text_value = Utils.flatten_output(value);
+    export let decode = false;
+
+    $: text_value = !decode ? Utils.flatten_output(value) : value.map(model =>
+        model.map(atom => atom.predicate !== '__base64__' ? atom.str : atob(atom.terms[0].str.slice(1, -1)))
+            .join('\n')).join(consts.SYMBOLS.MODELS_SEPARATOR);
 </script>
 
-<Card class="p-0">
+<Card class="p-0" data-testid="OutputPanel">
     <CardHeader>
         <CardTitle>
             Output
@@ -21,6 +26,9 @@
                     <Button size="sm" on:click={() => dispatch('change_input', Utils.flatten_output(value, ''))}>
                         <Icon name="arrow-up-square" />
                     </Button>
+                </Popover>
+                <Popover title="Decode output" value="If active, Base64 encoded content in __base64__/1 instances is decoded.">
+                    <Button size="sm" outline="{!decode}" on:click={() => decode = !decode}>Decode</Button>
                 </Popover>
             </span>
         </CardTitle>

@@ -2,6 +2,7 @@
     import {Utils} from "$lib/utils";
     import {Recipe} from "$lib/recipe";
     import AspChef from "$lib/AspChef.svelte";
+    import {consts} from "$lib/consts";
 
     async function clingo_to_be_loaded() {
         while (window.clingo === undefined) {
@@ -12,9 +13,12 @@
 
     async function process() {
         if (location.hash.length > 1) {
-            const input = Recipe.deserialize(location.hash.slice(1));
-            const output = await Recipe.process(input || '');
-            return output.map(model => model.map(atom => `${atom.str}.`).join('\n')).join('\n§\n');
+            const data = Recipe.deserialize(location.hash.slice(1));
+            const output = await Recipe.process(data.input || '', data.encode_input);
+            const the_output = !data.decode_output ? Utils.flatten_output(output) : output.map(model =>
+                    model.map(atom => atom.predicate !== '__base64__' ? atom.str : atob(atom.terms[0].str.slice(1, -1))).join('\n'))
+                .join(consts.SYMBOLS.MODELS_SEPARATOR);
+            return the_output;
         }
     }
 </script>

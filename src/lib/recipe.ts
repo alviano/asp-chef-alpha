@@ -43,9 +43,11 @@ export class Recipe {
         };
     }
 
-    static serialize(input: string) {
+    static serialize(input: string, encode_input: boolean, decode_output: boolean) {
         const json = {
-            input: input.split(consts.SYMBOLS.MODELS_SEPARATOR),
+            input: encode_input ? input : input.split(consts.SYMBOLS.MODELS_SEPARATOR),
+            encode_input: encode_input,
+            decode_output: decode_output,
             recipe: this.recipe,
         };
         this.last_serialization = Utils.compress(json) + '!';
@@ -62,7 +64,14 @@ export class Recipe {
         this.last_serialization = serialized_data;
         const json = JSON.parse(Utils.uncompress(serialized_data.slice(0, -1)));
         recipe.set(json.recipe);
-        return json.input.join(consts.SYMBOLS.MODELS_SEPARATOR);
+        if (!json.encode_input) {
+            json.input = json.input.join(consts.SYMBOLS.MODELS_SEPARATOR);
+        }
+        return {
+            input: json.input,
+            encode_input: json.encode_input,
+            decode_output: json.decode_output,
+        };
     }
 
     static get number_of_operations() {
@@ -85,13 +94,13 @@ export class Recipe {
         }
     }
 
-    static async process(input: string): Promise<object[][]> {
+    static async process(input: string, encode_input: boolean): Promise<object[][]> {
         Utils.reset_clingo_options();
         this.input_at_index.length = 0;
         let where = 'Input';
         processing_index.set(0);
         try {
-            let result = await this.process_input(input);
+            let result = await this.process_input(input, encode_input);
             for (const [index, ingredient] of this.recipe.entries()) {
                 where = `#${index + 1}. ${ingredient.operation}`;
                 processing_index.set(index + 1);
@@ -144,7 +153,10 @@ export class Recipe {
         recipe.set(the_recipe);
     }
 
-    static async process_input(input: string) {
+    static async process_input(input: string, encode: boolean) {
+        if (encode) {
+            return [[await Utils.parse_atom(`__base64__("${btoa(input)}")`)]];
+        }
         const res = [];
         for (const part of input.split(consts.SYMBOLS.MODELS_SEPARATOR)) {
             const atoms = await Utils.parse_answer_set(part);

@@ -1,4 +1,5 @@
 import { expect } from '@playwright/test';
+import {getByTestId} from "@testing-library/svelte";
 
 export class TestRecipe {
 	private readonly page;
@@ -17,8 +18,11 @@ export class TestRecipe {
 		return await this.page.pause();
 	}
 
-	async input(input: string, trim = true) {
+	async input(input: string, trim = true, encode = false) {
 		const the_input = trim ? input.trim() : input;
+		if (encode) {
+			await this.page.getByTestId('InputPanel').getByRole('button', { name: 'Encode' }).click();
+		}
 		await this.page.getByTestId("InputPanel-textarea").getByRole('textbox').fill(the_input);
 		await with_d_test_elements(this.page.getByTestId("InputPanel-textarea"), async () => {
 			await expect(await this.page.getByTestId("InputPanel-textarea").locator('.d-test')).toHaveText(the_input);
@@ -41,8 +45,11 @@ export class TestRecipe {
 		return locator;
 	}
 
-	async output(output: string, trim = true) {
+	async output(output: string, trim = true, decode = false) {
 		const the_output = trim ? output.trim() : output;
+		if (decode) {
+			await this.page.getByTestId('OutputPanel').getByRole('button', { name: 'Decode' }).click();
+		}
 		await with_d_test_elements(this.page.getByTestId("OutputPanel-textarea"), async () => {
 			await expect(await this.page.getByTestId("OutputPanel-textarea").locator('.d-test')).toHaveText(the_output);
 		});
@@ -283,7 +290,7 @@ export async function check_recipe(page, input, expected_output) {
 
 export async function add_ingredient(page, operation) {
 	const operations = await page.getByTestId('Operation').count();
-	await page.getByRole('button', { name: operation, exact: true }).click();
+	await page.getByTestId('OperationsPanel-list').getByRole('button', { name: operation, exact: true }).click();
 	const locator = page.getByTestId('Operation').filter({ hasText: `#${operations + 1}.` });
 	await expect(locator.getByText(`#${operations + 1}. ${operation}`)).toBeVisible();
 	return locator;

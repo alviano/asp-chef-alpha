@@ -13,21 +13,23 @@
     import {v4 as uuidv4} from 'uuid';
 
     let input_value = '';
+    let encode_input = false;
     let output_value = [];
+    let decode_output = false;
 
     let process_timeout = null;
     let processing = false;
 
-    async function process(input_value) {
-        output_value = await Recipe.process(input_value);
+    async function process(input_value, encode_input, decode_output) {
+        output_value = await Recipe.process(input_value, encode_input);
         if (recipe_unsubscribe !== null) {
-            location.hash = Recipe.serialize(input_value);
+            location.hash = Recipe.serialize(input_value, encode_input, decode_output);
         }
     }
 
     const lock = new AsyncLock();
     let delayed_process_counter = 0;
-    async function delayed_process(input_value) {
+    async function delayed_process(input_value, encode_input, decode_output, pause_baking) {
         let id;
         lock.acquire('process', async () => {
             delayed_process_counter++;
@@ -36,7 +38,7 @@
         if (process_timeout !== null) {
             clearTimeout(process_timeout);
         }
-        if ($pause_baking) {
+        if (pause_baking) {
             await Utils.clingo_terminate();
             return;
         }
@@ -55,14 +57,14 @@
                 return;
             }
             processing = true;
-            await process(input_value);
+            await process(input_value, encode_input, decode_output);
             await Utils.clingo_terminate();
             process_timeout = null;
             processing = false;
         }, 100);
     }
 
-    $: delayed_process(input_value, $pause_baking);
+    $: delayed_process(input_value, encode_input, decode_output, $pause_baking);
 
     let recipe_unsubscribe = null;
     let input_panel_div;
@@ -75,13 +77,15 @@
 
     onMount(() => {
         if (location.hash.length > 1) {
-            const input = Recipe.deserialize(location.hash.slice(1));
-            if (input !== null) {
-                input_value = input;
+            const data = Recipe.deserialize(location.hash.slice(1));
+            if (data !== null) {
+                input_value = data.input;
+                encode_input = data.encode_input;
+                decode_output = data.decode_output;
             }
         }
         recipe_unsubscribe = recipe.subscribe(() => {
-            delayed_process(input_value);
+            delayed_process(input_value, encode_input, decode_output, $pause_baking);
         });
         input_panel_div.style.height = `${input_panel_div.offsetHeight - progress_panel_div.offsetHeight / 2}px`;
         output_panel_div.style.height = `${output_panel_div.offsetHeight - progress_panel_div.offsetHeight / 2}px`;
@@ -119,7 +123,7 @@
     {#if !recipe_fullscreen}
         <Col class="p-0 vh-100" style="overflow: hidden;">
             <div bind:this={input_panel_div} style="height: 50vh; overflow-x: hidden; overflow-y: scroll;">
-                <InputPanel bind:value={input_value} />
+                <InputPanel bind:value={input_value} bind:encode={encode_input} />
             </div>
             <div bind:this={progress_panel_div}>
                 <Progress class="mb-0" multi style="font-family: monospace; font-weight: bold;">
@@ -132,7 +136,7 @@
                 </Progress>
             </div>
             <div bind:this={output_panel_div} style="height: 50vh; overflow-x: hidden; overflow-y: scroll;">
-                <OutputPanel value={output_value} on:change_input={(event) => input_value = event.detail} />
+                <OutputPanel value={output_value} bind:decode={decode_output} on:change_input={(event) => input_value = event.detail} />
             </div>
         </Col>
     {/if}
