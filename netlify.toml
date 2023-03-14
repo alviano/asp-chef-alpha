@@ -3,6 +3,7 @@
   publish = "build/"
 
 [context.production.environment]
+  VITE_DEBUG = 'false'
   VITE_DOMAIN = 'https://dumbo.alviano.net'
   VITE_PURIFY_LOG_ERRORS = 'false'
 

@@ -65,6 +65,10 @@ export class Recipe {
         return json.input.join(consts.SYMBOLS.MODELS_SEPARATOR);
     }
 
+    static get number_of_operations() {
+        return this.operation_types.size;
+    }
+
     static get_input_at_index(index: number) {
         return this.input_at_index[index];
     }
