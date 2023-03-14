@@ -258,6 +258,14 @@ export class TestRecipe {
 			await ingredient.getByTestId('ParseCSV-output-predicate').fill(output_predicate);
 		});
 	}
+
+	async table(input) {
+		const rows: Array<string> = input.split('\n');
+		return this.ingredient('Table', async ingredient => {
+			// table head has a row
+			await expect(await ingredient.getByTestId("Table").locator('tr')).toHaveCount(rows.length + 1);
+		});
+	}
 }
 
 export async function visit_homepage_and_accept_privacy_policy(page) {
