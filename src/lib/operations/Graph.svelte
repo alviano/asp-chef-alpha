@@ -102,6 +102,8 @@
             defaults.node_font = terms[0].string;
         } else if (property === 'node_opacity') {
             defaults.node_opacity = terms[0].number / 100;
+        } else if (property === 'node_shape') {
+            defaults.node_shape = terms.length > 1 ? terms.map(term => term.number) : terms[0].string || terms[0].str;
         } else if (property === 'link_color') {
             defaults.link_color = terms[0].string || terms[0].str;
         } else if (property === 'link_text_color') {
@@ -195,6 +197,7 @@
             Default properties:
             node_radius (also defining the capture area for dragging nodes),
             node_color,
+            node_shape,
             node_text_color,
             node_font,
             node_opacity,

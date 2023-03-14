@@ -52,4 +52,12 @@ EMPTY MODEL
 EMPTY MODEL
 		`);
 	});
+
+
+	test("multiple selections are unlinked", async () => {
+		await recipe.input('a. b.');
+		await recipe.select_predicates('a');
+		await recipe.select_predicates('a');
+		await recipe.output('a.');
+	});
 });

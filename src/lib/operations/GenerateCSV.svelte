@@ -30,7 +30,6 @@
             the_aoa[key[0] - 1][key[1] - 1] = value;
         });
 
-        console.log(the_aoa)
         const workbook = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(workbook, XLSX.utils.aoa_to_sheet(the_aoa));
 

@@ -136,7 +136,7 @@ export class Recipe {
         const ingredient = {
             id: uuidv4(),
             operation,
-            options,
+            options: JSON.parse(JSON.stringify(options)),
         };
         const the_recipe = this.recipe;
         if (index === undefined) {

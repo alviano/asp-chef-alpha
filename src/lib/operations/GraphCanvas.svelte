@@ -38,6 +38,7 @@
         node_text_color: "black",
         node_font: "8px monospace",
         node_opacity:  1,
+        node_shape: "circle",
         link_color:  "darkgrey",
         link_text_color:  "white",
         link_opacity:  1,
@@ -139,7 +140,6 @@
         context.translate(link.source.x + source_radius * Math.cos(angle), link.source.y + source_radius * Math.sin(angle))
         context.rotate(angle);
         if (link.search_result) {
-            console.log(link.search_result)
             context.lineWidth = 1.5;
             context.strokeStyle = search_text_color;
             context.strokeText(Utils.abbreviate(link.search_result.replaceAll(consts.SYMBOLS.SEARCH_FAIL, ' '), Math.floor(length / width4px) - 2), width4px, 0);
@@ -153,15 +153,16 @@
         context.globalAlpha = node.opacity || defaults.node_opacity;
         context.beginPath();
         const radius = node.radius || defaults.node_radius;
-        if (node.shape === undefined || node.shape === 'circle') {
+        const shape = node.shape || defaults.node_shape;
+        if (shape === 'circle') {
             context.arc(node.x, node.y, radius, 0, 2 * Math.PI);
-        } else if (node.shape === 'square') {
+        } else if (shape === 'square') {
             context.moveTo(node.x - radius, node.y - radius);
             context.lineTo(node.x + radius, node.y - radius);
             context.lineTo(node.x + radius, node.y + radius);
             context.lineTo(node.x - radius, node.y + radius);
             context.closePath();
-        } else if (Array.isArray(node.shape)) {
+        } else if (Array.isArray(shape)) {
             const coords = node.shape;
             context.moveTo(node.x + coords[0], node.y + coords[1]);
             for (let i = 2; i < coords.length; i += 2) {

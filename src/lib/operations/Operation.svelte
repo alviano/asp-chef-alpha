@@ -22,7 +22,7 @@
     export let keybinding;
 
     if (add_to_recipe) {
-        Recipe.add_operation(operation, {...options}, index);
+        Recipe.add_operation(operation, options, index);
     }
 </script>
 
