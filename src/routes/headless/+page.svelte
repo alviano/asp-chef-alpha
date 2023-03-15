@@ -3,6 +3,7 @@
     import {Recipe} from "$lib/recipe";
     import AspChef from "$lib/AspChef.svelte";
     import {consts} from "$lib/consts";
+    import {Base64} from "js-base64";
 
     async function clingo_to_be_loaded() {
         while (window.clingo === undefined) {
