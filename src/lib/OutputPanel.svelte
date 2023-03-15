@@ -5,6 +5,7 @@
     import {createEventDispatcher} from "svelte";
     import {Utils} from "$lib/utils";
     import {consts} from "$lib/consts";
+    import {Base64} from "js-base64";
 
     const dispatch = createEventDispatcher();
 
@@ -12,7 +13,7 @@
     export let decode = false;
 
     $: text_value = !decode ? Utils.flatten_output(value) : value.map(model =>
-        model.map(atom => atom.predicate !== '__base64__' ? atom.str : atob(atom.terms[0].str.slice(1, -1)))
+        model.map(atom => atom.predicate !== '__base64__' ? atom.str : Base64.decode(atom.terms[0].str.slice(1, -1)))
             .join('\n')).join(consts.SYMBOLS.MODELS_SEPARATOR);
 </script>
 

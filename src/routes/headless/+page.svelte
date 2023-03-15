@@ -15,10 +15,9 @@
         if (location.hash.length > 1) {
             const data = Recipe.deserialize(location.hash.slice(1));
             const output = await Recipe.process(data.input || '', data.encode_input);
-            const the_output = !data.decode_output ? Utils.flatten_output(output) : output.map(model =>
-                    model.map(atom => atom.predicate !== '__base64__' ? atom.str : atob(atom.terms[0].str.slice(1, -1))).join('\n'))
+            return !data.decode_output ? Utils.flatten_output(output) : output.map(model =>
+                model.map(atom => atom.predicate !== '__base64__' ? atom.str : Base64.decode(atom.terms[0].str.slice(1, -1))).join('\n'))
                 .join(consts.SYMBOLS.MODELS_SEPARATOR);
-            return the_output;
         }
     }
 </script>

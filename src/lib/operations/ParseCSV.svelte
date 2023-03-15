@@ -2,6 +2,7 @@
     import {Recipe} from "$lib/recipe";
     import {Utils} from "$lib/utils";
     import XLSX from "xlsx";
+    import {Base64} from "js-base64";
 
     const operation = "Parse CSV";
     const default_extra_options = {
@@ -39,7 +40,7 @@
             try {
                 const program = part.map(atom => {
                      if (atom.predicate === options.decode_predicate) {
-                        const content = atob(atom.terms[0].str.slice(1, -1));
+                        const content = Base64.decode(atom.terms[0].str.slice(1, -1));
                         return csv2facts(content, options) + (options.echo_encoded_content ? '\n' + mapper(atom) : '');
                     }
                     return mapper(atom);

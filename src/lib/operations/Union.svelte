@@ -1,6 +1,7 @@
 <script context="module">
     import {Recipe} from "$lib/recipe";
     import {Utils} from "$lib/utils";
+    import {Base64} from "js-base64";
 
     const operation = "Union";
     const default_extra_options = {
@@ -17,7 +18,7 @@
             try {
                 const program = part.map(atom => {
                     if (atom.predicate === options.decode_predicate) {
-                        return atob(atom.terms[0].str.slice(1, -1)) + (options.echo_encoded_content ? '\n' + mapper(atom) : '');
+                        return Base64.decode(atom.terms[0].str.slice(1, -1)) + (options.echo_encoded_content ? '\n' + mapper(atom) : '');
                     }
                     return mapper(atom);
                 }).join('\n') + options.rules;

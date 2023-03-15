@@ -1,6 +1,7 @@
 <script context="module">
     import {Recipe} from "$lib/recipe";
     import {Utils} from "$lib/utils";
+    import {Base64} from "js-base64";
 
     const operation = "Symmetric Closure";
     const default_extra_options = {
@@ -16,7 +17,7 @@
             listeners.get(id)(input);
         } catch (error) { /* component not mounted, possibly because of headless mode */ }
 
-        const content = btoa(`
+        const content = Base64.encode(`
 ${options.closure_predicate}(X,Y) :- ${options.input_predicate}(X,Y).
 ${options.closure_predicate}(Y,X) :- ${options.input_predicate}(X,Y).
                 `.trim());

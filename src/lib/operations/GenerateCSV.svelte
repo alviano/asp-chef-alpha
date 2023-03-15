@@ -2,6 +2,7 @@
     import {Recipe} from "$lib/recipe";
     import {Utils} from "$lib/utils";
     import XLSX from "xlsx";
+    import {Base64} from "js-base64";
 
     const operation = "Generate CSV";
     const default_extra_options = {
@@ -56,7 +57,7 @@
                         return options.echo_input ? mapper(atom) : '';
                     }
                     return mapper(atom);
-                }).join('\n') + '\n' + `${options.encode_predicate}("${btoa(facts2csv(aoa, options))}").`;
+                }).join('\n') + '\n' + `${options.encode_predicate}("${Base64.encode(facts2csv(aoa, options))}").`;
                 const model = await Utils.search_model(program);
                 res.push(Utils.parse_atoms(model));
             } catch (error) {

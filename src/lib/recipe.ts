@@ -3,6 +3,7 @@ import {Utils} from "$lib/utils";
 import {errors_at_index, processing_index, recipe} from "$lib/stores";
 import {consts} from "$lib/consts";
 import {v4 as uuidv4} from 'uuid';
+import {Base64} from "js-base64";
 
 export class Recipe {
     private static operation_types = new Map();
@@ -62,7 +63,7 @@ export class Recipe {
             throw Error('Cannot deserialize. Incomplete string. Must terminate with a bang!');
         }
         this.last_serialization = serialized_data;
-        const json = JSON.parse(Utils.uncompress(serialized_data.slice(0, -1)));
+        const json = Utils.uncompress(serialized_data.slice(0, -1));
         recipe.set(json.recipe);
         if (!json.encode_input) {
             json.input = json.input.join(consts.SYMBOLS.MODELS_SEPARATOR);
@@ -155,7 +156,7 @@ export class Recipe {
 
     static async process_input(input: string, encode: boolean) {
         if (encode) {
-            return [[await Utils.parse_atom(`__base64__("${btoa(input)}")`)]];
+            return [[await Utils.parse_atom(`__base64__("${Base64.encode(input)}")`)]];
         }
         const res = [];
         for (const part of input.split(consts.SYMBOLS.MODELS_SEPARATOR)) {
