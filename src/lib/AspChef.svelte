@@ -118,6 +118,8 @@
     <Col class="p-0 vh-100" style="background-color: lightgray; overflow-x: hidden; overflow-y: scroll;">
         <RecipePanel
                 on:change_input={(event) => input_value = event.detail}
+                bind:show_operations
+                bind:show_io_panel
         />
     </Col>
     {#if show_io_panel}

@@ -54,6 +54,9 @@
     import Unique from "$lib/operations/Unique.svelte";
     import SortModelsCanonically from "$lib/operations/SortModelsCanonically.svelte";
 
+    export let show_operations;
+    export let show_io_panel;
+
     async function copy_to_clipboard() {
         const url = Recipe.as_url();
         await navigator.clipboard.writeText(url);
@@ -115,6 +118,28 @@
                 <ButtonGroup>
                     <Popover title="Remove operation" value="Remove all ingredients from the recipe.">
                         <Button size="sm" color="danger" on:click={() => Recipe.remove_all_operations()}><Icon name="trash" /></Button>
+                    </Popover>
+                </ButtonGroup>
+                <ButtonGroup>
+                    <Popover title="Hide/show Operations panel">
+                        <div slot="value">
+                            <p>Keybinding: <code>L</code></p>
+                        </div>
+                        <Button size="sm"
+                                outline={!show_operations}
+                                on:click={() => show_operations = !show_operations}>
+                            <Icon name="box-arrow-left" />
+                        </Button>
+                    </Popover>
+                    <Popover title="Hide/show I/O panel">
+                        <div slot="value">
+                            <p>Keybinding: <code>R</code></p>
+                        </div>
+                        <Button size="sm"
+                                outline={!show_io_panel}
+                                on:click={() => show_io_panel = !show_io_panel}>
+                            <Icon name="box-arrow-right" />
+                        </Button>
                     </Popover>
                 </ButtonGroup>
                 <ButtonGroup>
