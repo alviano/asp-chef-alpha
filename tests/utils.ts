@@ -1,5 +1,4 @@
 import { expect } from '@playwright/test';
-import {getByTestId} from "@testing-library/svelte";
 
 export class TestRecipe {
 	private readonly page;
@@ -266,11 +265,29 @@ export class TestRecipe {
 		});
 	}
 
-	async table(input) {
-		const rows: Array<string> = input.split('\n');
+	async table({
+		input_one_atom_per_line = undefined,
+		search = [],
+		order = [],
+				} = {}) {
+		const models: Array<Array<string>> = input_one_atom_per_line !== undefined ?
+			input_one_atom_per_line.split('§').map(model => model.trim().split('\n')) : undefined;
 		return this.ingredient('Table', async ingredient => {
-			// table head has a row
-			await expect(await ingredient.getByTestId("Table").locator('tr')).toHaveCount(rows.length + 1);
+			if (models !== undefined) {
+				// expecting # of models + # of atoms rows
+				const number_of_rows = models.reduce((count, model) => count + model.length, models.length);
+				await expect(await ingredient.getByTestId("Table").locator('tr')).toHaveCount(number_of_rows);
+			}
+			for (const search_pair of search) {
+				expect(models !== undefined);
+				await ingredient.getByTestId('Table-search').fill(search_pair.string);
+				await expect(await ingredient.getByTestId("Table").locator('tr')).toHaveCount(search_pair.expected + models.length);
+			}
+			for (const order_pair of order) {
+				const id = order_pair.desc ? `Table-sort-desc-${order_pair.index}`
+					: `Table-sort-asc-${order_pair.index}`;
+				await ingredient.getByTestId(id).click();
+			}
 		});
 	}
 }
