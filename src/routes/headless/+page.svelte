@@ -30,7 +30,7 @@
 {#await clingo_to_be_loaded().then(process)}
     Processing...
 {:then output}
-    <pre>{output}</pre>
+    <pre data-testid="Headless-output">{output}</pre>
 {/await}
 
 <!-- keep <AspChef> just to load operations -->

@@ -52,6 +52,9 @@ export class TestRecipe {
 		await with_d_test_elements(this.page.getByTestId("OutputPanel-textarea"), async () => {
 			await expect(await this.page.getByTestId("OutputPanel-textarea").locator('.d-test')).toHaveText(the_output);
 		});
+
+		await this.page.goto('/headless#' + this.page.url().split('#')[1]);
+		await expect(await this.page.getByTestId("Headless-output")).toHaveText(the_output);
 	}
 
 	async output_ingredient(output: string, trim = true) {
