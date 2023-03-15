@@ -39,9 +39,11 @@
         node_font: "8px monospace",
         node_opacity:  1,
         node_shape: "circle",
+        node_undraggable: false,
         link_color:  "darkgrey",
         link_text_color:  "white",
         link_opacity:  1,
+        undirected: false,
     };
     defaults = {...defaults, ...graph.defaults}
 
@@ -120,7 +122,7 @@
         context.fillStyle = context.strokeStyle = link.search_result !== null && search_color !== '' ? search_color : (link.color || defaults.link_color);
         context.beginPath();
         context.moveTo(link.source.x + source_radius * Math.cos(angle), link.source.y + source_radius * Math.sin(angle));
-        if (link.undirected) {
+        if (link.undirected || (link.undirected === undefined && defaults.undirected)) {
             context.lineTo(link.target.x - (target_radius - 1) * Math.cos(angle), link.target.y - (target_radius - 1) * Math.sin(angle));
             context.stroke();
         } else {
@@ -223,6 +225,9 @@
             defaults.node_radius
         );
         if (node) {
+            if (node.undraggable === true || (defaults.node_undraggable === true && node.undraggable === undefined)) {
+                return null;
+            }
             node.x = transform.applyX(node.x);
             node.y = transform.applyY(node.y);
         }

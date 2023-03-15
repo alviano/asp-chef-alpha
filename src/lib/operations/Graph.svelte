@@ -53,6 +53,10 @@
                 node.fx = terms[0].number;
             } else if (property === 'fy') {
                 node.fy = terms[0].number;
+            } else if (property === 'draggable') {
+                node.undraggable = false;
+            } else if (property === 'undraggable') {
+                node.undraggable = true;
             } else {
                 Utils.snackbar('Unknown node property: ' + property);
             }
@@ -79,6 +83,8 @@
                 link.color = terms[0].string || terms[0].str;
             } else if (property === 'undirected') {
                 link.undirected = true;
+            } else if (property === 'directed') {
+                link.undirected = false;
             } else if (property === 'text_color') {
                 link.text_color = terms[0].string || terms[0].str;
             } else if (property === 'opacity') {
@@ -104,12 +110,20 @@
             defaults.node_opacity = terms[0].number / 100;
         } else if (property === 'node_shape') {
             defaults.node_shape = terms.length > 1 ? terms.map(term => term.number) : terms[0].string || terms[0].str;
+        } else if (property === 'node_draggable') {
+            defaults.node_undraggable = undefined;
+        } else if (property === 'node_undraggable') {
+            defaults.node_undraggable = true;
         } else if (property === 'link_color') {
             defaults.link_color = terms[0].string || terms[0].str;
         } else if (property === 'link_text_color') {
             defaults.link_text_color = terms[0].string;
         } else if (property === 'link_opacity') {
             defaults.link_opacity = terms[0].number / 100;
+        } else if (property === 'undirected') {
+            defaults.undirected = true;
+        } else if (property === 'directed') {
+            defaults.undirected = undefined;
         } else {
             Utils.snackbar('Unknown default property: ' + property);
         }
@@ -188,22 +202,24 @@
             The other terms have the form <code>property(VALUE)</code>.
         </p>
         <p>
-            Node properties: label, color, font, fx, fy, opacity, radius, shape, text_color.
+            Node properties: label, color, draggable/undraggable, font, fx, fy, opacity, radius, shape, text_color.
         </p>
         <p>
-            Link properties: label, color, opacity, undirected, text_color.
+            Link properties: directed/undirected, label, color, opacity, text_color.
         </p>
         <p>
             Default properties:
-            node_radius (also defining the capture area for dragging nodes),
             node_color,
-            node_shape,
-            node_text_color,
+            node_draggable/node_undraggable,
             node_font,
             node_opacity,
+            node_radius (also defining the capture area for dragging nodes),
+            node_shape,
+            node_text_color,
             link_color,
             link_text_color,
-            link_opacity.
+            link_opacity,
+            directed/undirected.
         </p>
         <p>
             Labels can be searched in the graph.
