@@ -85,7 +85,7 @@
     <div class="m-1" style="overflow-y: auto;">
         {#each models as model, model_index}
             <h6 class="text-center">Model #{model_index + 1}</h6>
-            <Table bordered>
+            <Table bordered data-testid="Table">
                 <thead>
                     <tr>
                         <th>
