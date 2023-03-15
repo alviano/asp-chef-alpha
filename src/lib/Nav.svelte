@@ -1,6 +1,5 @@
 <script>
   import { Collapse, Icon, Nav, Navbar, NavbarBrand, NavItem, NavLink, NavbarToggler } from 'sveltestrap/src';
-  import {Utils} from "$lib/utils";
   import {Popover} from "dumbo-svelte";
 
   let isOpen = false;
@@ -28,8 +27,8 @@
             Proudly brought to you by Mario Alviano, Davide Cirimele and Luis Angel Rodriguez Reiners.
           </p>
           <p>
-            Hide/show the Operations panel with the keybinding <code>O</code>.
-            Enter/leave the fully immersive view on the Recipe panel with the keybinding <code>R</code>.
+            Hide/show the Operations panel (on the left) with the keybinding <code>L</code>.
+            Hide/show the I/O panel (on the right) with the keybinding <code>R</code>.
           </p>
           <p>
             More details on the GitHub repository <code>https://github.com/alviano/asp-chef</code> (click to open).

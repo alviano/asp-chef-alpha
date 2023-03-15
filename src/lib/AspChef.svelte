@@ -71,7 +71,7 @@
     let output_panel_div;
     let progress_panel_div;
     let show_operations = true;
-    let recipe_fullscreen = false;
+    let show_io_panel = true;
 
     const keydown_uuid = uuidv4();
 
@@ -91,13 +91,13 @@
         output_panel_div.style.height = `${output_panel_div.offsetHeight - progress_panel_div.offsetHeight / 2}px`;
 
         $keydown.push([keydown_uuid, (event) => {
-            if (event.uKey === 'O') {
+            if (event.uKey === 'L') {
                 show_operations = !show_operations;
                 Utils.snackbar(show_operations ? "Operations panel shown..." : "Operations panel hidden...");
                 return true;
             } else if (event.uKey === 'R') {
-                recipe_fullscreen = !recipe_fullscreen;
-                Utils.snackbar(recipe_fullscreen ? "Entering fully immersive mode..." : "Leaving fully immersive mode...");
+                show_io_panel = !show_io_panel;
+                Utils.snackbar(show_io_panel ? "I/O panel shown..." : "I/O panel hidden...");
                 return true;
             }
         }]);
@@ -110,7 +110,7 @@
 </script>
 
 <Row class="vw-100 vh-100" style="overflow: hidden;">
-    {#if show_operations && !recipe_fullscreen}
+    {#if show_operations}
         <Col class="p-0 vh-100" style="max-width: 20em; overflow-x: hidden; overflow-y: scroll;">
             <Operations />
         </Col>
@@ -120,8 +120,8 @@
                 on:change_input={(event) => input_value = event.detail}
         />
     </Col>
-    {#if !recipe_fullscreen}
-        <Col class="p-0 vh-100" style="overflow: hidden;">
+    {#if show_io_panel}
+        <Col class="p-0 vh-100" style="max-width: 40em; overflow: hidden;">
             <div bind:this={input_panel_div} style="height: 50vh; overflow-x: hidden; overflow-y: scroll;">
                 <InputPanel bind:value={input_value} bind:encode={encode_input} />
             </div>
