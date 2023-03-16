@@ -1,4 +1,4 @@
-import { expect } from '@playwright/test';
+import {expect} from '@playwright/test';
 
 export class TestRecipe {
 	private readonly page;
@@ -48,6 +48,7 @@ export class TestRecipe {
 		const the_output = trim ? output.trim() : output;
 		if (decode) {
 			await this.page.getByTestId('OutputPanel').getByRole('button', { name: 'Decode' }).click();
+			await this.page.waitForNavigation('.*', { waitUntil: 'networkidle' });
 		}
 		await with_d_test_elements(this.page.getByTestId("OutputPanel-textarea"), async () => {
 			await expect(await this.page.getByTestId("OutputPanel-textarea").locator('.d-test')).toHaveText(the_output);
