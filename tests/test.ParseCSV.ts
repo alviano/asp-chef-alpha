@@ -51,4 +51,11 @@ cell(2,2,2).
 		`);
 	});
 
+	test("non-integer numbers are mapped to functions", async () => {
+		await check(recipe, `
+1.2
+		`, 'SPACE', 'cell',`
+cell(1,1,real("1.2")).
+		`);
+	});
 });

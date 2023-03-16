@@ -28,7 +28,9 @@
         const data = csv.Sheets[csv.SheetNames[0]]["!data"];
         return data.map((row_data, row) => {
             return row_data.map((value, col) => {
-                return `${options.output_predicate}(${row + 1},${col + 1},${value.t === 'n' ? value.v : '"' + value.v + '"'}).`;
+                return `${options.output_predicate}(${row + 1},${col + 1},${value.t === 'n' ?
+                    (Number.isInteger(value.v) ? value.v : `real("${value.v}")`) :
+                    '"' + value.v + '"'}).`;
             }).join('\n');
         }).join('\n');
     }
