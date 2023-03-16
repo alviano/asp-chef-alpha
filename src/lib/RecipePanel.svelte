@@ -181,7 +181,7 @@
         </CardTitle>
     </CardHeader>
     <CardBody class="p-0" style="background-color: lightgray;">
-        <section class="pb-5" use:dndzone="{{items, flipDurationMs}}" on:consider="{handleDndConsider}" on:finalize="{handleDndFinalize}">
+        <section style="padding-bottom: 20em;" use:dndzone="{{items, flipDurationMs}}" on:consider="{handleDndConsider}" on:finalize="{handleDndFinalize}">
             {#each items as item, index (item.id)}
                 <div animate:flip="{{duration: flipDurationMs}}" class="mt-1">
                     {#if item.operation === 'Search Models'}
