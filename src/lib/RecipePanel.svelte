@@ -23,7 +23,6 @@
     import Nop from "$lib/operations/Nop.svelte";
     import Filter from "$lib/operations/Filter.svelte";
     import SelectPredicates from "$lib/operations/SelectPredicates.svelte";
-    import Undo from "$lib/operations/Undo.svelte";
     import Encode from "$lib/operations/Encode.svelte";
     import {onDestroy, onMount} from "svelte";
     import {show_ingredient_details} from "$lib/stores";
@@ -53,6 +52,7 @@
     import SortCanonical from "$lib/operations/SortCanonical.svelte";
     import Unique from "$lib/operations/Unique.svelte";
     import SortModelsCanonically from "$lib/operations/SortModelsCanonically.svelte";
+    import RecipeOperation from "$lib/operations/Recipe.svelte";
 
     export let show_operations;
     export let show_io_panel;
@@ -163,7 +163,9 @@
                         <Button size="sm"
                                 color={$pause_baking ? "danger" : "secondary"}
                                 outline={!$pause_baking}
-                                on:click={() => toggle_pause_baking()}>
+                                on:click={() => toggle_pause_baking()}
+                                data-testid="RecipePanel-pause-baking"
+                        >
                             <Icon name="pause-fill" />
                         </Button>
                     </Popover>
@@ -222,8 +224,6 @@
                         <SelectPredicates id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
                     {:else if item.operation === 'Select Model'}
                         <SelectModel id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
-                    {:else if item.operation === 'Undo'}
-                        <Undo id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
                     {:else if item.operation === 'Encode'}
                         <Encode id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
                     {:else if item.operation === 'Symmetric Closure'}
@@ -270,6 +270,8 @@
                         <SortModelsCanonically id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
                     {:else if item.operation === 'Unique'}
                         <Unique id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
+                    {:else if item.operation === 'Recipe'}
+                        <RecipeOperation id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
                     {:else}
                         <Nop id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
                         <Alert color="danger">

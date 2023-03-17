@@ -13,8 +13,16 @@ export class TestRecipe {
 		return res;
 	}
 
+	async delay(time: number) {
+		return new Promise(resolve => setTimeout(resolve, time));
+	}
+
 	async pause() {
 		return await this.page.pause();
+	}
+
+	async click_pause_baking() {
+		await this.page.getByTestId("RecipePanel-pause-baking").click();
 	}
 
 	async input(input: string, trim = true, encode = false) {
@@ -215,12 +223,6 @@ export class TestRecipe {
 		});
 	}
 
-	async undo(steps) {
-		return this.ingredient('Undo', async ingredient => {
-			await ingredient.getByTestId('Undo-steps').fill(`${steps}`);
-		});
-	}
-
 	async symmetric_closure(input_predicate, closure_predicate, encode_predicate) {
 		return this.ingredient('Symmetric Closure', async ingredient => {
 			await ingredient.getByTestId('SymmetricClosure-input-predicate').fill(input_predicate);
@@ -291,6 +293,16 @@ export class TestRecipe {
 				const id = order_pair.desc ? `Table-sort-desc-${order_pair.index}`
 					: `Table-sort-asc-${order_pair.index}`;
 				await ingredient.getByTestId(id).click();
+			}
+		});
+	}
+
+	async recipe({
+		url = '',
+				 } = {}) {
+		return this.ingredient('Recipe', async ingredient => {
+			if (url) {
+				await ingredient.getByTestId('Recipe-url').fill(url);
 			}
 		});
 	}

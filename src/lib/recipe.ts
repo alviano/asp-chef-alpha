@@ -75,8 +75,27 @@ export class Recipe {
         };
     }
 
+    static serialize_ingredients(start: number, how_many = 0) {
+        const json = {
+            recipe: this.recipe.slice(start, how_many === 0 ? undefined : start + how_many),
+        };
+        return Utils.compress(json) + '!';
+    }
+
+    static extract_recipe_from_serialization(serialized_data: string) {
+        if (!serialized_data.endsWith('!')) {
+            throw Error('Cannot deserialize. Incomplete string. Must terminate with a bang!');
+        }
+        const json = Utils.uncompress(serialized_data.slice(0, -1));
+        return json.recipe;
+    }
+
     static get number_of_operations() {
         return this.operation_types.size;
+    }
+
+    static get number_of_ingredients() {
+        return this.recipe.length;
     }
 
     static get_input_at_index(index: number) {
@@ -186,6 +205,10 @@ export class Recipe {
 
     static remove_operation(index: number) {
         recipe.set(this.recipe.filter((value, the_index) => index !== the_index));
+    }
+
+    static remove_operations(index: number, how_many = 0) {
+        recipe.set(this.recipe.filter((value, ingredient_index) => ingredient_index < index  || (how_many !== 0 && ingredient_index >= index + how_many)));
     }
 
     static duplicate_operation(index: number) {
