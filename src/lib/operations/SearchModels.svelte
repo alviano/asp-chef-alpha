@@ -23,7 +23,7 @@
             try {
                 const program = part.map(atom => {
                     if (atom.predicate === options.decode_predicate) {
-                        return Base64.decode(atom.terms[0].str.slice(1, -1)) + (options.echo_encoded_content ? '\n' + atom.str + '.' : '');
+                        return Base64.decode(atom.terms[0].string) + (options.echo_encoded_content ? '\n' + atom.str + '.' : '');
                     }
                     return mapper(atom);
                 }).join('\n') + options.rules;

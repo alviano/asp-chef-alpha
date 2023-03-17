@@ -13,7 +13,7 @@
     export let decode = false;
 
     $: text_value = !decode ? Utils.flatten_output(value) : value.map(model =>
-        model.map(atom => atom.predicate !== '__base64__' ? atom.str + '.' : Base64.decode(atom.terms[0].str.slice(1, -1)))
+        model.map(atom => atom.predicate !== '__base64__' ? atom.str + '.' : Base64.decode(atom.terms[0].string))
             .join('\n')).join(consts.SYMBOLS.MODELS_SEPARATOR);
 </script>
 

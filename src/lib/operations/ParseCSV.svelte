@@ -42,7 +42,7 @@
             try {
                 const program = part.map(atom => {
                      if (atom.predicate === options.decode_predicate) {
-                        const content = Base64.decode(atom.terms[0].str.slice(1, -1));
+                        const content = Base64.decode(atom.terms[0].string);
                         return csv2facts(content, options) + (options.echo_encoded_content ? '\n' + mapper(atom) : '');
                     }
                     return mapper(atom);
