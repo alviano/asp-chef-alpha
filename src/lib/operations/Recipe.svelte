@@ -40,10 +40,11 @@
 </script>
 
 <script>
-    import {Button, Input, InputGroup, InputGroupText} from "sveltestrap";
+    import {Button, Icon, Input, InputGroup, InputGroupText} from "sveltestrap";
     import Operation from "$lib/operations/Operation.svelte";
     import {onDestroy, onMount} from "svelte";
     import {Popover} from "dumbo-svelte";
+    import {Utils} from "$lib/utils";
 
     export let id;
     export let options;
@@ -69,6 +70,11 @@
         options.url = `${consts.DOMAIN}/#${Recipe.serialize_ingredients(index + 1, number)}`;
         edit();
         Recipe.remove_operations(index + 1, number);
+    }
+
+    async function copy_to_clipboard(url) {
+        await navigator.clipboard.writeText(url);
+        Utils.snackbar("URL ready to be pasted!");
     }
 
     onMount(() => {
@@ -114,8 +120,11 @@
                title="Number of ingredients below to implode (0 for all)"
                data-testid="Recipe-number-of-ingredients-to-implode"
         />
+        <InputGroupText class="me-3">
+            from #{index + 2} to #{number_of_ingredients_to_implode ? index + 1 + number_of_ingredients_to_implode : 'end'}
+        </InputGroupText>
         <Button on:click={explode}>Explode</Button>
-        <InputGroupText>
+        <InputGroupText class="me-3">
             <Popover title="Ingredients in the Recipe">
                 <div slot="value">
                     {#each ingredients as ingredient, index}
@@ -135,6 +144,9 @@
         </InputGroupText>
         <Button href="{consts.DOMAIN + '#' + options.url.split('#')[1]}" target="_blank">
             Open in new tab
+        </Button>
+        <Button size="sm" title="Copy to clipboard" on:click={() => copy_to_clipboard(consts.DOMAIN + '#' + options.url.split('#')[1])}>
+            <Icon name="clipboard-plus" />
         </Button>
     </InputGroup>
 </Operation>

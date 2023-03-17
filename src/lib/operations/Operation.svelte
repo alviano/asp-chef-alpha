@@ -27,7 +27,8 @@
 </script>
 
 {#if id !== undefined}
-    <Card style="border-top: 3px solid black;" data-testid="Operation">
+    <Card style="border-top: 3px solid black; {options.stop ? 'border-bottom: 3px solid red;' : ''} {options.apply ? '' : 'border-left: 3px dashed darkgray; border-right: 3px dashed darkgray;'}"
+          data-testid="Operation">
         <IngredientHeader {id} {operation} {index} {options} />
         {#if $show_ingredient_details && options.show}
         <CardBody class="p-0" style="cursor: auto;">
