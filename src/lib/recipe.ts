@@ -8,7 +8,8 @@ import {Base64} from "js-base64";
 export class Recipe {
     private static operation_types = new Map();
     private static last_serialization = null;
-    private static input_at_index = [];
+    private static cached_output = [];
+    private static aborted = false;
 
     private static get recipe() {
         return get(recipe);
@@ -98,10 +99,6 @@ export class Recipe {
         return this.recipe.length;
     }
 
-    static get_input_at_index(index: number) {
-        return this.input_at_index[index];
-    }
-
     static set_errors_at_index(index: number, errors: string, result: object[] = null) {
         const the_errors = this.errors_at_index;
         while (the_errors.length < index) {
@@ -114,20 +111,37 @@ export class Recipe {
         }
     }
 
+    static async abort() {
+        this.aborted = true;
+        await Utils.clingo_reject();
+    }
+
+    static invalidate_cached_output(index: number) {
+        while (index < this.cached_output.length) {
+            this.cached_output[index++] = undefined;
+        }
+    }
+
     static async process(input: string, encode_input: boolean): Promise<object[][]> {
+        this.aborted = false;
         Utils.reset_clingo_options();
-        this.input_at_index.length = 0;
         let where = 'Input';
         processing_index.set(0);
         try {
             let result = await this.process_input(input, encode_input);
             for (const [index, ingredient] of this.recipe.entries()) {
+                if (this.aborted) {
+                    break;
+                }
                 where = `#${index + 1}. ${ingredient.operation}`;
-                processing_index.set(index + 1);
-                this.set_errors_at_index(index, '');
-                this.input_at_index.push(result);
-                if (ingredient.options.apply) {
-                    result = await Recipe.apply_operation_type(index, ingredient, result);
+                processing_index.set(index);
+                if (this.cached_output[index] !== undefined) {
+                    result = this.cached_output[index];
+                } else {
+                    this.cached_output[index + 1] = undefined;
+                    this.set_errors_at_index(index, '');
+                    this.cached_output[index] = result = ingredient.options.apply ?
+                        await Recipe.apply_operation_type(index, ingredient, result) : result;
                 }
                 if (ingredient.options.stop) {
                     break;
@@ -159,6 +173,7 @@ export class Recipe {
             options: JSON.parse(JSON.stringify(options)),
         };
         const the_recipe = this.recipe;
+        this.invalidate_cached_output(index || the_recipe.length);
         if (index === undefined) {
             the_recipe.push(ingredient);
         } else {
@@ -168,6 +183,7 @@ export class Recipe {
     }
 
     static edit_operation(index: number, options: object) {
+        this.invalidate_cached_output(index);
         const the_recipe = this.recipe;
         the_recipe[index].options = options;
         recipe.set(the_recipe);
@@ -186,6 +202,7 @@ export class Recipe {
     }
 
     static swap_operations(index_1: number, index_2: number) {
+        this.invalidate_cached_output(Math.min(index_1, index_2));
         const the_recipe = this.recipe;
         const tmp = the_recipe[index_1];
         the_recipe[index_1] = the_recipe[index_2];
@@ -200,18 +217,22 @@ export class Recipe {
     }
 
     static remove_all_operations() {
+        this.invalidate_cached_output(0);
         recipe.set([]);
     }
 
     static remove_operation(index: number) {
+        this.invalidate_cached_output(index);
         recipe.set(this.recipe.filter((value, the_index) => index !== the_index));
     }
 
     static remove_operations(index: number, how_many = 0) {
+        this.invalidate_cached_output(index);
         recipe.set(this.recipe.filter((value, ingredient_index) => ingredient_index < index  || (how_many !== 0 && ingredient_index >= index + how_many)));
     }
 
     static duplicate_operation(index: number) {
+        this.invalidate_cached_output(index + 1);
         const the_recipe = this.recipe;
         const copy = JSON.parse(JSON.stringify(the_recipe[index]));
         copy.id = uuidv4();
@@ -220,12 +241,14 @@ export class Recipe {
     }
 
     static toggle_stop_at_operation(index: number) {
+        this.invalidate_cached_output(index);
         const the_recipe = this.recipe;
         the_recipe[index].options.stop = !the_recipe[index].options.stop;
         recipe.set(the_recipe);
     }
 
     static toggle_apply_operation(index: number) {
+        this.invalidate_cached_output(index);
         const the_recipe = this.recipe;
         the_recipe[index].options.apply = !the_recipe[index].options.apply;
         recipe.set(the_recipe);

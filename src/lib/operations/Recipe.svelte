@@ -60,9 +60,9 @@
         Recipe.edit_operation(index, options);
     }
 
-    function explode() {
+    async function explode() {
         for (const [ingredient_index, ingredient] of ingredients.entries()) {
-            Recipe.add_operation(ingredient.operation, ingredient.options, index + ingredient_index + 1);
+            await Recipe.add_operation(ingredient.operation, ingredient.options, index + ingredient_index + 1);
         }
     }
 

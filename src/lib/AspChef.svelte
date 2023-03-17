@@ -49,7 +49,7 @@
             if (count_attempt % 30 === 0) {
                 await Utils.snackbar('Waiting for previous process to terminate...', { position: 'is-bottom-right' });
             }
-            await Utils.clingo_reject();
+            await Recipe.abort();
             await Utils.delay(100);
         }
         process_timeout = setTimeout(async () => {
@@ -64,6 +64,7 @@
         }, 100);
     }
 
+    $: input_value, encode_input, Recipe.invalidate_cached_output(0);
     $: delayed_process(input_value, encode_input, decode_output, $pause_baking);
 
     let recipe_unsubscribe = null;
