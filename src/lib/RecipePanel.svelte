@@ -55,6 +55,7 @@
     import RecipeOperation from "$lib/operations/Recipe.svelte";
     import EncodeInput from "$lib/operations/EncodeInput.svelte";
     import DecodeInput from "$lib/operations/DecodeInput.svelte";
+    import RemoveEmptyModels from "$lib/operations/RemoveEmptyModels.svelte";
 
     export let show_operations;
     export let show_io_panel;
@@ -278,6 +279,8 @@
                         <EncodeInput id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
                     {:else if item.operation === 'Decode Input'}
                         <DecodeInput id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
+                    {:else if item.operation === 'Remove Empty Models'}
+                        <RemoveEmptyModels id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
                     {:else}
                         <Nop id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
                         <Alert color="danger">

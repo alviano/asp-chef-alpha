@@ -223,6 +223,14 @@ export class TestRecipe {
 		});
 	}
 
+	async remove_empty_models(...predicates: string[]) {
+		return this.ingredient('Remove Empty Models', async ingredient => {
+			for (const predicate of predicates) {
+				await ingredient.locator('div.input-group').filter({ hasText: predicate }).click();
+			}
+		});
+	}
+
 	async symmetric_closure(input_predicate, closure_predicate, encode_predicate) {
 		return this.ingredient('Symmetric Closure', async ingredient => {
 			await ingredient.getByTestId('SymmetricClosure-input-predicate').fill(input_predicate);
