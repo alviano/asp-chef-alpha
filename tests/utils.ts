@@ -306,6 +306,34 @@ export class TestRecipe {
 			}
 		});
 	}
+
+	async encode_input({
+		predicate = '__base64__',
+		echo = false,
+				 } = {}) {
+		return this.ingredient('Encode Input', async ingredient => {
+			await ingredient.getByTestId('EncodeInput-predicate').fill(predicate);
+			if (echo) {
+				await ingredient.getByRole('button', { name: 'Echo' }).click();
+			}
+		});
+	}
+
+	async decode_input({
+		predicate = '__base64__',
+		include_others = false,
+		echo = false,
+				 } = {}) {
+		return this.ingredient('Decode Input', async ingredient => {
+			await ingredient.getByTestId('DecodeInput-predicate').fill(predicate);
+			if (include_others) {
+				await ingredient.getByRole('button', { name: 'Include Others' }).click();
+			}
+			if (echo) {
+				await ingredient.getByRole('button', { name: 'Echo' }).click();
+			}
+		});
+	}
 }
 
 export async function visit_homepage_and_accept_privacy_policy(page) {
