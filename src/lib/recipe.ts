@@ -173,10 +173,10 @@ export class Recipe {
             options: JSON.parse(JSON.stringify(options)),
         };
         const the_recipe = this.recipe;
-        this.invalidate_cached_output(index || the_recipe.length);
         if (index === undefined) {
             the_recipe.push(ingredient);
         } else {
+            this.invalidate_cached_output(index);
             the_recipe.splice(index, 0, ingredient);
         }
         recipe.set(the_recipe);

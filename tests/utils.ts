@@ -342,6 +342,15 @@ export class TestRecipe {
 			}
 		});
 	}
+
+	async project_argument({
+		index = 1,
+				 } = {}) {
+		return this.ingredient('Project Argument', async ingredient => {
+			await ingredient.getByTestId('ProjectArgument-index').fill(`${index}`);
+		});
+	}
+
 }
 
 export async function visit_homepage_and_accept_privacy_policy(page) {
