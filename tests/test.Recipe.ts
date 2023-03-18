@@ -2,13 +2,13 @@ import {test} from '@playwright/test';
 import {TestRecipe} from "./utils.js";
 
 async function implode(recipe, ingredient, number) {
-	await recipe.delay(250);
+	await recipe.delay(500);
 	await ingredient.getByTestId('Recipe-number-of-ingredients-to-implode').fill(`${number}`);
 	await ingredient.getByRole('button', {name: 'Implode'}).click();
 }
 
 async function explode(recipe, ingredient) {
-	await recipe.delay(250);
+	await recipe.delay(500);
 	await ingredient.getByRole('button', {name: 'Explode'}).click();
 }
 

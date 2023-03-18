@@ -351,6 +351,13 @@ export class TestRecipe {
 		});
 	}
 
+	async introspection_terms({
+		predicate = '__base64__',
+				 } = {}) {
+		return this.ingredient('Introspection Terms', async ingredient => {
+			await ingredient.getByTestId('IntrospectionTerms-encode-predicate').fill(predicate);
+		});
+	}
 }
 
 export async function visit_homepage_and_accept_privacy_policy(page) {
