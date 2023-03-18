@@ -238,10 +238,10 @@
         if (!currentEvent.active) {
             simulation.alphaTarget(0.3).restart();
         }
-        if (currentEvent.subject.fx && currentEvent.subject._fx === undefined) {
+        if (currentEvent.subject.fx !== undefined && currentEvent.subject._fx === undefined) {
             currentEvent.subject._fx = currentEvent.subject.fx;
         }
-        if (currentEvent.subject.fy && currentEvent.subject._fy === undefined) {
+        if (currentEvent.subject.fy !== undefined && currentEvent.subject._fy === undefined) {
             currentEvent.subject._fy = currentEvent.subject.fy;
         }
         currentEvent.subject.fx = transform.invertX(currentEvent.subject.x);
@@ -260,12 +260,12 @@
         if (currentEvent.subject._fx !== undefined) {
             currentEvent.subject.fx = currentEvent.subject._fx;
         } else {
-            currentEvent.subject.fx = null;
+            currentEvent.subject.fx = undefined;
         }
         if (currentEvent.subject._fy !== undefined) {
             currentEvent.subject.fy = currentEvent.subject._fy;
         } else {
-            currentEvent.subject.fy = null;
+            currentEvent.subject.fy = undefined;
         }
     }
 
