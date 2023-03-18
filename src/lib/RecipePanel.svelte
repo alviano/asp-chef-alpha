@@ -1,7 +1,7 @@
 <script>
     import {flip} from "svelte/animate";
     import {dndzone} from "svelte-dnd-action";
-    import {recipe} from "$lib/stores";
+    import {pause_baking, recipe, show_ingredient_details} from "$lib/stores";
     import {Alert, Button, ButtonGroup, Card, CardBody, CardHeader, CardTitle, Icon} from "sveltestrap";
     import SearchModels from "$lib/operations/SearchModels.svelte";
     import RemoveErrors from "$lib/operations/RemoveErrors.svelte";
@@ -25,10 +25,8 @@
     import SelectPredicates from "$lib/operations/SelectPredicates.svelte";
     import Encode from "$lib/operations/Encode.svelte";
     import {onDestroy, onMount} from "svelte";
-    import {show_ingredient_details} from "$lib/stores";
     import SelectModel from "$lib/operations/SelectModel.svelte";
     import Operations from "$lib/operations/Operations.svelte";
-    import {pause_baking} from "$lib/stores";
     import SymmetricClosure from "$lib/operations/SymmetricClosure.svelte";
     import TransitiveClosure from "$lib/operations/TransitiveClosure.svelte";
     import Lua from "$lib/operations/Lua.svelte";
@@ -78,10 +76,16 @@
 
     let items = [];
     const flipDurationMs = 300;
-    function handleDndConsider(e) {
+    async function handleDndConsider(e) {
         items = e.detail.items;
     }
-    function handleDndFinalize(e) {
+    async function handleDndFinalize(e) {
+        for (let index = 0; index < $recipe.length; index++) {
+            if ($recipe[index] !== e.detail.items[index]) {
+                Recipe.invalidate_cached_output(index);
+                break;
+            }
+        }
         recipe.set(e.detail.items);
     }
 

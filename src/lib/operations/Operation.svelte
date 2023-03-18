@@ -34,10 +34,10 @@
         <CardBody class="p-0" style="cursor: auto;">
             <slot />
             {#if $errors_at_index[index]}
-                <Alert color="danger">
+                <div class="alert-danger p-3" style="color: white">
                     <h5 class="alert-heading">Errors</h5>
                     <pre>{$errors_at_index[index]}</pre>
-                </Alert>
+                </div>
             {/if}
         </CardBody>
         {/if}
