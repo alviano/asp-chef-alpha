@@ -9,8 +9,8 @@
 
     Recipe.register_operation_type(operation, async (input, options, index) => {
         const res = [];
-        for (let index = 0; index < input.length; index++) {
-            const part = input[index];
+        for (let part_index = 0; part_index < input.length; part_index++) {
+            const part = input[part_index];
             try {
                 const models = await Utils.search_models(part.map(atom => `${atom.str}.`).join('\n') + `
 {${options.predicate}'(Index) : ${options.predicate}(Index)} = 1.

@@ -101,9 +101,6 @@ export class Recipe {
 
     static set_errors_at_index(index: number, errors: string, result: object[] = null) {
         const the_errors = this.errors_at_index;
-        while (the_errors.length < index) {
-            the_errors.push('');
-        }
         the_errors[index] = errors;
         errors_at_index.set(the_errors);
         if (result !== null) {
@@ -126,7 +123,7 @@ export class Recipe {
         this.aborted = false;
         Utils.reset_clingo_options();
         let where = 'Input';
-        processing_index.set(0);
+        processing_index.set(-1);
         try {
             let result = await this.process_input(input, encode_input);
             for (const [index, ingredient] of this.recipe.entries()) {
@@ -139,7 +136,7 @@ export class Recipe {
                     result = this.cached_output[index];
                 } else {
                     this.cached_output[index + 1] = undefined;
-                    this.set_errors_at_index(index, '');
+                    this.set_errors_at_index(index, undefined);
                     this.cached_output[index] = result = ingredient.options.apply ?
                         await Recipe.apply_operation_type(index, ingredient, result) : result;
                 }

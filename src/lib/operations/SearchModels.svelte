@@ -26,7 +26,7 @@
                         return Base64.decode(atom.terms[0].string) + (options.echo_encoded_content ? '\n' + atom.str + '.' : '');
                     }
                     return mapper(atom);
-                }).join('\n') + options.rules;
+                }).join('\n') + '\n' + options.rules;
                 const models = await Utils.search_models(program, options.number, options.raises);
                 models.forEach(model => {
                     res.push(Utils.parse_atoms(model));
