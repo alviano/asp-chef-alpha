@@ -279,6 +279,22 @@ export class TestRecipe {
 		});
 	}
 
+	async generate_csv({
+		input_predicate = '__cell__',
+		echo = false,
+		encode_predicate = '__base64__',
+		separator = 'TAB',
+					} = {}) {
+		return this.ingredient('Generate CSV', async ingredient => {
+			await ingredient.getByTestId('GenerateCSV-input-predicate').fill(input_predicate);
+			await ingredient.getByTestId('GenerateCSV-separator').fill(separator);
+			if (echo) {
+				await ingredient.getByRole('button').filter({ hasText: 'Echo' }).click();
+			}
+			await ingredient.getByTestId('GenerateCSV-encode-predicate').fill(encode_predicate);
+		});
+	}
+
 	async table({
 		input_one_atom_per_line = undefined,
 		search = [],

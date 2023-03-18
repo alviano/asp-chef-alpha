@@ -58,4 +58,20 @@ cell(2,2,2).
 cell(1,1,real("1.2")).
 		`);
 	});
+
+	test("empty separator", async () => {
+		await check(recipe, `
+abc
+1234
+		`, '', 'cell',`
+cell(1,1,"a").
+cell(1,2,"b").
+cell(1,3,"c").
+cell(2,1,1).
+cell(2,2,2).
+cell(2,3,3).
+cell(2,4,4).
+		`);
+	});
+
 });

@@ -3,6 +3,7 @@
     import {Utils} from "$lib/utils";
     import XLSX from "xlsx";
     import {Base64} from "js-base64";
+    import {consts} from "$lib/consts";
 
     const operation = "Parse CSV";
     const default_extra_options = {
@@ -18,6 +19,9 @@
             separator = '\t';
         } else if (separator === 'SPACE') {
             separator = ' ';
+        } else if (separator === '') {
+            separator = consts.SYMBOLS.MODELS_SEPARATOR;
+            content = content.split('\n').map(line => line.split('').join(separator)).join('\n');
         }
 
         const csv = XLSX.read(content, {

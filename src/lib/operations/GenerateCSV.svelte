@@ -3,6 +3,7 @@
     import {Utils} from "$lib/utils";
     import XLSX from "xlsx";
     import {Base64} from "js-base64";
+    import {consts} from "$lib/consts";
 
     const operation = "Generate CSV";
     const default_extra_options = {
@@ -18,6 +19,8 @@
             separator = '\t';
         } else if (separator === 'SPACE') {
             separator = ' ';
+        } else if (separator === '') {
+            separator = consts.SYMBOLS.MODELS_SEPARATOR;
         }
 
         const the_aoa = [];
@@ -34,11 +37,12 @@
         const workbook = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(workbook, XLSX.utils.aoa_to_sheet(the_aoa));
 
-        return XLSX.write(workbook, {
+        const res = XLSX.write(workbook, {
             type: 'string',
             bookType: 'csv',
             FS: separator,
         });
+        return separator === consts.SYMBOLS.MODELS_SEPARATOR ? res.replaceAll(separator, '') : res;
     }
 
     Recipe.register_operation_type(operation, async (input, options, index) => {
@@ -99,7 +103,7 @@
                bind:value={options.input_predicate}
                placeholder="input predicate"
                on:input={edit}
-               data-testid="GenerateCSV-input-predciate"
+               data-testid="GenerateCSV-input-predicate"
         />
         <Button outline="{!options.echo_input}" on:click={() => { options.echo_input = !options.echo_input; edit(); }}>Echo</Button>
     </InputGroup>
