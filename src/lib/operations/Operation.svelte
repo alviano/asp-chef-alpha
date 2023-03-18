@@ -27,7 +27,7 @@
 </script>
 
 {#if id !== undefined}
-    <Card style="border-top: 3px solid black; {options.stop ? 'border-bottom: 3px solid red;' : ''} {options.apply ? '' : 'border-left: 3px dashed darkgray; border-right: 3px dashed darkgray;'}"
+    <Card style="border-top: 3px solid black; {options.stop ? 'border-bottom: 3px solid red;' : ''} {options.apply ? '' : 'border-left: 3px dashed red; border-right: 3px dashed red;'}"
           data-testid="Operation">
         <IngredientHeader {id} {operation} {index} {options} />
         {#if $show_ingredient_details && options.show}
