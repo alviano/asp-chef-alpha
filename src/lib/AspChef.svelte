@@ -58,7 +58,6 @@
             }
             processing = true;
             await process(input_value, encode_input, decode_output);
-            await Utils.clingo_terminate();
             process_timeout = null;
             processing = false;
         }, 100);
@@ -128,7 +127,7 @@
             <div bind:this={input_panel_div} style="height: 50vh; overflow-x: hidden; overflow-y: scroll;">
                 <InputPanel bind:value={input_value} bind:encode={encode_input} />
             </div>
-            <div bind:this={progress_panel_div}>
+            <div bind:this={progress_panel_div} data-testid="AspChef-baking-bar">
                 <Progress class="mb-0" multi style="font-family: monospace; font-weight: bold;">
                     <Progress bar animated color="danger" value={process_timeout ? 100 : 0}>
                         <span style="color: white;">Baking...</span>

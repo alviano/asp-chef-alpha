@@ -7,6 +7,7 @@ import {Base64} from "js-base64";
 
 export class Recipe {
     private static operation_types = new Map();
+    private static uncachable_operations_types = new Set();
     private static last_serialization = null;
     private static cached_output = [];
     private static aborted = false;
@@ -32,9 +33,13 @@ export class Recipe {
 
     static register_operation_type(
         operation: string,
-        apply: (input: string[][], options: object, index: number, id: string) => Promise<string[][]>
+        apply: (input: string[][], options: object, index: number, id: string) => Promise<string[][]>,
     ) {
         this.operation_types.set(operation, apply);
+    }
+
+    static new_uncachable_operation_type(operation: string) {
+        this.uncachable_operations_types.add(operation);
     }
 
     static common_default_options() {
@@ -110,7 +115,7 @@ export class Recipe {
 
     static async abort() {
         this.aborted = true;
-        await Utils.clingo_reject();
+        await Utils.clingo_terminate();
     }
 
     static invalidate_cached_output(index: number) {
@@ -132,8 +137,8 @@ export class Recipe {
                 }
                 where = `#${index + 1}. ${ingredient.operation}`;
                 processing_index.set(index);
-                if (this.cached_output[index] !== undefined) {
-                    result = this.cached_output[index];
+                if (!this.uncachable_operations_types.has(ingredient.operation) && this.cached_output[index] !== undefined) {
+                    result = ingredient.options.apply ? this.cached_output[index] : result;
                 } else {
                     this.cached_output[index + 1] = undefined;
                     this.set_errors_at_index(index, undefined);

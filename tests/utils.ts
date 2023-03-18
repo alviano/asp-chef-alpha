@@ -59,7 +59,7 @@ export class TestRecipe {
 			await this.page.waitForNavigation('.*', { waitUntil: 'networkidle' });
 		}
 		await with_d_test_elements(this.page.getByTestId("OutputPanel-textarea"), async () => {
-			await expect(await this.page.getByTestId("OutputPanel-textarea").locator('.d-test')).toHaveText(the_output);
+			await expect(await this.page.getByTestId("OutputPanel-textarea").locator('.d-test')).toHaveText(the_output, { timeout: 5000 });
 		});
 
 		await this.page.goto('/headless#' + this.page.url().split('#')[1]);

@@ -51,6 +51,7 @@
         Utils.change_clingo_option('--opt-strategy=', value);
         return input;
     });
+    Recipe.new_uncachable_operation_type(operation);
 </script>
 
 <script>

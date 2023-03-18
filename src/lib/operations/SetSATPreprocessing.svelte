@@ -18,6 +18,7 @@
         Utils.change_clingo_option('--sat-prepro=', options.value);
         return input;
     });
+    Recipe.new_uncachable_operation_type(operation);
 </script>
 
 <script>
