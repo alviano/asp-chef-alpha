@@ -181,6 +181,20 @@ export class TestRecipe {
 		});
 	}
 
+	async unreify_program({
+		encode_predicate = '__base64__',
+		atom_predicate = '__atom__',
+		echo = false,
+	} = {}) {
+		return this.ingredient('Unreify Program', async ingredient => {
+			await ingredient.getByTestId('UnreifyProgram-encode-predicate').fill(encode_predicate);
+			await ingredient.getByTestId('UnreifyProgram-atom-predicate').fill(atom_predicate);
+			if (echo) {
+				await ingredient.getByRole('button').filter({ hasText: 'Echo' }).click();
+			}
+		});
+	}
+
 	async lua(content: string, encode_predicate = '__base64__') {
 		return this.ingredient('Lua', async ingredient => {
 			await ingredient.getByTestId('Lua-content').getByRole('textbox').fill(content.trim());

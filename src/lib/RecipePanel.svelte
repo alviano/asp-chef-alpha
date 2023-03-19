@@ -57,6 +57,7 @@
     import ProjectArgument from "$lib/operations/ProjectArgument.svelte";
     import IntrospectionTerms from "$lib/operations/IntrospectionTerms.svelte";
     import ReifyProgram from "$lib/operations/ReifyProgram.svelte";
+    import UnreifyProgram from "$lib/operations/UnreifyProgram.svelte";
 
     export let show_operations;
     export let show_io_panel;
@@ -294,6 +295,8 @@
                         <IntrospectionTerms id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
                     {:else if item.operation === 'Reify Program'}
                         <ReifyProgram id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
+                    {:else if item.operation === 'Unreify Program'}
+                        <UnreifyProgram id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
                     {:else}
                         <Nop id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
                         <Alert color="danger">
