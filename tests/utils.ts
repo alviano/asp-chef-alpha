@@ -168,6 +168,19 @@ export class TestRecipe {
 		});
 	}
 
+	async reify_program(rules: string, {
+		use_constraints = false,
+		decode_predicate = '__base64__'
+	} = {}) {
+		return this.ingredient('Reify Program', async ingredient => {
+			await ingredient.getByTestId('ReifyProgram-rules').getByRole('textbox').fill(rules.trim());
+			await ingredient.getByTestId('ReifyProgram-decode-predicate').fill(decode_predicate);
+			if (use_constraints) {
+				await ingredient.getByRole('button').filter({ hasText: 'Use constraints' }).click();
+			}
+		});
+	}
+
 	async lua(content: string, encode_predicate = '__base64__') {
 		return this.ingredient('Lua', async ingredient => {
 			await ingredient.getByTestId('Lua-content').getByRole('textbox').fill(content.trim());

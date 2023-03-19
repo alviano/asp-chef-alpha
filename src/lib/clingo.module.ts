@@ -8,15 +8,6 @@ Change notes (possibly to reapply on future versions of clingo-wasm).
 Removed a few console prints.
 
 Modified the output parsing (for example, to use --output=reify)
-    let parsedResults;
-    try {
-      parsedResults = JSON.parse(this.results.join(""));
-      delete parsedResults.Input;
-    } catch (error) {
-      parsedResults = {
-        atoms: this.results,
-      };
-    }
 
 
  */
@@ -130,6 +121,7 @@ export class Runner {
       } as ClingoError;
     }
 
+    // ASP Chef : begin
     let parsedResults;
     try {
       parsedResults = JSON.parse(this.results.join(""));
@@ -139,6 +131,7 @@ export class Runner {
         atoms: this.results,
       };
     }
+    // ASP Chef : end
 
     parsedResults.Warnings = this.errors.join("\n").split("\n\n");
 

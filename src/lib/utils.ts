@@ -153,7 +153,7 @@ export class Utils extends BaseUtils {
         if (result.Result === 'ERROR') {
             throw new Error(result.Error);
         } else {
-            return result.atoms;
+            return result.atoms.map(atom => atom.slice(0, -1));
         }
     }
 

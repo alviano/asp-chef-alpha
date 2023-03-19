@@ -56,6 +56,7 @@
     import RemoveEmptyModels from "$lib/operations/RemoveEmptyModels.svelte";
     import ProjectArgument from "$lib/operations/ProjectArgument.svelte";
     import IntrospectionTerms from "$lib/operations/IntrospectionTerms.svelte";
+    import ReifyProgram from "$lib/operations/ReifyProgram.svelte";
 
     export let show_operations;
     export let show_io_panel;
@@ -291,6 +292,8 @@
                         <ProjectArgument id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
                     {:else if item.operation === 'Introspection Terms'}
                         <IntrospectionTerms id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
+                    {:else if item.operation === 'Reify Program'}
+                        <ReifyProgram id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
                     {:else}
                         <Nop id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
                         <Alert color="danger">
