@@ -128,6 +128,7 @@
                 <InputPanel bind:value={input_value} bind:encode={encode_input} />
             </div>
             <div bind:this={progress_panel_div} data-testid="AspChef-baking-bar">
+                <span class="d-test">{process_timeout ? "Baking..." : "Ready!"}</span>
                 <Progress class="mb-0" multi style="font-family: monospace; font-weight: bold;">
                     <Progress bar animated color="danger" value={process_timeout ? 100 : 0}>
                         <span style="color: white;">Baking...</span>

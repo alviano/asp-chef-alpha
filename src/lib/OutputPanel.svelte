@@ -1,11 +1,12 @@
 <script>
     import CodeMirror from "svelte-codemirror-editor";
-    import {Button, Card, CardBody, CardHeader, CardTitle, Icon} from "sveltestrap";
+    import {Badge, Button, Card, CardBody, CardHeader, CardTitle, Icon} from "sveltestrap";
     import {AutoHideBadge, Popover} from "dumbo-svelte";
     import {createEventDispatcher} from "svelte";
     import {Utils} from "$lib/utils";
     import {consts} from "$lib/consts";
     import {Base64} from "js-base64";
+    import {errors_at_index} from "$lib/stores";
 
     const dispatch = createEventDispatcher();
 
@@ -15,6 +16,7 @@
     $: text_value = !decode ? Utils.flatten_output(value) : value.map(model =>
         model.map(atom => atom.predicate !== '__base64__' ? atom.str + '.' : Base64.decode(atom.terms[0].string))
             .join('\n')).join(consts.SYMBOLS.MODELS_SEPARATOR);
+    $: errors = $errors_at_index.map((value, index) => value ? `#${index + 1}. ${value}` : value).filter(value => value);
 </script>
 
 <Card class="p-0" data-testid="OutputPanel">
@@ -22,6 +24,16 @@
         <CardTitle>
             Output
             <span class="float-end">
+                {#if errors.length > 0}
+                    <Popover title="Errors in the Recipe">
+                        <div slot="value">
+                            {#each errors as error}
+                                <p><code>{error}</code></p>
+                            {/each}
+                        </div>
+                        <Badge color="danger" class="me-3">Errors</Badge>
+                    </Popover>
+                {/if}
                 <code class="h6 me-3">models: {value.length}</code>
                 <Popover title="Set as input" value="Replace input with the current content in output.">
                     <Button size="sm" on:click={() => dispatch('change_input', Utils.flatten_output(value, ''))}>

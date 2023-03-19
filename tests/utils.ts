@@ -21,6 +21,12 @@ export class TestRecipe {
 		return await this.page.pause();
 	}
 
+	async complete_baking(timeout = 5000) {
+		await with_d_test_elements(this.page.getByTestId("AspChef-baking-bar"), async (location) => {
+			await expect(await location.locator('.d-test')).toHaveText("Ready!", { timeout: timeout });
+		});
+	}
+
 	async click_pause_baking() {
 		await this.page.getByTestId("RecipePanel-pause-baking").click();
 	}
@@ -58,18 +64,19 @@ export class TestRecipe {
 			await this.page.getByTestId('OutputPanel').getByRole('button', { name: 'Decode' }).click();
 			await this.page.waitForNavigation('.*', { waitUntil: 'networkidle' });
 		}
-		await with_d_test_elements(this.page.getByTestId("OutputPanel-textarea"), async () => {
-			await expect(await this.page.getByTestId("OutputPanel-textarea").locator('.d-test')).toHaveText(the_output, { timeout: 5000 });
+		await this.complete_baking();
+		await with_d_test_elements(this.page.getByTestId("OutputPanel-textarea"), async (location) => {
+			await expect(await location.locator('.d-test')).toHaveText(the_output, { timeout: 5000 });
 		});
 
 		await this.page.goto('/headless#' + this.page.url().split('#')[1]);
-		await expect(await this.page.getByTestId("Headless-output")).toHaveText(the_output);
+		await expect(await this.page.getByTestId("Headless-output")).toHaveText(the_output, { timeout: 5000 });
 	}
 
 	async output_ingredient(output: string, trim = true) {
 		const the_output = trim ? output.trim() : output;
 		return this.ingredient_with_d_test_elements('Output', async ingredient => {
-			await expect(await ingredient.getByTestId("Output-textarea").locator('.d-test')).toHaveText(the_output);
+			await expect(await ingredient.locator('.d-test')).toHaveText(the_output);
 		});
 	}
 
