@@ -89,6 +89,7 @@
                data-testid="SearchModels-decode-predicate"
         />
         <Button outline="{!options.echo_encoded_content}" on:click={() => { options.echo_encoded_content = !options.echo_encoded_content; edit(); }}>Echo</Button>
+        <Button outline="{!options.input_as_constraints}" on:click={() => { options.input_as_constraints = !options.input_as_constraints; edit(); }}>Use constraints</Button>
     </InputGroup>
     <div style="height: {options.height}px; overflow-y: auto" data-testid="SearchModels-rules">
         <CodeMirror bind:value={options.rules}
@@ -107,6 +108,5 @@
                data-testid="SearchModels-models"
         />
         <Button outline="{!options.raises}" on:click={() => { options.raises = !options.raises; edit(); }}>Raise error</Button>
-        <Button outline="{!options.input_as_constraints}" on:click={() => { options.input_as_constraints = !options.input_as_constraints; edit(); }}>Use constraints</Button>
     </InputGroup>
 </Operation>
