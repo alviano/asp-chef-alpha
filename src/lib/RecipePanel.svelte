@@ -58,6 +58,10 @@
     import IntrospectionTerms from "$lib/operations/IntrospectionTerms.svelte";
     import ReifyProgram from "$lib/operations/ReifyProgram.svelte";
     import UnreifyProgram from "$lib/operations/UnreifyProgram.svelte";
+    import MetaStableModels from "$lib/operations/MetaStableModels.svelte";
+    import MetaClassicalModels from "$lib/operations/MetaClassicalModels.svelte";
+    import MetaSupportedModels from "$lib/operations/MetaSupportedModels.svelte";
+    import MetaHereAndThereModels from "$lib/operations/MetaHereandThereModels.svelte";
 
     export let show_operations;
     export let show_io_panel;
@@ -297,6 +301,14 @@
                         <ReifyProgram id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
                     {:else if item.operation === 'Unreify Program'}
                         <UnreifyProgram id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
+                    {:else if item.operation === 'Meta Stable Models'}
+                        <MetaStableModels id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
+                    {:else if item.operation === 'Meta Classical Models'}
+                        <MetaClassicalModels id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
+                    {:else if item.operation === 'Meta Supported Models'}
+                        <MetaSupportedModels id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
+                    {:else if item.operation === 'Meta Here and There Models'}
+                        <MetaHereAndThereModels id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
                     {:else}
                         <Nop id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
                         <Alert color="danger">

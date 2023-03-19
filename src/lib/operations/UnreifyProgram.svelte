@@ -17,6 +17,7 @@
         const outputs = new Map();
         const atom_tuple = [];
         const literal_tuple = [];
+        const weighted_literal_tuple = [];
         part.forEach(atom => {
             if (atom.predicate === 'atom_tuple') {
                 if (atom_tuple[atom.terms[0].number] === undefined) {
@@ -36,6 +37,13 @@
                 outputs.set(atom.terms[0], atom.terms[1].number);
             } else if (atom.predicate === 'rule') {
                 rules.push(atom.terms);
+            } else if (atom.predicate === 'weighted_literal_tuple') {
+                if (weighted_literal_tuple[atom.terms[0].number] === undefined) {
+                    weighted_literal_tuple[atom.terms[0].number] = [];
+                }
+                if (atom.terms.length === 3) {
+                    weighted_literal_tuple[atom.terms[0].number].push([atom.terms[1].number, atom.terms[2].number]);
+                }
             }
         });
 
@@ -69,14 +77,24 @@
             let head;
             if (rule[0].functor === 'choice') {
                 head = '{' + atoms.map(get_atom).join('; ') + '}';
-            } else {
+            } else if (rule[0].functor === 'disjunction') {
                 head = atoms.map(get_atom).join(' | ');
+            } else {
+                throw new Error('Unknown functor ' + rule[0].functor);
             }
 
-            const literals = literal_tuple[rule[1].terms[0].number];
             let body;
             if (rule[1].functor === 'normal') {
+                const literals = literal_tuple[rule[1].terms[0].number];
                 body = literals.map(literal => literal > 0 ? get_atom(literal) : `not ${get_atom(-literal)}`).join(', ');
+            } else if (rule[1].functor === 'sum') {
+                const literals = weighted_literal_tuple[rule[1].terms[0].number];
+                const bound = rule[1].terms[1].number;
+                body = '#sum{' +
+                    literals.map(([literal, weight]) => literal > 0 ? `${weight} : ${get_atom(literal)}` : `${weight} : not ${get_atom(-literal)}`).join('; ') +
+                    '} >= ' + bound;
+            } else {
+                throw new Error('Unknown functor ' + rule[1].functor);
             }
 
             return head && body ? `${head} :- ${body}.` :
@@ -91,7 +109,7 @@
                 const unreified = unreify(part, options);
                 const content = `${options.encode_predicate}("${Base64.encode(unreified)}").`
                 const program = part.filter(atom =>
-                    options.echo || !['atom_tuple', 'literal_tuple', 'output', 'rule'].includes(atom.predicate)
+                    options.echo || !['atom_tuple', 'literal_tuple', 'output', 'rule', 'weighted_literal_tuple'].includes(atom.predicate)
                 ).map(atom => atom.str + '.').join('\n') + '\n' + content;
                 const model = await Utils.search_model(program);
                 res.push(Utils.parse_atoms(model));
@@ -120,13 +138,14 @@
 
 <Operation {id} {operation} {options} {index} {default_extra_options} {add_to_recipe} {keybinding}>
     <div slot="description">
-        <p>The <strong>{operation}</strong> operation reverts the reification process.</p>
+        <p>The <strong>{operation}</strong> operation reverts the reification process (as much as possible).</p>
         <p>
             Predicates
             <code>atom_tuple</code>,
             <code>literal_tuple</code>,
-            <code>output</code> and
-            <code>rule</code>
+            <code>output</code>,
+            <code>rule</code> and
+            <code>weighted_literal_tuple</code>
             in input are mapped to a program.
             Rules are made of
             <code>disjunction</code>,

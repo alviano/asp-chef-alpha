@@ -183,7 +183,7 @@ export class Utils extends BaseUtils {
         return output_value.map(atoms =>
             atoms.length === 0 ? empty_model :
                 atoms.map(atom => atom.str + '.')
-                .join('\n')).join('\n§\n');
+                .join('\n')).join('\n' + consts.SYMBOLS.MODELS_SEPARATOR +'\n');
     }
 
     static keep_occurrences(input_string, regex) {

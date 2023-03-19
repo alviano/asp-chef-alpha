@@ -14,8 +14,9 @@
     export let decode = false;
 
     $: text_value = !decode ? Utils.flatten_output(value) : value.map(model =>
+        model.length === 0 ? 'EMPTY MODEL' :
         model.map(atom => atom.predicate !== '__base64__' ? atom.str + '.' : Base64.decode(atom.terms[0].string))
-            .join('\n')).join(consts.SYMBOLS.MODELS_SEPARATOR);
+            .join('\n')).join('\n' + consts.SYMBOLS.MODELS_SEPARATOR +'\n');
     $: errors = $errors_at_index.map((value, index) => value ? `#${index + 1}. ${value}` : value).filter(value => value);
 </script>
 
