@@ -1,6 +1,6 @@
 // adapted from clingo-wasm
 
-import {init} from "clingo-wasm/src/run";
+import {init} from "$lib/clingo.module";
 
 let run;
 
@@ -27,9 +27,6 @@ onmessage = async (event) => {
         }
         const results = run(...message.args);
         postMessage(results, undefined);
-    } else if (message.type === "init") {
-        await initRun(message.wasmUrl);
-        postMessage(null, undefined);
     }
 };
 

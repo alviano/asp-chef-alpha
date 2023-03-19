@@ -4,6 +4,7 @@ import {DOMPurifyConfig, Utils as BaseUtils} from "dumbo-svelte";
 import _ from 'lodash';
 import AsyncLock from "async-lock";
 // import {run} from 'clingo-wasm'
+import ClingoWorker from '$lib/clingo.worker?worker';
 
 const dom_purify_config = new DOMPurifyConfig(consts);
 
@@ -12,7 +13,6 @@ export class Utils extends BaseUtils {
     private static _clingo_reject = null;
     private static _clingo_lock = new AsyncLock();
     private static _clingo_options = new Map();
-    private static _ClingoWorker = null;
     private static _clingo_worker = null;
 
     static render_markdown(content: string) {
@@ -25,12 +25,6 @@ export class Utils extends BaseUtils {
 
     static dom_purify(content: string) {
         return BaseUtils.dom_purify(content, dom_purify_config);
-    }
-
-    static get clingo() {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        return window.clingo;
     }
 
     static set clingo_timeout(value: number) {
@@ -49,7 +43,7 @@ export class Utils extends BaseUtils {
     static async clingo_terminate(message = 'Error: terminated.') {
         try {
             this._clingo_worker.terminate();
-            this._clingo_worker = new this._ClingoWorker.default();
+            this._clingo_worker = new ClingoWorker();
         } catch (error) {
             /* empty */
         }
@@ -63,11 +57,8 @@ export class Utils extends BaseUtils {
     static async clingo_run(program: string, number = 0, options = [], timeout = null) {
         const the_timeout = timeout !== null ? timeout : this._clingo_timeout;
         return await this._clingo_lock.acquire('clingo', async () => {
-            if (this._ClingoWorker === null) {
-                this._ClingoWorker = await import('$lib/clingo.worker?worker');
-            }
             if (this._clingo_worker === null) {
-                this._clingo_worker = new this._ClingoWorker.default();
+                this._clingo_worker = new ClingoWorker();
             }
             return new Promise((resolve, reject) => {
                 this._clingo_reject = reject;
@@ -154,6 +145,15 @@ export class Utils extends BaseUtils {
             throw new Error('NO MODEL');
         } else {
             return result.Call[0].Witnesses[result.Call[0].Witnesses.length - 1].Value;
+        }
+    }
+
+    static async reify_program(program: string) {
+        const result = await this.clingo_run(program, 1, ['--output=reify']);
+        if (result.Result === 'ERROR') {
+            throw new Error(result.Error);
+        } else {
+            return result.atoms;
         }
     }
 
