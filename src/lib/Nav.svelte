@@ -10,7 +10,7 @@
 </script>
 
 <Navbar id="navbar" color="dark d-print-none" style="max-height: 1em;" dark expand="md">
-  <NavbarBrand href='/'>
+  <NavbarBrand href='/' on:click={() => location.assign('/')}>
     <span class="logo">
       ASP Chef
     </span>

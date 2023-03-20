@@ -70,15 +70,6 @@
         </p>
     </div>
     <InputGroup>
-        <InputGroupText style="width: 10em;">Output predicate</InputGroupText>
-        <Input type="search"
-               bind:value={options.output_predicate}
-               placeholder="output predicate"
-               on:input={edit}
-               data-testid="Slider-output-predicate"
-        />
-    </InputGroup>
-    <InputGroup>
         <InputGroupText style="width: 10em;">Minimum value</InputGroupText>
         <Input type="search"
                bind:value={options.min}
@@ -94,6 +85,15 @@
                placeholder="max"
                on:input={edit}
                data-testid="Slider-max"
+        />
+    </InputGroup>
+    <InputGroup>
+        <InputGroupText style="width: 10em;">Output predicate</InputGroupText>
+        <Input type="search"
+               bind:value={options.output_predicate}
+               placeholder="output predicate"
+               on:input={edit}
+               data-testid="Slider-output-predicate"
         />
     </InputGroup>
     <div class="m-3">
