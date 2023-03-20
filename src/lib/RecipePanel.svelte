@@ -62,6 +62,7 @@
     import MetaClassicalModels from "$lib/operations/MetaClassicalModels.svelte";
     import MetaSupportedModels from "$lib/operations/MetaSupportedModels.svelte";
     import MetaHereAndThereModels from "$lib/operations/MetaHereandThereModels.svelte";
+    import Slider from "$lib/operations/Slider.svelte";
 
     export let show_operations;
     export let show_io_panel;
@@ -309,6 +310,8 @@
                         <MetaSupportedModels id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
                     {:else if item.operation === 'Meta Here and There Models'}
                         <MetaHereAndThereModels id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
+                    {:else if item.operation === 'Slider'}
+                        <Slider id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
                     {:else}
                         <Nop id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
                         <Alert color="danger">

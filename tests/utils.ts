@@ -408,6 +408,22 @@ export class TestRecipe {
 			await ingredient.getByTestId('IntrospectionTerms-encode-predicate').fill(predicate);
 		});
 	}
+
+	async slider({
+		 output_predicate = '__slider__',
+		 minimum_value = '1',
+		 maximum_value = '10',
+		 value = '1',
+				 } = {}) {
+		return this.ingredient('Slider', async ingredient => {
+			await ingredient.getByTestId('Slider-min').fill(minimum_value);
+			await ingredient.getByTestId('Slider-max').fill(maximum_value);
+			await with_d_test_elements(ingredient, async (ingredient) => {
+				await ingredient.getByTestId('Slider-value').fill(value);
+			});
+			await ingredient.getByTestId('Slider-output-predicate').fill(output_predicate);
+		});
+	}
 }
 
 export async function visit_homepage_and_accept_privacy_policy(page) {
