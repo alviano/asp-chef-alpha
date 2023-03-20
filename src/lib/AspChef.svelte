@@ -76,6 +76,8 @@
     const keydown_uuid = uuidv4();
 
     onMount(() => {
+        const recipe_panel = document.getElementById('recipe_panel_column');
+
         if (location.hash.length > 1) {
             const data = Recipe.deserialize(location.hash.slice(1));
             if (data !== null) {
@@ -91,13 +93,31 @@
         output_panel_div.style.height = `${output_panel_div.offsetHeight - progress_panel_div.offsetHeight / 2}px`;
 
         $keydown.push([keydown_uuid, (event) => {
-            if (event.uKey === 'L') {
+            if (event.uKey === 'L' || event.key === 'ArrowLeft') {
                 show_operations = !show_operations;
                 Utils.snackbar(show_operations ? "Operations panel shown..." : "Operations panel hidden...");
                 return true;
-            } else if (event.uKey === 'R') {
+            } else if (event.uKey === 'R' || event.key === 'ArrowRight') {
                 show_io_panel = !show_io_panel;
                 Utils.snackbar(show_io_panel ? "I/O panel shown..." : "I/O panel hidden...");
+                return true;
+            } else if (event.key === 'PageDown') {
+                recipe_panel.scrollTop += recipe_panel.offsetHeight * 0.9;
+                return true;
+            } else if (event.key === 'PageUp') {
+                recipe_panel.scrollTop -= recipe_panel.offsetHeight * 0.9;
+                return true;
+            } else if (event.key === 'ArrowDown') {
+                recipe_panel.scrollTop += recipe_panel.offsetHeight * 0.1;
+                return true;
+            } else if (event.key === 'ArrowUp') {
+                recipe_panel.scrollTop -= recipe_panel.offsetHeight * 0.1;
+                return true;
+            } else if (event.key === 'Home') {
+                recipe_panel.scrollTop = 0;
+                return true;
+            } else if (event.key === 'End') {
+                recipe_panel.scrollTop = recipe_panel.scrollHeight;
                 return true;
             }
         }]);
@@ -115,7 +135,7 @@
             <Operations />
         </Col>
     {/if}
-    <Col class="p-0 vh-100" style="background-color: lightgray; overflow-x: hidden; overflow-y: scroll;">
+    <Col id="recipe_panel_column" class="p-0 vh-100" style="background-color: lightgray; overflow-x: hidden; overflow-y: scroll;">
         <RecipePanel
                 on:change_input={(event) => input_value = event.detail}
                 bind:show_operations
