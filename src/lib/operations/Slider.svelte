@@ -46,7 +46,6 @@
             } else {
                 min = options.min;
             }
-            console.log(options, Number.parseInt(options.max))
             if (isNaN(options.max)) {
                 max = Math.max(...input.flatMap(part => part.filter(atom => atom.predicate === options.max).map(atom => atom.terms[0].number)));
             } else {
