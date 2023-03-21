@@ -424,6 +424,22 @@ export class TestRecipe {
 			await ingredient.getByTestId('Slider-output-predicate').fill(output_predicate);
 		});
 	}
+
+	async store() {
+		return this.ingredient('Store');
+	}
+
+	async restore({
+		 store = '',
+		 echo = false,
+				 } = {}) {
+		return this.ingredient('Restore', async ingredient => {
+			await ingredient.getByTestId('Restore-store').fill(store);
+			if (echo) {
+				await ingredient.getByRole('button', { name: 'Echo' }).click();
+			}
+		});
+	}
 }
 
 export async function visit_homepage_and_accept_privacy_policy(page) {

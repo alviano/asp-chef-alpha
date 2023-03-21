@@ -64,6 +64,8 @@
     import Server from "$lib/operations/Server.svelte";
     import InvalidateCache from "$lib/operations/InvalidateCache.svelte";
     import SetTimeout from "$lib/operations/SetTimeout.svelte";
+    import Store from "$lib/operations/Store.svelte";
+    import Restore from "$lib/operations/Restore.svelte";
 
     export let show_operations;
     export let show_io_panel;
@@ -315,6 +317,10 @@
                         <Server id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
                     {:else if item.operation === 'Invalidate Cache'}
                         <InvalidateCache id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
+                    {:else if item.operation === 'Store'}
+                        <Store id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
+                    {:else if item.operation === 'Restore'}
+                        <Restore id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
                     {:else}
                         <Nop id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
                         <Alert color="danger">

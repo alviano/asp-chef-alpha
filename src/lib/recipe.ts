@@ -11,6 +11,7 @@ export class Recipe {
     private static last_serialization = null;
     private static cached_output = [];
     private static aborted = false;
+    private static stores = new Map();
 
     private static get recipe() {
         return get(recipe);
@@ -104,6 +105,10 @@ export class Recipe {
         return this.recipe.length;
     }
 
+    static id_of_ingredient(index: number) {
+        return this.recipe[index].id;
+    }
+
     static set_errors_at_index(index: number, errors: string, result: object[] = null) {
         const the_errors = this.errors_at_index;
         the_errors[index] = errors;
@@ -111,6 +116,17 @@ export class Recipe {
         if (result !== null) {
             result.push([{str: errors}])
         }
+    }
+
+    static store(id: string, value: object[][]) {
+        this.stores.set(id, value);
+    }
+
+    static restore(id: string) {
+        if (this.stores.has(id)) {
+            return this.stores.get(id);
+        }
+        throw new Error('Unknown store ' + id)
     }
 
     static async abort() {
