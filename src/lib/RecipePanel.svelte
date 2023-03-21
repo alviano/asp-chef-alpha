@@ -33,8 +33,6 @@
     import SortByIncreasingSize from "$lib/operations/SortbyIncreasingSize.svelte";
     import SortByDecreasingSize from "$lib/operations/SortbyDecreasingSize.svelte";
     import SortByPredicateOrArgument from "$lib/operations/SortbyPredicateorArgument.svelte";
-    import TimeoutMinutes from "$lib/operations/TimeoutMinutes.svelte";
-    import TimeoutSeconds from "$lib/operations/TimeoutSeconds.svelte";
     import SetConfiguration from "$lib/operations/SetConfiguration.svelte";
     import SetSATPreprocessing from "$lib/operations/SetSATPreprocessing.svelte";
     import SetTransformationOfExtendedRules from "$lib/operations/SetTransformationofExtendedRules.svelte";
@@ -65,6 +63,7 @@
     import Slider from "$lib/operations/Slider.svelte";
     import Server from "$lib/operations/Server.svelte";
     import InvalidateCache from "$lib/operations/InvalidateCache.svelte";
+    import SetTimeout from "$lib/operations/SetTimeout.svelte";
 
     export let show_operations;
     export let show_io_panel;
@@ -256,10 +255,8 @@
                         <SortByDecreasingSize id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
                     {:else if item.operation === 'Sort by Predicate or Argument'}
                         <SortByPredicateOrArgument id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
-                    {:else if item.operation === 'Timeout Minutes'}
-                        <TimeoutMinutes id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
-                    {:else if item.operation === 'Timeout Seconds'}
-                        <TimeoutSeconds id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
+                    {:else if item.operation === 'Set Timeout'}
+                        <SetTimeout id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
                     {:else if item.operation === 'Set Configuration'}
                         <SetConfiguration id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
                     {:else if item.operation === 'Set SAT Preprocessing'}

@@ -2,15 +2,16 @@
     import {Recipe} from "$lib/recipe";
     import {Utils} from "$lib/utils";
 
-    const operation = "Timeout Minutes";
+    const operation = "Set Timeout";
     const default_extra_options = {
-        minutes: 1,
+        seconds: 5,
     };
 
     Recipe.register_operation_type(operation, async (input, options) => {
-        Utils.clingo_timeout = options.minutes * 60;
+        Utils.clingo_timeout = options.seconds;
         return input;
     });
+
     Recipe.new_uncachable_operation_type(operation);
 </script>
 
@@ -24,7 +25,12 @@
     export let add_to_recipe;
     export let keybinding;
 
+    let seconds = options ? options.seconds % 60 : 5;
+    let minutes = options ? Math.floor((options.seconds % 3600) / 60) : 0;
+    let hours = options ? Math.floor(options.seconds / 3600) : 0;
+
     function edit() {
+        options.seconds = seconds + 60 * minutes + 3600 * hours;
         Recipe.edit_operation(index, options);
     }
 </script>
@@ -39,18 +45,33 @@
             Note that some extra time is required to recover the system, and refreshing the page is also required in some cases.
         </p>
         <p>
-            Default value: <code>5 minutes</code>
+            Default value: <code>5 seconds</code>
         </p>
     </div>
     <div class="m-3">
         <Input type="range"
-               min="{1}"
-               max="{60}"
-               bind:value="{options.minutes}"
+               min="{0}"
+               max="{59}"
+               bind:value="{seconds}"
                on:change={edit}
                />
+        <Input type="range"
+               min="{0}"
+               max="{59}"
+               bind:value="{minutes}"
+               on:change={edit}
+               />
+        <Input type="range"
+               min="{0}"
+               max="{23}"
+               bind:value="{hours}"
+               on:change={edit}
+               />
+        <code class="float-start">
+            {hours} hours, {minutes} minutes and {seconds % 60} seconds
+        </code>
         <code class="float-end">
-            {options.minutes} minutes
+            {options.seconds} seconds
         </code>
     </div>
 </Operation>
