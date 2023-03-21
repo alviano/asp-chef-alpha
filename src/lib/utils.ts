@@ -4,6 +4,7 @@ import {DOMPurifyConfig, Utils as BaseUtils} from "dumbo-svelte";
 import _ from 'lodash';
 import AsyncLock from "async-lock";
 // import {run} from 'clingo-wasm'
+import ClingoWorker from '$lib/clingo.worker?worker';
 
 const dom_purify_config = new DOMPurifyConfig(consts);
 
@@ -12,6 +13,7 @@ export class Utils extends BaseUtils {
     private static _clingo_reject = null;
     private static _clingo_lock = new AsyncLock();
     private static _clingo_options = new Map();
+    private static _clingo_worker = null;
 
     static render_markdown(content: string) {
         return BaseUtils.render_markdown(content, dom_purify_config)
@@ -23,12 +25,6 @@ export class Utils extends BaseUtils {
 
     static dom_purify(content: string) {
         return BaseUtils.dom_purify(content, dom_purify_config);
-    }
-
-    static get clingo() {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        return window.clingo;
     }
 
     static set clingo_timeout(value: number) {
@@ -44,32 +40,15 @@ export class Utils extends BaseUtils {
         this._clingo_options.set(key, value);
     }
 
-    static async clingo_clear() {
-        const random = Math.floor(Math.random() * 1_000_000);
-        for (;;) {
-            try {
-                const result = await this.clingo.run(`#show ${random}.`);
-                if (result && result.Result === 'SATISFIABLE' && result.Models.Number === 1) {
-                    const model = result.Call[0].Witnesses[0].Value;
-                    if (model.length === 1 && model[0] === '' + random) {
-                        return;
-                    }
-                }
-                await Utils.delay(1000);
-            } catch (error) {
-                await Utils.delay(1000);
-            }
-        }
-    }
-
-    static async clingo_terminate() {
-        await this.clingo_reject();
-        await this.clingo_clear();
-    }
-
-    static async clingo_reject() {
+    static async clingo_terminate(message = 'Error: terminated.') {
         try {
-            this._clingo_reject('Error: terminated');
+            this._clingo_worker.terminate();
+            this._clingo_worker = new ClingoWorker();
+        } catch (error) {
+            /* empty */
+        }
+        try {
+            this._clingo_reject(message);
         } catch (error) {
             /* empty */
         }
@@ -78,19 +57,22 @@ export class Utils extends BaseUtils {
     static async clingo_run(program: string, number = 0, options = [], timeout = null) {
         const the_timeout = timeout !== null ? timeout : this._clingo_timeout;
         return await this._clingo_lock.acquire('clingo', async () => {
-            return await new Promise((resolve, reject) => {
+            if (this._clingo_worker === null) {
+                this._clingo_worker = new ClingoWorker();
+            }
+            return new Promise((resolve, reject) => {
                 this._clingo_reject = reject;
-                setTimeout(async () => {
-                    reject(`Error: TIMEOUT ${the_timeout} seconds`);
-                    this._clingo_reject = null;
+                const timeout = setTimeout(async () => {
+                    await this.clingo_terminate(`Error: TIMEOUT ${the_timeout} seconds`);
                 }, the_timeout * 1000);
-                this.clingo.run(program, number, [
+                this._clingo_worker.onmessage = ({data}) => {
+                    clearTimeout(timeout);
+                    resolve(data);
+                }
+                this._clingo_worker.postMessage({ type: 'run', args: [program, number, [
                     ...options,
                     ...Array.from(this._clingo_options, ([key, value]) => `${key}${value}`),
-                ]).then(result => {
-                    resolve(result);
-                    this._clingo_reject = null;
-                });
+                ]]});
             });
         });
     }
@@ -166,6 +148,15 @@ export class Utils extends BaseUtils {
         }
     }
 
+    static async reify_program(program: string) {
+        const result = await this.clingo_run(program, 1, ['--output=reify']);
+        if (result.Result === 'ERROR') {
+            throw new Error(result.Error);
+        } else {
+            return result.atoms.map(atom => atom.slice(0, -1));
+        }
+    }
+
     static predicates(models: string[][]) {
         const res = new Set();
         models.forEach(model => {
@@ -192,7 +183,7 @@ export class Utils extends BaseUtils {
         return output_value.map(atoms =>
             atoms.length === 0 ? empty_model :
                 atoms.map(atom => atom.str + '.')
-                .join('\n')).join('\n§\n');
+                .join('\n')).join('\n' + consts.SYMBOLS.MODELS_SEPARATOR +'\n');
     }
 
     static keep_occurrences(input_string, regex) {

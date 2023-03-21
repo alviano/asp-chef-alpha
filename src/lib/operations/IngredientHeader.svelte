@@ -30,7 +30,7 @@
                 <Badge color="danger me-2">Errors!</Badge>
             {/if}
             <Popover title="Remove operation" value="Remove ingredient #{index + 1} from the recipe.">
-                <Button size="sm" color="danger" on:click={() => Recipe.remove_operation(index)}><Icon name="trash" /></Button>
+                <Button size="sm" color="danger" on:click={() => Recipe.remove_operation(index)} data-testid="IngredientHeader-remove"><Icon name="trash" /></Button>
             </Popover>
             <ButtonGroup>
                 <Popover title="Duplicate operation" value="Add a copy of ingredient #{index + 1} below it.">

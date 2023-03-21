@@ -8,6 +8,7 @@
     import {v4 as uuidv4} from "uuid";
 
     export let value;
+    export let encode;
 
     let editor;
 
@@ -28,7 +29,7 @@
     });
 </script>
 
-<Card class="p-0">
+<Card class="p-0" data-testid="InputPanel">
     <CardHeader>
         <CardTitle>
             Input
@@ -36,6 +37,9 @@
                 <code class="h6 me-3">models: {value.split(consts.SYMBOLS.MODELS_SEPARATOR).length}</code>
                 <Popover title="Remove operation" value="Remove input content.">
                     <Button size="sm" color="danger" on:click={() => value = ''}><Icon name="trash" /></Button>
+                </Popover>
+                <Popover title="Encode input" value="If active, the input is Base64 encoded as a single fact.">
+                    <Button size="sm" outline="{!encode}" on:click={() => encode = !encode}>Encode</Button>
                 </Popover>
             </span>
         </CardTitle>

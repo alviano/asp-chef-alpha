@@ -1,6 +1,7 @@
 <script context="module">
     import {Recipe} from "$lib/recipe";
     import {Utils} from "$lib/utils";
+    import {Base64} from "js-base64";
 
     const operation = "Search Models";
     const default_extra_options = {
@@ -22,10 +23,10 @@
             try {
                 const program = part.map(atom => {
                     if (atom.predicate === options.decode_predicate) {
-                        return atob(atom.terms[0].str.slice(1, -1)) + (options.echo_encoded_content ? '\n' + atom.str + '.' : '');
+                        return Base64.decode(atom.terms[0].string) + (options.echo_encoded_content ? '\n' + atom.str + '.' : '');
                     }
                     return mapper(atom);
-                }).join('\n') + options.rules;
+                }).join('\n') + '\n' + options.rules;
                 const models = await Utils.search_models(program, options.number, options.raises);
                 models.forEach(model => {
                     res.push(Utils.parse_atoms(model));
@@ -88,6 +89,7 @@
                data-testid="SearchModels-decode-predicate"
         />
         <Button outline="{!options.echo_encoded_content}" on:click={() => { options.echo_encoded_content = !options.echo_encoded_content; edit(); }}>Echo</Button>
+        <Button outline="{!options.input_as_constraints}" on:click={() => { options.input_as_constraints = !options.input_as_constraints; edit(); }}>Use constraints</Button>
     </InputGroup>
     <div style="height: {options.height}px; overflow-y: auto" data-testid="SearchModels-rules">
         <CodeMirror bind:value={options.rules}
@@ -106,6 +108,5 @@
                data-testid="SearchModels-models"
         />
         <Button outline="{!options.raises}" on:click={() => { options.raises = !options.raises; edit(); }}>Raise error</Button>
-        <Button outline="{!options.input_as_constraints}" on:click={() => { options.input_as_constraints = !options.input_as_constraints; edit(); }}>Use constraints</Button>
     </InputGroup>
 </Operation>

@@ -2,6 +2,7 @@
     import {Recipe} from "$lib/recipe";
     import {Utils} from "$lib/utils";
     import jsonpath from "jsonpath";
+    import {Base64} from "js-base64";
 
     const operation = "JSON Path";
     const default_extra_options = {
@@ -30,7 +31,7 @@
             try {
                 const program = part.map(atom => {
                     if (atom.predicate === options.decode_predicate) {
-                        const data = JSON.parse(atob(atom.terms[0].str.slice(1, -1)));
+                        const data = JSON.parse(Base64.decode(atom.terms[0].string));
                         const answer = jsonpath.query(data, options.query);
                         return answer.map(object_mapper).map(term => `${options.output_predicate}(${term}).`).join('\n') +
                             (options.echo_encoded_content ? '\n' + mapper(atom) : '');

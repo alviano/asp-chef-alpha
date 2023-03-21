@@ -1,6 +1,7 @@
 <script context="module">
     import {Recipe} from "$lib/recipe";
     import {Utils} from "$lib/utils";
+    import {Base64} from "js-base64";
 
     const operation = "Encode";
     const default_extra_options = {
@@ -10,7 +11,7 @@
     };
 
     Recipe.register_operation_type(operation, async (input, options, index) => {
-        const content = btoa(options.content);
+        const content = Base64.encode(options.content);
         const encoded_content = `${options.predicate}("${content}").`;
         const mapper = atom => atom.str + '.';
         const res = [];

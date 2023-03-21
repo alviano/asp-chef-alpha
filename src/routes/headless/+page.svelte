@@ -2,6 +2,8 @@
     import {Utils} from "$lib/utils";
     import {Recipe} from "$lib/recipe";
     import AspChef from "$lib/AspChef.svelte";
+    import {consts} from "$lib/consts";
+    import {Base64} from "js-base64";
 
     async function clingo_to_be_loaded() {
         while (window.clingo === undefined) {
@@ -12,9 +14,11 @@
 
     async function process() {
         if (location.hash.length > 1) {
-            const input = Recipe.deserialize(location.hash.slice(1));
-            const output = await Recipe.process(input || '');
-            return output.map(model => model.map(atom => `${atom.str}.`).join('\n')).join('\n§\n');
+            const data = Recipe.deserialize(location.hash.slice(1));
+            const output = await Recipe.process(data.input || '', data.encode_input);
+            return !data.decode_output ? Utils.flatten_output(output) : output.map(model =>
+                model.map(atom => atom.predicate !== '__base64__' ? atom.str : Base64.decode(atom.terms[0].string)).join('\n'))
+                .join(consts.SYMBOLS.MODELS_SEPARATOR);
         }
     }
 </script>
@@ -26,7 +30,7 @@
 {#await clingo_to_be_loaded().then(process)}
     Processing...
 {:then output}
-    <pre>{output}</pre>
+    <pre data-testid="Headless-output">{output}</pre>
 {/await}
 
 <!-- keep <AspChef> just to load operations -->

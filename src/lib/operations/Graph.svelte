@@ -35,26 +35,30 @@
             const term = atom.terms[term_index];
             const property = term.functor;
             const terms = term.terms;
-            if (property === 'label') {
+            if (property === 'label' && terms.length === 1) {
                 node.label = `${terms[0].string || terms[0].number || terms[0].str}`;
-            } else if (property === 'color') {
+            } else if (property === 'color' && terms.length === 1) {
                 node.color = terms[0].string || terms[0].str;
-            } else if (property === 'text_color') {
+            } else if (property === 'text_color' && terms.length === 1) {
                 node.text_color = terms[0].string || terms[0].str;
-            } else if (property === 'font') {
+            } else if (property === 'font' && terms.length === 1) {
                 node.font = terms[0].string;
-            } else if (property === 'radius') {
+            } else if (property === 'radius' && terms.length === 1) {
                 node.radius = terms[0].number;
-            } else if (property === 'shape') {
+            } else if (property === 'shape' && terms.length > 0) {
                 node.shape = terms.length > 1 ? terms.map(term => term.number) : terms[0].string || terms[0].str;
-            } else if (property === 'opacity') {
+            } else if (property === 'opacity' && terms.length === 1) {
                 node.opacity = terms[0].number / 100;
-            } else if (property === 'fx') {
+            } else if (property === 'fx' && terms.length === 1) {
                 node.fx = terms[0].number;
-            } else if (property === 'fy') {
+            } else if (property === 'fy' && terms.length === 1) {
                 node.fy = terms[0].number;
+            } else if (property === 'draggable' && terms.length === 0) {
+                node.undraggable = false;
+            } else if (property === 'undraggable' && terms.length === 0) {
+                node.undraggable = true;
             } else {
-                Utils.snackbar('Unknown node property: ' + property);
+                Utils.snackbar(`Unknown node property: ${property}/${terms.length}`);
             }
         }
     }
@@ -73,18 +77,20 @@
             const term = atom.terms[term_index];
             const property = term.functor;
             const terms = term.terms;
-            if (property === 'label') {
+            if (property === 'label' && terms.length === 1) {
                 link.label = `${terms[0].string || terms[0].number || terms[0].str}`;
-            } else if (property === 'color') {
+            } else if (property === 'color' && terms.length === 1) {
                 link.color = terms[0].string || terms[0].str;
-            } else if (property === 'undirected') {
+            } else if (property === 'undirected' && terms.length === 0) {
                 link.undirected = true;
-            } else if (property === 'text_color') {
+            } else if (property === 'directed' && terms.length === 0) {
+                link.undirected = false;
+            } else if (property === 'text_color' && terms.length === 1) {
                 link.text_color = terms[0].string || terms[0].str;
-            } else if (property === 'opacity') {
+            } else if (property === 'opacity' && terms.length === 1) {
                 link.opacity = terms[0].number / 100;
             } else {
-                Utils.snackbar('Unknown link property: ' + property);
+                Utils.snackbar(`Unknown link property: ${property}/${terms.length}`);
             }
         }
     }
@@ -94,22 +100,32 @@
         const terms = term.terms;
         if (property === 'node_radius') {
             defaults.node_radius = terms[0].number;
-        } else if (property === 'node_color') {
+        } else if (property === 'node_color' && terms.length === 1) {
             defaults.node_color = terms[0].string || terms[0].str;
-        } else if (property === 'node_text_color') {
+        } else if (property === 'node_text_color' && terms.length === 1) {
             defaults.node_text_color = terms[0].string || terms[0].str;
-        } else if (property === 'node_font') {
+        } else if (property === 'node_font' && terms.length === 1) {
             defaults.node_font = terms[0].string;
-        } else if (property === 'node_opacity') {
+        } else if (property === 'node_opacity' && terms.length === 1) {
             defaults.node_opacity = terms[0].number / 100;
-        } else if (property === 'link_color') {
+        } else if (property === 'node_shape' && terms.length > 0) {
+            defaults.node_shape = terms.length > 1 ? terms.map(term => term.number) : terms[0].string || terms[0].str;
+        } else if (property === 'node_draggable' && terms.length === 0) {
+            defaults.node_undraggable = undefined;
+        } else if (property === 'node_undraggable' && terms.length === 0) {
+            defaults.node_undraggable = true;
+        } else if (property === 'link_color' && terms.length === 1) {
             defaults.link_color = terms[0].string || terms[0].str;
-        } else if (property === 'link_text_color') {
+        } else if (property === 'link_text_color' && terms.length === 1) {
             defaults.link_text_color = terms[0].string;
-        } else if (property === 'link_opacity') {
+        } else if (property === 'link_opacity' && terms.length === 1) {
             defaults.link_opacity = terms[0].number / 100;
+        } else if (property === 'undirected' && terms.length === 0) {
+            defaults.undirected = true;
+        } else if (property === 'directed' && terms.length === 0) {
+            defaults.undirected = undefined;
         } else {
-            Utils.snackbar('Unknown default property: ' + property);
+            Utils.snackbar(`Unknown default property: ${property}/${terms.length}`);
         }
     }
 
@@ -119,16 +135,16 @@
         const defaults = {};
         model.forEach(atom => {
             if (atom.predicate === options.predicate) {
-                if (atom.terms[0].functor === 'node') {
+                if (atom.terms[0].functor === 'node' && atom.terms[0].terms.length === 1) {
                     process_node(nodes, links, atom);
-                } else if (atom.terms[0].functor === 'link') {
+                } else if (atom.terms[0].functor === 'link' && atom.terms[0].terms.length === 2) {
                     process_link(nodes, links, atom);
-                } else if (atom.terms[0].functor === 'defaults') {
+                } else if (atom.terms[0].functor === 'defaults' && atom.terms[0].terms.length === 0) {
                     for (let term_index = 1; term_index < atom.terms.length; term_index++) {
                         process_defaults(defaults, atom.terms[term_index])
                     }
                 } else {
-                    Utils.snackbar('Fail to process graph atom: ' + atom.str);
+                    Utils.snackbar(`Unknown graph directive: ${atom.terms[0].functor}/${atom.terms[0].terms.length}`);
                 }
             }
         });
@@ -186,21 +202,24 @@
             The other terms have the form <code>property(VALUE)</code>.
         </p>
         <p>
-            Node properties: label, color, font, fx, fy, opacity, radius, shape, text_color.
+            Node properties: label, color, draggable/undraggable, font, fx, fy, opacity, radius, shape, text_color.
         </p>
         <p>
-            Link properties: label, color, opacity, undirected, text_color.
+            Link properties: directed/undirected, label, color, opacity, text_color.
         </p>
         <p>
-            Defaults properties:
-            node_radius (also defining the capture area for dragging nodes),
+            Default properties:
             node_color,
-            node_text_color,
+            node_draggable/node_undraggable,
             node_font,
             node_opacity,
+            node_radius (also defining the capture area for dragging nodes),
+            node_shape,
+            node_text_color,
             link_color,
             link_text_color,
-            link_opacity.
+            link_opacity,
+            directed/undirected.
         </p>
         <p>
             Labels can be searched in the graph.

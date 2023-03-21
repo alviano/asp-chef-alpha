@@ -11,6 +11,7 @@
         Utils.clingo_timeout = options.minutes * 60;
         return input;
     });
+    Recipe.new_uncachable_operation_type(operation);
 </script>
 
 <script>

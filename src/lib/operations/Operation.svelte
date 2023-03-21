@@ -22,21 +22,22 @@
     export let keybinding;
 
     if (add_to_recipe) {
-        Recipe.add_operation(operation, {...options}, index);
+        Recipe.add_operation(operation, options, index);
     }
 </script>
 
 {#if id !== undefined}
-    <Card style="border-top: 3px solid black;" data-testid="Operation">
+    <Card style="border-top: 3px solid black; {options.stop ? 'border-bottom: 3px solid red;' : ''} {options.apply ? '' : 'border-left: 3px dashed red; border-right: 3px dashed red;'}"
+          data-testid="Operation">
         <IngredientHeader {id} {operation} {index} {options} />
         {#if $show_ingredient_details && options.show}
         <CardBody class="p-0" style="cursor: auto;">
             <slot />
             {#if $errors_at_index[index]}
-                <Alert color="danger">
+                <div class="alert-danger p-3" style="color: white">
                     <h5 class="alert-heading">Errors</h5>
                     <pre>{$errors_at_index[index]}</pre>
-                </Alert>
+                </div>
             {/if}
         </CardBody>
         {/if}

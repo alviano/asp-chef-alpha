@@ -25,6 +25,7 @@
     import CodeMirror from "svelte-codemirror-editor";
     import {AutoHideBadge} from "dumbo-svelte";
     import {consts} from "$lib/consts";
+    import {Base64} from "js-base64";
 
 
     export let id;
@@ -42,7 +43,7 @@
     onMount(() => {
         listeners.set(id, (input) => {
             output = input.map(model => model.filter(atom => atom.predicate === options.predicate).map(atom => {
-                return atob(atom.terms[0].str.slice(1, -1));
+                return Base64.decode(atom.terms[0].string);
             }).join('\n')).join(consts.SYMBOLS.MODELS_SEPARATOR);
         });
     });

@@ -1,7 +1,7 @@
 <script>
     import {flip} from "svelte/animate";
     import {dndzone} from "svelte-dnd-action";
-    import {recipe} from "$lib/stores";
+    import {pause_baking, recipe, show_ingredient_details} from "$lib/stores";
     import {Alert, Button, ButtonGroup, Card, CardBody, CardHeader, CardTitle, Icon} from "sveltestrap";
     import SearchModels from "$lib/operations/SearchModels.svelte";
     import RemoveErrors from "$lib/operations/RemoveErrors.svelte";
@@ -23,13 +23,10 @@
     import Nop from "$lib/operations/Nop.svelte";
     import Filter from "$lib/operations/Filter.svelte";
     import SelectPredicates from "$lib/operations/SelectPredicates.svelte";
-    import Undo from "$lib/operations/Undo.svelte";
     import Encode from "$lib/operations/Encode.svelte";
     import {onDestroy, onMount} from "svelte";
-    import {show_ingredient_details} from "$lib/stores";
     import SelectModel from "$lib/operations/SelectModel.svelte";
     import Operations from "$lib/operations/Operations.svelte";
-    import {pause_baking} from "$lib/stores";
     import SymmetricClosure from "$lib/operations/SymmetricClosure.svelte";
     import TransitiveClosure from "$lib/operations/TransitiveClosure.svelte";
     import Lua from "$lib/operations/Lua.svelte";
@@ -53,6 +50,22 @@
     import SortCanonical from "$lib/operations/SortCanonical.svelte";
     import Unique from "$lib/operations/Unique.svelte";
     import SortModelsCanonically from "$lib/operations/SortModelsCanonically.svelte";
+    import RecipeOperation from "$lib/operations/Recipe.svelte";
+    import EncodeInput from "$lib/operations/EncodeInput.svelte";
+    import DecodeInput from "$lib/operations/DecodeInput.svelte";
+    import RemoveEmptyModels from "$lib/operations/RemoveEmptyModels.svelte";
+    import ProjectArgument from "$lib/operations/ProjectArgument.svelte";
+    import IntrospectionTerms from "$lib/operations/IntrospectionTerms.svelte";
+    import ReifyProgram from "$lib/operations/ReifyProgram.svelte";
+    import UnreifyProgram from "$lib/operations/UnreifyProgram.svelte";
+    import MetaStableModels from "$lib/operations/MetaStableModels.svelte";
+    import MetaClassicalModels from "$lib/operations/MetaClassicalModels.svelte";
+    import MetaSupportedModels from "$lib/operations/MetaSupportedModels.svelte";
+    import MetaHereAndThereModels from "$lib/operations/MetaHereandThereModels.svelte";
+    import Slider from "$lib/operations/Slider.svelte";
+
+    export let show_operations;
+    export let show_io_panel;
 
     async function copy_to_clipboard() {
         const url = Recipe.as_url();
@@ -71,10 +84,16 @@
 
     let items = [];
     const flipDurationMs = 300;
-    function handleDndConsider(e) {
+    async function handleDndConsider(e) {
         items = e.detail.items;
     }
-    function handleDndFinalize(e) {
+    async function handleDndFinalize(e) {
+        for (let index = 0; index < $recipe.length; index++) {
+            if ($recipe[index] !== e.detail.items[index]) {
+                Recipe.invalidate_cached_output(index);
+                break;
+            }
+        }
         recipe.set(e.detail.items);
     }
 
@@ -118,6 +137,28 @@
                     </Popover>
                 </ButtonGroup>
                 <ButtonGroup>
+                    <Popover title="Hide/show Operations panel">
+                        <div slot="value">
+                            <p>Keybinding: <code>L</code></p>
+                        </div>
+                        <Button size="sm"
+                                outline={!show_operations}
+                                on:click={() => show_operations = !show_operations}>
+                            <Icon name="box-arrow-left" />
+                        </Button>
+                    </Popover>
+                    <Popover title="Hide/show I/O panel">
+                        <div slot="value">
+                            <p>Keybinding: <code>R</code></p>
+                        </div>
+                        <Button size="sm"
+                                outline={!show_io_panel}
+                                on:click={() => show_io_panel = !show_io_panel}>
+                            <Icon name="box-arrow-right" />
+                        </Button>
+                    </Popover>
+                </ButtonGroup>
+                <ButtonGroup>
                     <Popover title="Show details">
                         <div slot="value">
                             <p>You may want to hide details when ordering your recipe.</p>
@@ -138,7 +179,9 @@
                         <Button size="sm"
                                 color={$pause_baking ? "danger" : "secondary"}
                                 outline={!$pause_baking}
-                                on:click={() => toggle_pause_baking()}>
+                                on:click={() => toggle_pause_baking()}
+                                data-testid="RecipePanel-pause-baking"
+                        >
                             <Icon name="pause-fill" />
                         </Button>
                     </Popover>
@@ -156,7 +199,7 @@
         </CardTitle>
     </CardHeader>
     <CardBody class="p-0" style="background-color: lightgray;">
-        <section class="pb-5" use:dndzone="{{items, flipDurationMs}}" on:consider="{handleDndConsider}" on:finalize="{handleDndFinalize}">
+        <section style="padding-bottom: 20em;" use:dndzone="{{items, flipDurationMs}}" on:consider="{handleDndConsider}" on:finalize="{handleDndFinalize}">
             {#each items as item, index (item.id)}
                 <div animate:flip="{{duration: flipDurationMs}}" class="mt-1">
                     {#if item.operation === 'Search Models'}
@@ -197,8 +240,6 @@
                         <SelectPredicates id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
                     {:else if item.operation === 'Select Model'}
                         <SelectModel id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
-                    {:else if item.operation === 'Undo'}
-                        <Undo id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
                     {:else if item.operation === 'Encode'}
                         <Encode id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
                     {:else if item.operation === 'Symmetric Closure'}
@@ -245,6 +286,32 @@
                         <SortModelsCanonically id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
                     {:else if item.operation === 'Unique'}
                         <Unique id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
+                    {:else if item.operation === 'Recipe'}
+                        <RecipeOperation id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
+                    {:else if item.operation === 'Encode Input'}
+                        <EncodeInput id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
+                    {:else if item.operation === 'Decode Input'}
+                        <DecodeInput id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
+                    {:else if item.operation === 'Remove Empty Models'}
+                        <RemoveEmptyModels id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
+                    {:else if item.operation === 'Project Argument'}
+                        <ProjectArgument id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
+                    {:else if item.operation === 'Introspection Terms'}
+                        <IntrospectionTerms id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
+                    {:else if item.operation === 'Reify Program'}
+                        <ReifyProgram id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
+                    {:else if item.operation === 'Unreify Program'}
+                        <UnreifyProgram id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
+                    {:else if item.operation === 'Meta Stable Models'}
+                        <MetaStableModels id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
+                    {:else if item.operation === 'Meta Classical Models'}
+                        <MetaClassicalModels id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
+                    {:else if item.operation === 'Meta Supported Models'}
+                        <MetaSupportedModels id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
+                    {:else if item.operation === 'Meta Here and There Models'}
+                        <MetaHereAndThereModels id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
+                    {:else if item.operation === 'Slider'}
+                        <Slider id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
                     {:else}
                         <Nop id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
                         <Alert color="danger">

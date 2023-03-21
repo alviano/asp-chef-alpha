@@ -80,22 +80,22 @@
     </div>
     <InputGroup>
         <InputGroupText>Search</InputGroupText>
-        <Input type="search" placeholder="Search..." bind:value={options.search} on:input={edit} />
+        <Input type="search" placeholder="Search..." bind:value={options.search} on:input={edit} data-testid="Table-search" />
     </InputGroup>
     <div class="m-1" style="overflow-y: auto;">
         {#each models as model, model_index}
             <h6 class="text-center">Model #{model_index + 1}</h6>
-            <Table bordered>
+            <Table bordered data-testid="Table">
                 <thead>
                     <tr>
                         <th>
                             <Popover block title="Sort by predicate" value="Add a Sort operation before this ingredient.">
                                 <ButtonGroup class="align-content-center">
                                 <InputGroupText>Predicate</InputGroupText>
-                                        <Button size="sm" on:click={() => add_sort(0, false)}>
+                                        <Button size="sm" on:click={() => add_sort(0, true)} data-testid="Table-sort-desc-0">
                                             <Icon name="arrow-up" />
                                         </Button>
-                                    <Button size="sm" on:click={() => add_sort(0, true)}>
+                                    <Button size="sm" on:click={() => add_sort(0, false)} data-testid="Table-sort-asc-0">
                                         <Icon name="arrow-down" />
                                     </Button>
                                 </ButtonGroup>
@@ -106,10 +106,10 @@
                                 <Popover block title="Sort by argument #{arg_index + 1}" value="Add a Sort operation before this ingredient.">
                                     <ButtonGroup class="align-content-center">
                                         <InputGroupText>Arg#{arg_index + 1}</InputGroupText>
-                                        <Button size="sm" on:click={() => add_sort(arg_index + 1, false)}>
+                                        <Button size="sm" on:click={() => add_sort(arg_index + 1, true)} data-testid="Table-sort-desc-{arg_index + 1}">
                                             <Icon name="arrow-up" />
                                         </Button>
-                                        <Button size="sm" on:click={() => add_sort(arg_index + 1, true)}>
+                                        <Button size="sm" on:click={() => add_sort(arg_index + 1, false)} data-testid="Table-sort-asc-{arg_index + 1}">
                                             <Icon name="arrow-down" />
                                         </Button>
                                     </ButtonGroup>

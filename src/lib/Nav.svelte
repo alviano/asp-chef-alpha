@@ -1,6 +1,5 @@
 <script>
   import { Collapse, Icon, Nav, Navbar, NavbarBrand, NavItem, NavLink, NavbarToggler } from 'sveltestrap/src';
-  import {Utils} from "$lib/utils";
   import {Popover} from "dumbo-svelte";
 
   let isOpen = false;
@@ -11,7 +10,7 @@
 </script>
 
 <Navbar id="navbar" color="dark d-print-none" style="max-height: 1em;" dark expand="md">
-  <NavbarBrand href='/'>
+  <NavbarBrand href='/' on:click={() => location.assign('/')}>
     <span class="logo">
       ASP Chef
     </span>
@@ -26,10 +25,6 @@
           </p>
           <p>
             Proudly brought to you by Mario Alviano, Davide Cirimele and Luis Angel Rodriguez Reiners.
-          </p>
-          <p>
-            Hide/show the Operations panel with the keybinding <code>O</code>.
-            Enter/leave the fully immersive view on the Recipe panel with the keybinding <code>R</code>.
           </p>
           <p>
             More details on the GitHub repository <code>https://github.com/alviano/asp-chef</code> (click to open).

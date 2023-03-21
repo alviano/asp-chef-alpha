@@ -2,6 +2,8 @@
     import {Recipe} from "$lib/recipe";
     import {Utils} from "$lib/utils";
     import XLSX from "xlsx";
+    import {Base64} from "js-base64";
+    import {consts} from "$lib/consts";
 
     const operation = "Generate CSV";
     const default_extra_options = {
@@ -17,6 +19,8 @@
             separator = '\t';
         } else if (separator === 'SPACE') {
             separator = ' ';
+        } else if (separator === '') {
+            separator = consts.SYMBOLS.MODELS_SEPARATOR;
         }
 
         const the_aoa = [];
@@ -30,15 +34,15 @@
             the_aoa[key[0] - 1][key[1] - 1] = value;
         });
 
-        console.log(the_aoa)
         const workbook = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(workbook, XLSX.utils.aoa_to_sheet(the_aoa));
 
-        return XLSX.write(workbook, {
+        const res = XLSX.write(workbook, {
             type: 'string',
             bookType: 'csv',
             FS: separator,
         });
+        return separator === consts.SYMBOLS.MODELS_SEPARATOR ? res.replaceAll(separator, '') : res;
     }
 
     Recipe.register_operation_type(operation, async (input, options, index) => {
@@ -57,7 +61,7 @@
                         return options.echo_input ? mapper(atom) : '';
                     }
                     return mapper(atom);
-                }).join('\n') + '\n' + `${options.encode_predicate}("${btoa(facts2csv(aoa, options))}").`;
+                }).join('\n') + '\n' + `${options.encode_predicate}("${Base64.encode(facts2csv(aoa, options))}").`;
                 const model = await Utils.search_model(program);
                 res.push(Utils.parse_atoms(model));
             } catch (error) {
@@ -99,7 +103,7 @@
                bind:value={options.input_predicate}
                placeholder="input predicate"
                on:input={edit}
-               data-testid="GenerateCSV-input-predciate"
+               data-testid="GenerateCSV-input-predicate"
         />
         <Button outline="{!options.echo_input}" on:click={() => { options.echo_input = !options.echo_input; edit(); }}>Echo</Button>
     </InputGroup>

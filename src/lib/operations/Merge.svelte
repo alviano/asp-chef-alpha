@@ -9,10 +9,10 @@
 
     Recipe.register_operation_type(operation, async (input, options, index) => {
         const res = [];
-        for (let index = 0; index < input.length; index++) {
-            const part = input[index];
+        for (let part_index = 0; part_index < input.length; part_index++) {
+            const part = input[part_index];
             try {
-                const model = await Utils.search_model(`${options.predicate}(${index + 1}).` + part.map(atom => `${options.predicate}(${index + 1}, ${atom.str}).`).join('\n'));
+                const model = await Utils.search_model(`${options.predicate}(${part_index + 1}).` + part.map(atom => `${options.predicate}(${part_index + 1}, ${atom.str}).`).join('\n'));
                 res.push(Utils.parse_atoms(model));
             } catch (error) {
                 Recipe.set_errors_at_index(index, error, res);

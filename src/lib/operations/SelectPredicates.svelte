@@ -46,13 +46,17 @@
     }
 
     onMount(() => {
-        listeners.set(id, (input) => {
-            input_predicates = Utils.predicates(input);
-        });
+        if (id !== undefined) {
+            listeners.set(id, (input) => {
+                input_predicates = Utils.predicates(input);
+            });
+        }
     });
 
     onDestroy(() => {
-        listeners.delete(id);
+        if (id !== undefined) {
+            listeners.delete(id);
+        }
     });
 </script>
 

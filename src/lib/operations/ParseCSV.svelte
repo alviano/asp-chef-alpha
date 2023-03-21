@@ -2,6 +2,8 @@
     import {Recipe} from "$lib/recipe";
     import {Utils} from "$lib/utils";
     import XLSX from "xlsx";
+    import {Base64} from "js-base64";
+    import {consts} from "$lib/consts";
 
     const operation = "Parse CSV";
     const default_extra_options = {
@@ -17,6 +19,9 @@
             separator = '\t';
         } else if (separator === 'SPACE') {
             separator = ' ';
+        } else if (separator === '') {
+            separator = consts.SYMBOLS.MODELS_SEPARATOR;
+            content = content.split('\n').map(line => line.split('').join(separator)).join('\n');
         }
 
         const csv = XLSX.read(content, {
@@ -27,7 +32,9 @@
         const data = csv.Sheets[csv.SheetNames[0]]["!data"];
         return data.map((row_data, row) => {
             return row_data.map((value, col) => {
-                return `${options.output_predicate}(${row + 1},${col + 1},${value.t === 'n' ? value.v : '"' + value.v + '"'}).`;
+                return `${options.output_predicate}(${row + 1},${col + 1},${value.t === 'n' ?
+                    (Number.isInteger(value.v) ? value.v : `real("${value.v}")`) :
+                    '"' + value.v + '"'}).`;
             }).join('\n');
         }).join('\n');
     }
@@ -39,7 +46,7 @@
             try {
                 const program = part.map(atom => {
                      if (atom.predicate === options.decode_predicate) {
-                        const content = atob(atom.terms[0].str.slice(1, -1));
+                        const content = Base64.decode(atom.terms[0].string);
                         return csv2facts(content, options) + (options.echo_encoded_content ? '\n' + mapper(atom) : '');
                     }
                     return mapper(atom);

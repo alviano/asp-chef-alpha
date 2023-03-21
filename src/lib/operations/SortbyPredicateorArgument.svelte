@@ -21,7 +21,7 @@
                 } else if (term.number !== undefined) {
                     return term.number;
                 } else {
-                    return [2, term.str];
+                    return term.str;
                 }
             }];
         const mapper = options.descending ?
