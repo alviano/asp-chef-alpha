@@ -107,6 +107,53 @@ To actually test an operation add a file in `tests/test.OperationName.ts` with t
 Again, to ease the testing of combinations of different operations implement a method in `tests/utils.ts` to add the operation as an ingredient with the provided options.  
 
 
+### Implementing an external server
+
+The __Server__ operation interacts with a remote or local server.
+The actual server can implement any function and is required to answer to a POST request with JSON content.
+The JSON content is an object with properties `input_part`, `decoded_input` and `options`.
+
+A request is done for each model in input, where `input_part` contains the list of atoms (as strings), `decoded_input` contains the content decoded from some Base64 predicate, and `options` is a string given in the ingredient.
+It is up to the server to give a meaning to these elements, and to produce in response a JSON object with property `models`.
+
+A minimalist example of server searching for stable models via the Python API of clingo is given below.
+```python
+from fastapi import FastAPI, Request
+from fastapi.middleware.cors import CORSMiddleware
+
+import clingo
+
+
+app = FastAPI()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5188"],
+    allow_credentials=False,
+    allow_methods=["POST"],
+    allow_headers=["*"],
+)
+
+
+@app.post("/")
+async def process(request: Request):
+    json = await request.json()
+    input_part = json["input_part"]
+    decoded_input = json["decoded_input"]
+    options = json["options"]
+    
+    control = clingo.Control(options)
+    program = []
+    for atom in input_part:
+        program.append(f"{atom}.")
+    program = '\n'.join(program) + '\n' + '\n'.join(decoded_input)
+    control.add(program)
+    control.ground([("base", [])])
+    res = []
+    control.solve(on_model=lambda model: res.append([str(atom) for atom in model.symbols(shown=True)]))
+    return {"models" : res}
+```
+
+
 ## Contributors
 
 * [Mario Alviano](https://alviano.net)
