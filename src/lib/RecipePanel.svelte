@@ -63,6 +63,8 @@
     import MetaSupportedModels from "$lib/operations/MetaSupportedModels.svelte";
     import MetaHereAndThereModels from "$lib/operations/MetaHereandThereModels.svelte";
     import Slider from "$lib/operations/Slider.svelte";
+    import Server from "$lib/operations/Server.svelte";
+    import InvalidateCache from "$lib/operations/InvalidateCache.svelte";
 
     export let show_operations;
     export let show_io_panel;
@@ -312,6 +314,10 @@
                         <MetaHereAndThereModels id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
                     {:else if item.operation === 'Slider'}
                         <Slider id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
+                    {:else if item.operation === 'Server'}
+                        <Server id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
+                    {:else if item.operation === 'Invalidate Cache'}
+                        <InvalidateCache id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
                     {:else}
                         <Nop id={item.id} options={item.options} index={index} add_to_recipe={undefined} keybinding={undefined} />
                         <Alert color="danger">

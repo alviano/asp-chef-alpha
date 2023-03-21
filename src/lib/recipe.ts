@@ -140,10 +140,11 @@ export class Recipe {
                 if (!this.uncachable_operations_types.has(ingredient.operation) && this.cached_output[index] !== undefined) {
                     result = ingredient.options.apply ? this.cached_output[index] : result;
                 } else {
-                    this.cached_output[index + 1] = undefined;
                     this.set_errors_at_index(index, undefined);
-                    this.cached_output[index] = result = ingredient.options.apply ?
-                        await Recipe.apply_operation_type(index, ingredient, result) : result;
+                    if (ingredient.options.apply) {
+                        this.cached_output[index + 1] = undefined;
+                        this.cached_output[index] = result = await Recipe.apply_operation_type(index, ingredient, result);
+                    }
                 }
                 if (ingredient.options.stop) {
                     break;
