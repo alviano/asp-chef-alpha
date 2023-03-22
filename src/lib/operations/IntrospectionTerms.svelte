@@ -119,21 +119,14 @@ end
         />
     </InputGroup>
     {#each ['error(details)', 'error_message(error)', 'functor(term)', 'arity(term)', 'argument(term, index)'].sort() as term}
-        <Popover title="Set @-terms">
-            <div slot="value">
-                <p>
-                    Change the name of the @-term <code>{term}</code>.
-                </p>
-            </div>
-            <InputGroup>
-                <InputGroupText style="width: 10em;">@{term.split('(')[0]}</InputGroupText>
-                <Input type="text"
-                       bind:value={options.at_terms[term.split('(')[0]]}
-                       placeholder="function"
-                       on:input={edit}
-                       data-testid="IntrospectionTerms-{term.split('(')[0]}"
-                />
-            </InputGroup>
-        </Popover>
+        <InputGroup>
+            <InputGroupText style="width: 10em;">@{term.split('(')[0]}</InputGroupText>
+            <Input type="text"
+                   bind:value={options.at_terms[term.split('(')[0]]}
+                   placeholder="function"
+                   on:input={edit}
+                   data-testid="IntrospectionTerms-{term.split('(')[0]}"
+            />
+        </InputGroup>
     {/each}
 </Operation>
