@@ -71,7 +71,7 @@
     </div>
     <InputGroup>
         <InputGroupText style="width: 10em;">Minimum value</InputGroupText>
-        <Input type="search"
+        <Input type="text"
                bind:value={options.min}
                placeholder="min"
                on:input={edit}
@@ -80,7 +80,7 @@
     </InputGroup>
     <InputGroup>
         <InputGroupText style="width: 10em;">Maximum value</InputGroupText>
-        <Input type="search"
+        <Input type="text"
                bind:value={options.max}
                placeholder="max"
                on:input={edit}
@@ -89,7 +89,7 @@
     </InputGroup>
     <InputGroup>
         <InputGroupText style="width: 10em;">Output predicate</InputGroupText>
-        <Input type="search"
+        <Input type="text"
                bind:value={options.output_predicate}
                placeholder="output predicate"
                on:input={edit}
