@@ -61,7 +61,7 @@
                on:input={edit}
         />
         <InputGroupText>Predicate</InputGroupText>
-        <Input type="search"
+        <Input type="text"
                bind:value={options.predicate}
                placeholder="relation predicate"
                on:input={edit}

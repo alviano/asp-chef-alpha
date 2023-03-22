@@ -96,14 +96,14 @@
     </div>
     <InputGroup>
         <InputGroupText>Decode</InputGroupText>
-        <Input type="search"
+        <Input type="text"
                bind:value={options.decode_predicate}
                placeholder="decode predicate"
                on:input={edit}
         />
         <Button outline="{!options.echo_encoded_content}" on:click={() => { options.echo_encoded_content = !options.echo_encoded_content; edit(); }}>Echo</Button>
     </InputGroup>
-    <Input type="search"
+    <Input type="text"
            bind:value={options.query}
            placeholder="$.phoneNumbers[:1].type"
            on:input={edit}
@@ -111,7 +111,7 @@
     />
     <InputGroup>
         <InputGroupText>Output predicate</InputGroupText>
-        <Input type="search"
+        <Input type="text"
                bind:value={options.output_predicate}
                placeholder="predicate"
                on:input={edit}

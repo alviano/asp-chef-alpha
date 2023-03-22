@@ -77,7 +77,7 @@ body(sum(B,G))  :- rule(_,sum(B,G)),
     </div>
     <InputGroup>
         <InputGroupText style="width: 10em;">Encode predicate</InputGroupText>
-        <Input type="search"
+        <Input type="text"
                bind:value={options.encode_predicate}
                placeholder="encode predicate"
                on:input={edit}

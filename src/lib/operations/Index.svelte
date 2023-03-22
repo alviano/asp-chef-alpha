@@ -49,7 +49,7 @@
             The name of the binary predicate <code>__index__</code> can be specified in the recipe.
         </p>
     </div>
-    <Input type="search"
+    <Input type="text"
            bind:value="{options.predicate}"
            placeholder="predicate"
            on:input={edit}

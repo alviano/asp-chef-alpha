@@ -51,7 +51,7 @@
             The name of the unary predicate <code>__atom__</code> can be specified in the recipe.
         </p>
     </div>
-    <Input type="search"
+    <Input type="text"
            bind:value="{options.predicate}"
            placeholder="predicate"
            on:input={edit}

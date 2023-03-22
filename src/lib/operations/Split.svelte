@@ -56,7 +56,7 @@
             The order of models is not necessarily preserved.
         </p>
     </div>
-    <Input type="search"
+    <Input type="text"
            bind:value="{options.predicate}"
            placeholder="predicate"
            on:input={edit}

@@ -82,7 +82,7 @@ ${options.closure_predicate}(X,Z) :- ${options.closure_predicate}(X,Y); ${option
     </div>
     <InputGroup>
         <InputGroupText style="width: 10em;">Input predicate</InputGroupText>
-        <Input type="search"
+        <Input type="text"
                bind:value={options.input_predicate}
                placeholder="input predicate"
                on:input={edit}
@@ -105,7 +105,7 @@ ${options.closure_predicate}(X,Z) :- ${options.closure_predicate}(X,Y); ${option
     {/if}
     <InputGroup>
         <InputGroupText style="width: 10em;">Closure predicate</InputGroupText>
-        <Input type="search"
+        <Input type="text"
                bind:value={options.closure_predicate}
                placeholder="closure predicate"
                on:input={edit}
@@ -114,7 +114,7 @@ ${options.closure_predicate}(X,Z) :- ${options.closure_predicate}(X,Y); ${option
     </InputGroup>
     <InputGroup>
         <InputGroupText style="width: 10em;">Encode predicate</InputGroupText>
-        <Input type="search"
+        <Input type="text"
                bind:value={options.encode_predicate}
                placeholder="encode predicate"
                on:input={edit}

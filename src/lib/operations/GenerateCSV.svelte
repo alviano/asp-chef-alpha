@@ -99,7 +99,7 @@
     </div>
     <InputGroup>
         <InputGroupText>Input predicate</InputGroupText>
-        <Input type="search"
+        <Input type="text"
                bind:value={options.input_predicate}
                placeholder="input predicate"
                on:input={edit}
@@ -109,14 +109,14 @@
     </InputGroup>
     <InputGroup>
         <InputGroupText>Encode predicate</InputGroupText>
-        <Input type="search"
+        <Input type="text"
                bind:value={options.encode_predicate}
                placeholder="encode predicate"
                on:input={edit}
                data-testid="GenerateCSV-encode-predicate"
         />
         <InputGroupText>Separator</InputGroupText>
-        <Input type="search"
+        <Input type="text"
                bind:value={options.separator}
                placeholder="TAB|SPACE|char"
                on:input={edit}

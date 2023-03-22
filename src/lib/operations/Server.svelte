@@ -89,7 +89,7 @@
     </div>
     <InputGroup>
         <InputGroupText style="width: 6em;">Decode</InputGroupText>
-        <Input type="search"
+        <Input type="text"
                bind:value={options.decode_predicate}
                placeholder="decode predicate"
                on:input={edit}

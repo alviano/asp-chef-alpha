@@ -88,7 +88,7 @@
     </div>
     <InputGroup>
         <InputGroupText>Decode</InputGroupText>
-        <Input type="search"
+        <Input type="text"
                bind:value={options.decode_predicate}
                placeholder="decode predicate"
                on:input={edit}
@@ -96,7 +96,7 @@
         />
         <Button outline="{!options.echo_encoded_content}" on:click={() => { options.echo_encoded_content = !options.echo_encoded_content; edit(); }}>Echo</Button>
         <InputGroupText>Separator</InputGroupText>
-        <Input type="search"
+        <Input type="text"
                bind:value={options.separator}
                placeholder="TAB|SPACE|char"
                on:input={edit}
@@ -105,7 +105,7 @@
     </InputGroup>
     <InputGroup>
         <InputGroupText>Output predicate</InputGroupText>
-        <Input type="search"
+        <Input type="text"
                bind:value={options.output_predicate}
                placeholder="predicate"
                on:input={edit}

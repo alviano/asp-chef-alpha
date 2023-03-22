@@ -167,7 +167,7 @@
     </div>
     <InputGroup>
         <InputGroupText style="width: 10em;">Encode predicate</InputGroupText>
-        <Input type="search"
+        <Input type="text"
                bind:value={options.encode_predicate}
                placeholder="encode predicate"
                on:input={edit}
@@ -177,7 +177,7 @@
     </InputGroup>
     <InputGroup>
         <InputGroupText style="width: 10em;">Atom predicate</InputGroupText>
-        <Input type="search"
+        <Input type="text"
                bind:value={options.atom_predicate}
                placeholder="atom predicate"
                on:input={edit}

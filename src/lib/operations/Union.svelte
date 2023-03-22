@@ -71,7 +71,7 @@
                on:input={edit}
         />
         <InputGroupText>Decode</InputGroupText>
-        <Input type="search"
+        <Input type="text"
                bind:value={options.decode_predicate}
                on:input={edit}
         />

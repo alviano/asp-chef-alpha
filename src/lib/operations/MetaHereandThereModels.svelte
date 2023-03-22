@@ -91,7 +91,7 @@ hold(A,M); not hold(A,t) :- atom_tuple(H,A),     rule(     choice(H),B), body(B,
     </div>
     <InputGroup>
         <InputGroupText style="width: 10em;">Encode predicate</InputGroupText>
-        <Input type="search"
+        <Input type="text"
                bind:value={options.encode_predicate}
                placeholder="encode predicate"
                on:input={edit}

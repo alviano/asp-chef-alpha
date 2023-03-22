@@ -254,8 +254,8 @@
     </InputGroup>
     <InputGroup>
         <InputGroupText>Highlight color</InputGroupText>
-        <Input type="search" placeholder="Color..." bind:value={options.search_color} on:change={edit} />
+        <Input type="text" placeholder="Color..." bind:value={options.search_color} on:change={edit} />
         <InputGroupText>Highlight text color</InputGroupText>
-        <Input type="search" placeholder="Text color..." bind:value={options.search_text_color} on:change={edit} />
+        <Input type="text" placeholder="Text color..." bind:value={options.search_text_color} on:change={edit} />
     </InputGroup>
 </Operation>
