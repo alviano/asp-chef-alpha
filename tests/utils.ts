@@ -94,16 +94,10 @@ export class TestRecipe {
 		});
 	}
 
-	async encode(content: string, predicate: string, trim = true) {
+	async encode(content: string, trim = true, predicate = '__base64__') {
 		return await this.ingredient('Encode', async ingredient => {
 			await ingredient.getByTestId('Encode-content').getByRole('textbox').fill(trim ? content.trim() : content);
-			if(predicate != null){
-				if(predicate != '')
-					await ingredient.getByPlaceholder('predicate').fill(trim ? predicate.trim() : predicate);
-				else
-					await ingredient.getByPlaceholder('predicate').fill('');
-			}
-			
+				await ingredient.getByPlaceholder('predicate').fill(predicate);
 		});
 	}
 
