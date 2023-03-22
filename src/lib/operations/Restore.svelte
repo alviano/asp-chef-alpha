@@ -54,7 +54,7 @@
     </div>
     <InputGroup>
         <InputGroupText>Store</InputGroupText>
-        <Input bind:value="{options.store}" data-testid="Restore-store" />
+        <Input bind:value="{options.store}" on:input={edit} data-testid="Restore-store" />
         <Button outline="{!options.echo}" on:click={() => { options.echo = !options.echo; edit(); }}>Echo</Button>
     </InputGroup>
 </Operation>
