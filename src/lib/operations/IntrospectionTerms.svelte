@@ -6,18 +6,26 @@
     const operation = "Introspection Terms";
     const default_extra_options = {
         encode_predicate: '__base64__',
+        at_terms: {
+            argument: "argument",
+            arity: "arity",
+            error: "error",
+            error_message: "error_message",
+            functor: "functor",
+        }
     };
 
-    const content = Base64.encode(`
+    Recipe.register_operation_type(operation, async (input, options, index) => {
+        const content = Base64.encode(`
 #script (lua)
 
-function error(details)
-  return clingo.Function("error", details)
+function ${options.at_terms.error}(details)
+  return clingo.Function("${options.at_terms.error}", details)
 end
 
-function error_message(error)
-  if error.name ~= "error" then
-    return "noo"
+function ${options.at_terms.error_message}(error)
+  if error.name ~= "${options.at_terms.error}" then
+    return "Cannot process error!"
   end
 
   args = {}
@@ -31,18 +39,18 @@ function error_message(error)
   return string.format(table.unpack(args))
 end
 
-function functor(term)
+function ${options.at_terms.functor}(term)
   if term.name == nil then
     return error({"%s has no name", tostring(term)})
   end
   return term.name
 end
 
-function arity(term)
+function ${options.at_terms.arity}(term)
   return #term.arguments
 end
 
-function argument(term, index)
+function ${options.at_terms.argument}(term, index)
   index = index.number
   if index == 0 then
     return functor(term)
@@ -54,9 +62,8 @@ function argument(term, index)
 end
 
 #end.
-    `.trim());
+        `.trim());
 
-    Recipe.register_operation_type(operation, async (input, options, index) => {
         const encoded_content = `${options.encode_predicate}("${content}").`;
         const mapper = atom => atom.str + '.';
         const res = [];
@@ -76,6 +83,7 @@ end
 <script>
     import {Input, InputGroup, InputGroupText} from "sveltestrap";
     import Operation from "$lib/operations/Operation.svelte";
+    import {Popover} from "dumbo-svelte";
 
     export let id;
     export let options;
@@ -94,25 +102,38 @@ end
             The <strong>{operation}</strong> operation extends models in input with some encoded Lua content.
         </p>
         <p>
-            The @-terms defined by this operation are
-            {#each ['error(details)', 'error_message(error)', 'functor(term)', 'arity(term)', 'argument(term, index)'].sort() as term}
-                <code>{term}</code>
-            {/each}
-        </p>
-        <p>
             The definitions are base64 encoded and wrapped by predicate <code>__base64__</code>.
         </p>
         <p>
             The name of the unary predicate <code>__base64__</code> can be specified in the recipe.
+            Also the name of the @-terms defined by this can be customized.
         </p>
     </div>
     <InputGroup>
         <InputGroupText style="width: 10em;">Encode predicate</InputGroupText>
-        <Input type="search"
+        <Input type="text"
                bind:value={options.encode_predicate}
                placeholder="encode predicate"
                on:input={edit}
                data-testid="IntrospectionTerms-encode-predicate"
         />
     </InputGroup>
+    {#each ['error(details)', 'error_message(error)', 'functor(term)', 'arity(term)', 'argument(term, index)'].sort() as term}
+        <Popover title="Set @-terms">
+            <div slot="value">
+                <p>
+                    Change the name of the @-term <code>{term}</code>.
+                </p>
+            </div>
+            <InputGroup>
+                <InputGroupText style="width: 10em;">@{term.split('(')[0]}</InputGroupText>
+                <Input type="text"
+                       bind:value={options.at_terms[term.split('(')[0]]}
+                       placeholder="function"
+                       on:input={edit}
+                       data-testid="IntrospectionTerms-{term.split('(')[0]}"
+                />
+            </InputGroup>
+        </Popover>
+    {/each}
 </Operation>

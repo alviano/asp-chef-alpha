@@ -107,7 +107,7 @@ To actually test an operation add a file in `tests/test.OperationName.ts` with t
 Again, to ease the testing of combinations of different operations implement a method in `tests/utils.ts` to add the operation as an ingredient with the provided options.  
 
 
-### Implementing an external server
+### How to implement an external server
 
 The __Server__ operation interacts with a remote or local server.
 The actual server can implement any function and is required to answer to a POST request with JSON content.
@@ -127,7 +127,7 @@ import clingo
 app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5188"],
+    allow_origins=["http://localhost:5188", "https://asp-chef.alviano.net"],
     allow_credentials=False,
     allow_methods=["POST"],
     allow_headers=["*"],
@@ -142,10 +142,7 @@ async def process(request: Request):
     options = json["options"]
     
     control = clingo.Control(options)
-    program = []
-    for atom in input_part:
-        program.append(f"{atom}.")
-    program = '\n'.join(program) + '\n' + '\n'.join(decoded_input)
+    program = '\n'.join([f"{atom}." for atom in input_part]) + '\n'.join(decoded_input)
     control.add(program)
     control.ground([("base", [])])
     res = []
