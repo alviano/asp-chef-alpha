@@ -58,7 +58,7 @@ export class Recipe {
             decode_output: decode_output,
             recipe: this.recipe,
         };
-        this.last_serialization = Utils.compress(json) + '!';
+        this.last_serialization = Utils.compress(json) + '%21';
         return this.last_serialization;
     }
 
@@ -66,6 +66,7 @@ export class Recipe {
         if (serialized_data === this.last_serialization) {
             return null;
         }
+        serialized_data = decodeURI(serialized_data);
         if (!serialized_data.endsWith('!')) {
             throw Error('Cannot deserialize. Incomplete string. Must terminate with a bang!');
         }
@@ -86,10 +87,11 @@ export class Recipe {
         const json = {
             recipe: this.recipe.slice(start, how_many === 0 ? undefined : start + how_many),
         };
-        return Utils.compress(json) + '!';
+        return Utils.compress(json) + '%21';
     }
 
     static extract_recipe_from_serialization(serialized_data: string) {
+        serialized_data = decodeURI(serialized_data);
         if (!serialized_data.endsWith('!')) {
             throw Error('Cannot deserialize. Incomplete string. Must terminate with a bang!');
         }

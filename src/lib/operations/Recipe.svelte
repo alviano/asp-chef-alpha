@@ -114,7 +114,7 @@
     </div>
     <Input type="text"
            bind:value="{options.url}"
-           placeholder="{consts.DOMAIN + '#/...!'}"
+           placeholder="{consts.DOMAIN + '#/...%21'}"
            on:input={edit}
            data-testid="Recipe-url"
     />
