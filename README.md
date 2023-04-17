@@ -1,9 +1,9 @@
-# ASP Chef
+# ASP Chef Alpha
 
-[ASP Chef](https://asp-chef.alviano.net/) is a simple, intuitive web app for analysing answer sets without having to deal with complex tools or programming languages...
+[ASP Chef](https://asp-chef-alpha.netlify.app/) is a simple, intuitive web app for analysing answer sets without having to deal with complex tools or programming languages...
 well, excluding ASP!
 
-ASP Chef inspired by [CyberChef](https://gchq.github.io/CyberChef/#input=UVZOUUlFTm9aV1lo), and as such it is designed to ease the creation of pipelines of operations over arrays of models rather than being an IDE or editor for ASP.
+ASP Chef is inspired by [CyberChef](https://gchq.github.io/CyberChef/#input=UVZOUUlFTm9aV1lo), and as such it is designed to ease the creation of pipelines of operations over arrays of models rather than being an IDE or editor for ASP.
 
 ## Prerequisites
 
@@ -150,6 +150,57 @@ async def process(request: Request):
     return {"models" : res}
 ```
 
+If the above script is saved in the file `clingo_server.py`, the server can be run with 
+```bash
+$ uvicorn clingo_server:app
+```
+
+As another example, a server relying on [MiniZinc](https://minizinc-python.readthedocs.io/en/latest/index.html) can be implemented as follows:
+```python
+from fastapi import FastAPI, Request
+from fastapi.middleware.cors import CORSMiddleware
+
+from minizinc import Instance, Model, Solver
+
+import re
+
+
+app = FastAPI()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5188", "https://asp-chef-alpha.alviano.net"],
+    allow_credentials=False,
+    allow_methods=["POST"],
+    allow_headers=["*"],
+)
+
+constant_pattern = re.compile('^constant\((?P<name>\w+),(?P<value>\d+)\)$')
+
+
+@app.post("/")
+async def process(request: Request):
+    json = await request.json()
+    input_part = json["input_part"]
+    decoded_input = json["decoded_input"]
+    options = json["options"]
+    
+    solver = Solver.lookup("gecode")
+    model = Model()
+    model.add_string('\n'.join(decoded_input))
+    instance = Instance(solver, model)
+    for atom in input_part:
+        match = constant_pattern.match(atom)
+        if match:
+            name = match.group('name')
+            value = int(match.group('value'))
+            instance[name] = value
+            
+    res = await instance.solve_async()
+    res = list(f"{options}({index},{value})" for index, value in enumerate(res[options], start=1))
+    return {"models" : [res]}
+```
+The above script interprets the encoded content as a MiniZinc model (the analogous of a program in ASP),
+instances of predicate `constant/2` as integer constants, and the content of options as the name of the variable to return in output.
 
 ## Contributors
 
