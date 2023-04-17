@@ -9,4 +9,4 @@
 
 [functions]
   node_bundler = "esbuild"
-  external_node_modules = ["svelte-kit"]
+  external_node_modules = ["@sveltejs/kit"]
