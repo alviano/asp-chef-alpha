@@ -6,7 +6,3 @@
   VITE_DEBUG = 'false'
   VITE_DOMAIN = 'https://asp-chef-alpha.netlify.app'
   VITE_PURIFY_LOG_ERRORS = 'false'
-
-[functions]
-  node_bundler = "esbuild"
-  external_node_modules = ["@sveltejs/kit"]
