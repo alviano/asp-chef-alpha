@@ -127,7 +127,7 @@ import clingo
 app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5188", "https://asp-chef.alviano.net"],
+    allow_origins=["http://localhost:5188", "https://asp-chef-alpha.netlify.app"],
     allow_credentials=False,
     allow_methods=["POST"],
     allow_headers=["*"],
@@ -168,7 +168,7 @@ import re
 app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5188", "https://asp-chef-alpha.alviano.net"],
+    allow_origins=["http://localhost:5188", "https://asp-chef-alpha.netlify.app"],
     allow_credentials=False,
     allow_methods=["POST"],
     allow_headers=["*"],
